@@ -141,7 +141,7 @@ namespace ACS.Monitor
 
             try
             {
-                var orderedRobots = uow.Robots.GetAll().ToList();
+                var orderedRobots = uow.Robots.DBGetAll().ToList();
                 orderedRobots = orderedRobots.OrderBy(x => x.RobotAlias).ToList();
                 orderedRobots = orderedRobots.Where(x => ConfigData.DisplayRobotNames.ContainsKey(x.RobotName)).ToList(); // 설정창에서 체크된 robot만 필터링
 
@@ -941,7 +941,7 @@ namespace ACS.Monitor
             {
                 string RobotAlias = gridView1.GetDataRow(info.RowHandle)["DGV_MiR_Status_Robot_Alias"].ToString();
 
-                var RobotData = uow.Robots.GetAll().FirstOrDefault(x => x.RobotAlias == RobotAlias);
+                var RobotData = uow.Robots.DBGetAll().FirstOrDefault(x => x.RobotAlias == RobotAlias);
 
                 if (RobotData != null)
                 {
@@ -1021,7 +1021,7 @@ namespace ACS.Monitor
     public class RobotZoom
     {
         public UCMapView view { get; set; }
-        public MapNameAlias mapDBdata { get; set; }
-        public MapData Data { get; set; }
+        //public MapNameAlias mapDBdata { get; set; }
+        //public MapData Data { get; set; }
     }
 }

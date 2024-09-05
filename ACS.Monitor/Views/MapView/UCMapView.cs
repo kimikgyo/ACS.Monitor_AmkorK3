@@ -1,7 +1,7 @@
 ﻿
 using ACS.Monitor.Properties;
-using DevExpress.XtraEditors;
 using ACS.Monitor.Utilities;
+using DevExpress.XtraEditors;
 using log4net;
 using Monitor.Data;
 using Monitor.Map;
@@ -27,6 +27,7 @@ namespace ACS.Monitor
 
         public string MapID { get; set; }
         public string UriStr { get; set; }
+        private readonly UnitOfWork uow;
 
         // map 관련 변수
         private FleetMapProcessor mapProcessor = null;
@@ -50,7 +51,7 @@ namespace ACS.Monitor
         private DateTime oldDbUpdatedTime = default; // keep map UpdateDime
         private readonly Bitmap blankBitmap = new Bitmap(2000, 2000);
 
-        private readonly UnitOfWork uow;
+
 
         public UCMapView()
         {

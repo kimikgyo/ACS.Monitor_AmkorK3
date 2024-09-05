@@ -139,41 +139,23 @@
     <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Monitor\Views\JobHistory.cs">
+    <Compile Include="Views\History\JobHistory.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Monitor\Views\JobHistory.designer.cs">
+    <Compile Include="Views\History\JobHistory.designer.cs">
       <DependentUpon>JobHistory.cs</DependentUpon>
     </Compile>
-    <Compile Include="Monitor\Views\SettingsCallMissions.cs">
+    <Compile Include="Views\History\WaitPositionTimeHistory.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Monitor\Views\SettingsCallMissions.Designer.cs">
-      <DependentUpon>SettingsCallMissions.cs</DependentUpon>
+    <Compile Include="Views\History\WaitPositionTimeHistory.designer.cs">
+      <DependentUpon>WaitPositionTimeHistory.cs</DependentUpon>
     </Compile>
-    <Compile Include="Monitor\Views\SettingsElevator.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Monitor\Views\SettingsElevator.Designer.cs">
-      <DependentUpon>SettingsElevator.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Monitor\Views\SettingsGridView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Monitor\Views\SettingsGridView.Designer.cs">
-      <DependentUpon>SettingsGridView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Monitor\Views\UserControls\UCMapView.cs">
+    <Compile Include="Views\MapView\UCMapView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Monitor\Views\UserControls\UCMapView.designer.cs">
+    <Compile Include="Views\MapView\UCMapView.designer.cs">
       <DependentUpon>UCMapView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Monitor\Views\WaitPositionTimeHistory.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Monitor\Views\WaitPositionTimeHistory.designer.cs">
-      <DependentUpon>WaitPositionTimeHistory.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -187,215 +169,62 @@
     <Compile Include="Views\AutoScreen.designer.cs">
       <DependentUpon>AutoScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Popups\ChangePasswordForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\ChangePasswordForm.designer.cs">
-      <DependentUpon>ChangePasswordForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\CheckUserNumberForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\CheckUserNumberForm.designer.cs">
-      <DependentUpon>CheckUserNumberForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\UserNumberForm..cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\UserNumberForm..designer.cs">
-      <DependentUpon>UserNumberForm..cs</DependentUpon>
-    </Compile>
     <Compile Include="Utilities\ImageTransparency.cs" />
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\Fibonacci.cs" />
-    <Compile Include="Views\Popups\ItemQtyEditPopupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\ItemQtyEditPopupForm.Designer.cs">
-      <DependentUpon>ItemQtyEditPopupForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\ErrorMessagePopupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\ErrorMessagePopupForm.Designer.cs">
-      <DependentUpon>ErrorMessagePopupForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\GroupSelectForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\GroupSelectForm.designer.cs">
-      <DependentUpon>GroupSelectForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainForm_PublicVar.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\TcpMonitoring.cs" />
-    <Compile Include="Views\Popups\ErrorMissionSelectForm.cs">
+    <Compile Include="Views\Setting\SettingsCallMissions.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\Popups\ErrorMissionSelectForm.designer.cs">
-      <DependentUpon>ErrorMissionSelectForm.cs</DependentUpon>
+    <Compile Include="Views\Setting\SettingsCallMissions.designer.cs">
+      <DependentUpon>SettingsCallMissions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Popups\IP_AddressBoard.cs">
+    <Compile Include="Views\Setting\SettingsElevator.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\Popups\IP_AddressBoard.designer.cs">
-      <DependentUpon>IP_AddressBoard.cs</DependentUpon>
+    <Compile Include="Views\Setting\SettingsElevator.designer.cs">
+      <DependentUpon>SettingsElevator.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Popups\LoginForm.cs">
+    <Compile Include="Views\Setting\SettingsGridView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\Popups\LoginForm.designer.cs">
-      <DependentUpon>LoginForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\LoginKeypad.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\LoginKeypad.designer.cs">
-      <DependentUpon>LoginKeypad.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\MiR_Error_PopupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\MiR_Error_PopupForm.designer.cs">
-      <DependentUpon>MiR_Error_PopupForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\MissionGroupSelectForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\MissionGroupSelectForm.designer.cs">
-      <DependentUpon>MissionGroupSelectForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\MissionSelectForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\MissionSelectForm.designer.cs">
-      <DependentUpon>MissionSelectForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\MsgPopupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\MsgPopupForm.designer.cs">
-      <DependentUpon>MsgPopupForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\NumPadForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\NumPadForm.designer.cs">
-      <DependentUpon>NumPadForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\PasswordForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\PasswordForm.designer.cs">
-      <DependentUpon>PasswordForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\TypeSelectForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\TypeSelectForm.designer.cs">
-      <DependentUpon>TypeSelectForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\UseSelectForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\UseSelectForm.designer.cs">
-      <DependentUpon>UseSelectForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popups\VirtualHeyBoard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Popups\VirtualHeyBoard.designer.cs">
-      <DependentUpon>VirtualHeyBoard.cs</DependentUpon>
+    <Compile Include="Views\Setting\SettingsGridView.designer.cs">
+      <DependentUpon>SettingsGridView.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Monitor\Views\JobHistory.resx">
+    <EmbeddedResource Include="Views\History\JobHistory.resx">
       <DependentUpon>JobHistory.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Monitor\Views\SettingsCallMissions.resx">
-      <DependentUpon>SettingsCallMissions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Monitor\Views\SettingsElevator.resx">
-      <DependentUpon>SettingsElevator.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Monitor\Views\SettingsGridView.resx">
-      <DependentUpon>SettingsGridView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Monitor\Views\UserControls\UCMapView.resx">
-      <DependentUpon>UCMapView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Monitor\Views\WaitPositionTimeHistory.resx">
+    <EmbeddedResource Include="Views\History\WaitPositionTimeHistory.resx">
       <DependentUpon>WaitPositionTimeHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\MapView\UCMapView.resx">
+      <DependentUpon>UCMapView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Views\AutoScreen.resx">
       <DependentUpon>AutoScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\ChangePasswordForm.resx">
-      <DependentUpon>ChangePasswordForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\CheckUserNumberForm.resx">
-      <DependentUpon>CheckUserNumberForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\UserNumberForm..resx">
-      <DependentUpon>UserNumberForm..cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\ItemQtyEditPopupForm.resx">
-      <DependentUpon>ItemQtyEditPopupForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\ErrorMessagePopupForm.resx">
-      <DependentUpon>ErrorMessagePopupForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\GroupSelectForm.resx">
-      <DependentUpon>GroupSelectForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\ErrorMissionSelectForm.resx">
-      <DependentUpon>ErrorMissionSelectForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\Setting\SettingsCallMissions.resx">
+      <DependentUpon>SettingsCallMissions.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\IP_AddressBoard.resx">
-      <DependentUpon>IP_AddressBoard.cs</DependentUpon>
+    <EmbeddedResource Include="Views\Setting\SettingsElevator.resx">
+      <DependentUpon>SettingsElevator.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\LoginForm.resx">
-      <DependentUpon>LoginForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\LoginKeypad.resx">
-      <DependentUpon>LoginKeypad.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\MiR_Error_PopupForm.resx">
-      <DependentUpon>MiR_Error_PopupForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\MissionGroupSelectForm.resx">
-      <DependentUpon>MissionGroupSelectForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\MissionSelectForm.resx">
-      <DependentUpon>MissionSelectForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\MsgPopupForm.resx">
-      <DependentUpon>MsgPopupForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\NumPadForm.resx">
-      <DependentUpon>NumPadForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\PasswordForm.resx">
-      <DependentUpon>PasswordForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\TypeSelectForm.resx">
-      <DependentUpon>TypeSelectForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\UseSelectForm.resx">
-      <DependentUpon>UseSelectForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Popups\VirtualHeyBoard.resx">
-      <DependentUpon>VirtualHeyBoard.cs</DependentUpon>
+    <EmbeddedResource Include="Views\Setting\SettingsGridView.resx">
+      <DependentUpon>SettingsGridView.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Config\log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
