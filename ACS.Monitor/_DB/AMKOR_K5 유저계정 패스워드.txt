@@ -1,0 +1,9 @@
+id:	sa
+pw:	acsserver
+
+id:	monitor
+pw:	monitor1111
+
+id:	rhs
+pw:	rh1111
+
