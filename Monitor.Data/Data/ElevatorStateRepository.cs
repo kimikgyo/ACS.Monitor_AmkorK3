@@ -23,11 +23,10 @@ namespace Monitor.Data
         public ElevatorStateRepository(string connectionString)
         {
             this.connectionString = connectionString;
-            Load();
         }
 
         //DB 불러오기
-        private void Load()
+        public List<ElevatorStateModel> DBLoad()
         {
             _elevatorStateModule.Clear();
 
@@ -38,6 +37,7 @@ namespace Monitor.Data
                 {
                     _elevatorStateModule.Add(skyNetModels);
                 }
+                return _elevatorStateModule.ToList();
             }
         }
         //DB 추가하기

@@ -88,12 +88,12 @@ namespace Monitor.Common
         private string product;                 // AmkorK5 사용 Line 자재 확인 
         private string door;                    // AmkorK5 사용 Line TopModule Door 상태
         private string positionZoneName;
+        private int progressBar;
 
         public RobotType RobotType = RobotType.LIFT;     // 0=LIFT타입, 1=HOOK타입
         private FleetState fleet_State;              // fleet 상태
         private string fleet_State_Text;             // fleet 상태
         private bool connectState;                 // RobotConnect 상태
-
         public int Id
         {
             get => id;
@@ -347,6 +347,15 @@ namespace Monitor.Common
             {
                 if (positionZoneName != value) DataChanged = true;
                 positionZoneName = value;
+            }
+        }
+        public int ProgressBar
+        {
+            get => progressBar;
+            set
+            {
+                if (progressBar != value) DataChanged = true;
+                progressBar = value;
             }
         }
 

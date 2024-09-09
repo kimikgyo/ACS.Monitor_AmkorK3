@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Monitor.Data
 {
-   public class FloorMapIDConfigRepository
+    public class FloorMapIDConfigRepository
     {
         //private readonly static ILog logger = LogManager.GetLogger("User");
 
@@ -19,23 +19,14 @@ namespace Monitor.Data
 
         private readonly List<FloorMapIdConfigModel> _floorMapIDConfigModel = new List<FloorMapIdConfigModel>(); // cache data
 
+        private readonly static object lockObj = new object();
 
         public FloorMapIDConfigRepository(string connectionString)
         {
             this.connectionString = connectionString;
+            DBLoad();
         }
-        private void Load()
-        {
-            _floorMapIDConfigModel.Clear();
-            using (var con = new SqlConnection(connectionString))
-            {
-                foreach (var floorMapIDConfigs in con.Query<FloorMapIdConfigModel>("SELECT * FROM FloorMapIDConfigs WHERE DisplayFlag=1"))
-                {
 
-                    _floorMapIDConfigModel.Add(floorMapIDConfigs);
-                }
-            }
-        }
         //DB 추가하기
         public FloorMapIdConfigModel Add(FloorMapIdConfigModel model)
         {
@@ -82,8 +73,52 @@ namespace Monitor.Data
         //    }
         //}
 
-        public IList<FloorMapIdConfigModel> GetAll() => _floorMapIDConfigModel;
+        public IList<FloorMapIdConfigModel> GetAll()
+        {
+            lock (lockObj)
+            {
+                return _floorMapIDConfigModel;
+            }
+        }
 
+        public List<FloorMapIdConfigModel> DBLoad()
+        {
+            lock (lockObj)
+            {
+                _floorMapIDConfigModel.Clear();
+                using (var con = new SqlConnection(connectionString))
+                {
+                    foreach (var floorMapIDConfigs in con.Query<FloorMapIdConfigModel>("SELECT * FROM FloorMapIDConfigs WHERE DisplayFlag=1"))
+                    {
+                        _floorMapIDConfigModel.Add(floorMapIDConfigs);
+                    }
+                    return _floorMapIDConfigModel;
+                }
+            }
+        }
+
+        public List<FloorMapIdConfigModel> Update()
+        {
+            lock (lockObj)
+            {
+                using (var con = new SqlConnection(connectionString))
+                {
+                    foreach (var floorMapIDConfigs in con.Query<FloorMapIdConfigModel>("SELECT * FROM FloorMapIDConfigs WHERE DisplayFlag=1"))
+                    {
+                       var Updata = _floorMapIDConfigModel.FirstOrDefault(x=>x.Id == floorMapIDConfigs.Id);
+                        if(Updata!=null)
+                        {
+                            Updata.Id = floorMapIDConfigs.Id;
+                            Updata.FloorIndex = floorMapIDConfigs.FloorIndex;
+                            Updata.FloorName = floorMapIDConfigs.FloorName;
+                            Updata.MapID = floorMapIDConfigs.MapID;
+                            Updata.MapImageData = floorMapIDConfigs.MapImageData;
+                        }
+                    }
+                    return _floorMapIDConfigModel;
+                }
+            }
+        }
 
         public List<FloorMapIdConfigModel> DBGetAll()
         {
@@ -92,7 +127,6 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<FloorMapIdConfigModel>("SELECT * FROM FloorMapIDConfigs WHERE DisplayFlag=1").ToList();
-
                 }
             }
         }

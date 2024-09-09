@@ -15,13 +15,14 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using Monitor.Common;
+using Newtonsoft.Json;
 
 namespace ACS.Monitor
 {
     public partial class AutoScreen : Form
     {
-        public Dictionary<int, string> Sub_DisplayMapNames;
-        public List<MapNameAlias> mapDBdatas;
+        public Dictionary<string, string> Sub_DisplayMapNames;
         public List<TableLayoutPanel> layoutPanels;
         public bool FlagLayout = false;
         public string S_UserNumber = "";
@@ -35,7 +36,6 @@ namespace ACS.Monitor
         private readonly Font gridFont1 = new Font("Arial", 10, FontStyle.Bold);
         private readonly Font gridFont2 = new Font("Arial", 9, FontStyle.Bold);
         private DataTable GridDT = new DataTable();
-        private Dictionary<string, RobotZoom> RobotzoomData = new Dictionary<string, RobotZoom>();
 
         public AutoScreen(MainForm mainForm, IUnitOfWork uow)
         {
@@ -62,14 +62,11 @@ namespace ACS.Monitor
 #else
             string fleetIp = ConfigurationManager.AppSettings["sFleet_IP_Address_SV"];
 #endif
-            Sub_DisplayMapNames = new Dictionary<int, string>();
-            mapDBdatas = new List<MapNameAlias>();
+            Sub_DisplayMapNames = new Dictionary<string, string>();
             layoutPanels = new List<TableLayoutPanel>();
-            mapDBdatas = MapNameAlias.GetAll();
-
             {
                 string tmp = ConfigurationManager.AppSettings["MapNames"];
-                ConfigData.DisplayMapNames = Helpers.ConvertintToDictionary(tmp) ?? new Dictionary<int, string>();
+                ConfigData.DisplayMapNames = Helpers.ConvertStringToDictionary(tmp) ?? new Dictionary<string, string>();
             }
 
             {
@@ -141,11 +138,9 @@ namespace ACS.Monitor
 
             try
             {
-                var orderedRobots = uow.Robots.DBGetAll().ToList();
-                orderedRobots = orderedRobots.OrderBy(x => x.RobotAlias).ToList();
-                orderedRobots = orderedRobots.Where(x => ConfigData.DisplayRobotNames.ContainsKey(x.RobotName)).ToList(); // 설정창에서 체크된 robot만 필터링
+                // 설정창에서 체크된 robot만 필터링
 
-                ConfigData.Robots = orderedRobots; // 맵에서 사용하기 위해 전역변수에 저장한다!
+
 
                 gridView1.SelectAll();
                 gridView1.DeleteSelectedRows();
@@ -156,125 +151,247 @@ namespace ACS.Monitor
                 int GridCount = 0;
                 dtgAuto_MiR_Status.RepositoryItems.Clear();
                 GridDT.Rows.Clear();
-                for (int iMiR_No = 0; iMiR_No < orderedRobots.Count(); iMiR_No++)
+
+                //foreach 문으로 변경
+
+                var orderedRobots = uow.Robots.GetAll().Where(r => r.RobotID > 0 && ConfigData.DisplayRobotNames.ContainsKey(r.RobotName))
+                                                       .OrderBy(r => r.RobotAlias).ToList();
+
+                foreach (var robot in orderedRobots)
                 {
-                    var robot = orderedRobots[iMiR_No];
 
-                    bool ViewResult = false;
-                    if (ConfigData.DisplayMapNames is Dictionary<int, string>)
+                    ritem.Minimum = 0;
+                    ritem.Maximum = 100;
+                    dtgAuto_MiR_Status.RepositoryItems.Add(ritem);
+                    dtgAuto_MiR_Status.RepositoryItems.Add(te);
+
+                    DataRow row = GridDT.NewRow();
+                    row["DGV_MiR_Status_Robot_Alias"] = robot.RobotAlias.ToString();
+                    row["DGV_MiR_State"] = robot.Fleet_State == FleetState.unavailable ? robot.Fleet_State_Text : robot.StateText;
+                    row["DGV_MiR_Status_Battery_Percent"] = robot.BatteryPercent.ToString("0.00") + "%";
+
+                    row["DGV_WaitTime"] = uow.PositionWaitTimes.GetAll().FirstOrDefault(x => x.RobotName == robot.RobotName && x.RobotAlias == robot.RobotAlias)?.ElapsedTime ?? "";
+                    //Job 상태
+                    if (robot.JobId > 0)
                     {
-                        foreach (var data in ConfigData.DisplayMapNames)
+
+                        var RunJobs = uow.Jobs.GetAll().FirstOrDefault(j => j.Id == robot.JobId);
+                        var Missions = uow.Missions.GetAll().Where(m => m.JobId == robot.JobId);
+                        var ExecMission = Missions.FirstOrDefault(e => e.MissionState == "Executing");
+                        var ElevatorOrderAll = uow.ElevatorStates.GetAll();
+                        var ElevatorOrderRobotNameSelect = ElevatorOrderAll.FirstOrDefault(x => x.RobotName == robot.RobotName);
+
+                        if (RunJobs != null)
                         {
-                            if (robot.MapID == data.Value)
-                                ViewResult = true;
-                        }
-                    }
-
-                    if (robot.RobotID > 0 && ViewResult)
-                    {
-                        DataRow row = GridDT.NewRow();
-                        row["DGV_MiR_Status_Robot_Alias"] = robot.RobotAlias.ToString();
-                        row["DGV_MiR_State"] = robot.Fleet_State == FleetState.unavailable ? robot.Fleet_State_Text : robot.StateText;
-
-                        ritem = new RepositoryItemProgressBar();
-                        ritem.Minimum = 0;
-                        ritem.Maximum = 100;
-                        dtgAuto_MiR_Status.RepositoryItems.Add(ritem);
-                        if (robot.JobId != 0)
-                        {
-                            var Missions = uow.Missions.GetAll().Where(x => x.JobId == robot.JobId);
-
-                            int count = Missions.Count();
-                            var ExecMission = Missions.FirstOrDefault(x => x.MissionState == "Executing");
-                            var JobsMissions = uow.Jobs.GetAll().FirstOrDefault(x => x.Id == robot.JobId);
-
-                            if (ExecMission != null)
-                            {
-                                if (JobsMissions.MissionId1 == ExecMission.Id)
-                                    row["DGV_ProgressBar"] = (100 / count);
-                                else if (JobsMissions.MissionId2 == ExecMission.Id)
-                                    row["DGV_ProgressBar"] = (200 / count);
-                                else if (JobsMissions.MissionId3 == ExecMission.Id)
-                                    row["DGV_ProgressBar"] = (270 / count);
-                                else if (JobsMissions.MissionId4 == ExecMission.Id)
-                                    row["DGV_ProgressBar"] = (400 / count);
-                                else if (JobsMissions.MissionId5 == ExecMission.Id)
-                                    row["DGV_ProgressBar"] = (450 / count);
-
-                                robot.ProgressBar = Convert.ToInt16(row["DGV_ProgressBar"]);
-                            }
-                            else
-                                row["DGV_ProgressBar"] = robot.ProgressBar;
+                            row["DGV_MiR_Status_CallName"] = RunJobs.CallName;
+                            row["DGV_Source"] = RunJobs.CallName.Split('_')[0];
+                            row["DGV_Dest"] = RunJobs.CallName.Split('_')[1];
                         }
                         else
-                            row["DGV_ProgressBar"] = 0;
-
-                        var PositionValue = uow.PositionAreaConfigs.GetAll().FirstOrDefault(x => x.PositionWaitTimeLog == true && x.PositionAreaName == robot.PositionZoneName);
-                        if (PositionValue != null)
-                            row["DGV_PositionWaitTime"] = "Area";
-                        else
-                            row["DGV_PositionWaitTime"] = "Not Area";
-
-                        row["DGV_MiR_Status_Battery_Percent"] = robot.BatteryPercent.ToString("0.00") + "%";
-
-                        var job = uow.Jobs.Find(x => x.Id == robot.JobId).FirstOrDefault();
-                        if (job != null)
-                            row["DGV_MiR_Status_CallName"] = job.CallName;
-                        else
+                        {
                             row["DGV_MiR_Status_CallName"] = "";
-
-                        if (job != null && job.CallName != null)
-                        {
-                            row["DGV_Source"] = job.CallName.Split('_')[0];
-                            row["DGV_Dest"] = job.CallName.Split('_')[1];
-                        }
-                        else
-                        {
                             row["DGV_Source"] = "";
                             row["DGV_Dest"] = "";
                         }
 
-                        row["DGV_WaitTime"] = uow.PositionWaitTimeRepository.GetAll().FirstOrDefault(x => x.RobotName == robot.RobotName && x.RobotAlias == robot.RobotAlias)?.ElapsedTime ?? "";
 
-                        uow.ElevatorStateRepository.Load();
-                        var ElevatorState = uow.ElevatorStateRepository.GetAll();
-                        var RobotName = ElevatorState.FirstOrDefault(x => x.RobotName == robot.RobotName);
-                        int ElevatorOrder = ElevatorState.IndexOf(RobotName);
-                        if (ElevatorOrder != -1)
-                            row["DGV_ElevatorOrder"] = Convert.ToString((ElevatorOrder + 1) + "번째");
-                        else
-                            row["DGV_ElevatorOrder"] = "";
-
-                        row["DGV_MiR_Status_Product"] = robot.Product ?? "";
-
-                        var products = uow.Products.Get10ProductsByRobotName(robot.RobotName);
-                        var productNames = products.Select(x => x.ProductName).ToList();
-                        string productInfo = string.Join("\r\n", productNames);
-                        row["DGV_MiR_Status_Product_Detail"] = productInfo;
-
-                        te = new RepositoryItemTextEdit();
-                        dtgAuto_MiR_Status.RepositoryItems.Add(te);
-                        row["DGV_MiR_Status_Door_T"] = robot.Door ?? "";
-
-
-                        string[] Number = robot.RobotAlias.Split('#');
-
-                        if (Number.Length >= 2)
+                        if (ExecMission != null)
                         {
-                            bool result = Int16.TryParse(Number[1], out short number);
+                            if (RunJobs.MissionId1 == ExecMission.Id)
+                                row["DGV_ProgressBar"] = (100 / Missions.Count());
+                            else if (RunJobs.MissionId2 == ExecMission.Id)
+                                row["DGV_ProgressBar"] = (200 / Missions.Count());
+                            else if (RunJobs.MissionId3 == ExecMission.Id)
+                                row["DGV_ProgressBar"] = (270 / Missions.Count());
+                            else if (RunJobs.MissionId4 == ExecMission.Id)
+                                row["DGV_ProgressBar"] = (400 / Missions.Count());
+                            else if (RunJobs.MissionId5 == ExecMission.Id)
+                                row["DGV_ProgressBar"] = (450 / Missions.Count());
 
-                            if (result)
-                                row["DGV_MiR_Status_Robot_Name_orderby"] = Convert.ToInt16(Number[1]);
-                            else
-                                row["DGV_MiR_Status_Robot_Name_orderby"] = Convert.ToInt16(0);
+                            robot.ProgressBar = Convert.ToInt16(row["DGV_ProgressBar"]);
                         }
                         else
-                            row["DGV_MiR_Status_Robot_Name_orderby"] = Convert.ToInt16(0);
+                            row["DGV_ProgressBar"] = robot.ProgressBar;
 
-                        GridDT.Rows.InsertAt(row, GridCount);
-                        GridCount++;
+                        if (ElevatorOrderRobotNameSelect != null)
+                        {
+                            int ElevatorOrderIndex = ElevatorOrderAll.IndexOf(ElevatorOrderRobotNameSelect);
+                            row["DGV_ElevatorOrder"] = Convert.ToString((ElevatorOrderIndex + 1) + "번째");
+
+                        }
+                        else row["DGV_ElevatorOrder"] = "";
+
                     }
+                    else
+                    {
+                        row["DGV_ProgressBar"] = 0;
+                        row["DGV_ElevatorOrder"] = "";
+                    }
+
+                    //Position WaitTime 
+                    if (PositionValue != null)
+                        row["DGV_PositionWaitTime"] = "Area";
+                    else
+                        row["DGV_PositionWaitTime"] = "Not Area";
+
+
+                    row["DGV_MiR_Status_Product"] = robot.Product ?? "";
+
+                    //var products = uow.Products.Get10ProductsByRobotName(robot.RobotName);
+                    //var productNames = products.Select(x => x.ProductName).ToList();
+                    //string productInfo = string.Join("\r\n", productNames);
+                    //row["DGV_MiR_Status_Product_Detail"] = productInfo;
+
+
+                    row["DGV_MiR_Status_Door_T"] = robot.Door ?? "";
+
+
+                    string[] Number = robot.RobotAlias.Split('#');
+
+                    if (Number.Length >= 2)
+                    {
+                        bool result = Int16.TryParse(Number[1], out short number);
+
+                        if (result)
+                            row["DGV_MiR_Status_Robot_Name_orderby"] = Convert.ToInt16(Number[1]);
+                        else
+                            row["DGV_MiR_Status_Robot_Name_orderby"] = Convert.ToInt16(0);
+                    }
+                    else
+                        row["DGV_MiR_Status_Robot_Name_orderby"] = Convert.ToInt16(0);
+
+                    GridDT.Rows.InsertAt(row, GridCount);
+                    GridCount++;
+
                 }
+
+
+
+
+
+
+
+
+
+                //for (int iMiR_No = 0; iMiR_No < orderedRobots.Count(); iMiR_No++)
+                //{
+                //    var robot = orderedRobots[iMiR_No];
+
+                //    bool ViewResult = false;
+                //    if (ConfigData.DisplayMapNames is Dictionary<int, string>)
+                //    {
+                //        foreach (var data in ConfigData.DisplayMapNames)
+                //        {
+                //            if (robot.MapID == data.Value)
+                //                ViewResult = true;
+                //        }
+                //    }
+
+                //    if (robot.RobotID > 0 && ViewResult)
+                //    {
+                //        DataRow row = GridDT.NewRow();
+                //        row["DGV_MiR_Status_Robot_Alias"] = robot.RobotAlias.ToString();
+                //        row["DGV_MiR_State"] = robot.Fleet_State == FleetState.unavailable ? robot.Fleet_State_Text : robot.StateText;
+
+                //        ritem = new RepositoryItemProgressBar();
+                //        ritem.Minimum = 0;
+                //        ritem.Maximum = 100;
+                //        dtgAuto_MiR_Status.RepositoryItems.Add(ritem);
+                //        if (robot.JobId != 0)
+                //        {
+                //            var Missions = uow.Missions.GetAll().Where(x => x.JobId == robot.JobId);
+
+                //            int count = Missions.Count();
+                //            var ExecMission = Missions.FirstOrDefault(x => x.MissionState == "Executing");
+                //            var JobsMissions = uow.Jobs.GetAll().FirstOrDefault(x => x.Id == robot.JobId);
+
+                //            if (ExecMission != null)
+                //            {
+                //                if (JobsMissions.MissionId1 == ExecMission.Id)
+                //                    row["DGV_ProgressBar"] = (100 / count);
+                //                else if (JobsMissions.MissionId2 == ExecMission.Id)
+                //                    row["DGV_ProgressBar"] = (200 / count);
+                //                else if (JobsMissions.MissionId3 == ExecMission.Id)
+                //                    row["DGV_ProgressBar"] = (270 / count);
+                //                else if (JobsMissions.MissionId4 == ExecMission.Id)
+                //                    row["DGV_ProgressBar"] = (400 / count);
+                //                else if (JobsMissions.MissionId5 == ExecMission.Id)
+                //                    row["DGV_ProgressBar"] = (450 / count);
+
+                //                robot.ProgressBar = Convert.ToInt16(row["DGV_ProgressBar"]);
+                //            }
+                //            else
+                //                row["DGV_ProgressBar"] = robot.ProgressBar;
+                //        }
+                //        else
+                //            row["DGV_ProgressBar"] = 0;
+
+
+                //        if (PositionValue != null)
+                //            row["DGV_PositionWaitTime"] = "Area";
+                //        else
+                //            row["DGV_PositionWaitTime"] = "Not Area";
+
+                //        row["DGV_MiR_Status_Battery_Percent"] = robot.BatteryPercent.ToString("0.00") + "%";
+
+                //        var job = uow.Jobs.Find(x => x.Id == robot.JobId).FirstOrDefault();
+                //        if (job != null)
+                //            row["DGV_MiR_Status_CallName"] = job.CallName;
+                //        else
+                //            row["DGV_MiR_Status_CallName"] = "";
+
+                //        if (job != null && job.CallName != null)
+                //        {
+                //            row["DGV_Source"] = job.CallName.Split('_')[0];
+                //            row["DGV_Dest"] = job.CallName.Split('_')[1];
+                //        }
+                //        else
+                //        {
+                //            row["DGV_Source"] = "";
+                //            row["DGV_Dest"] = "";
+                //        }
+
+                //        row["DGV_WaitTime"] = uow.PositionWaitTimeRepository.GetAll().FirstOrDefault(x => x.RobotName == robot.RobotName && x.RobotAlias == robot.RobotAlias)?.ElapsedTime ?? "";
+
+                //        uow.ElevatorStateRepository.Load();
+                //        var ElevatorState = uow.ElevatorStateRepository.GetAll();
+                //        var RobotName = ElevatorState.FirstOrDefault(x => x.RobotName == robot.RobotName);
+                //        int ElevatorOrder = ElevatorState.IndexOf(RobotName);
+                //        if (ElevatorOrder != -1)
+                //            row["DGV_ElevatorOrder"] = Convert.ToString((ElevatorOrder + 1) + "번째");
+                //        else
+                //            row["DGV_ElevatorOrder"] = "";
+
+                //        row["DGV_MiR_Status_Product"] = robot.Product ?? "";
+
+                //        var products = uow.Products.Get10ProductsByRobotName(robot.RobotName);
+                //        var productNames = products.Select(x => x.ProductName).ToList();
+                //        string productInfo = string.Join("\r\n", productNames);
+                //        row["DGV_MiR_Status_Product_Detail"] = productInfo;
+
+                //        te = new RepositoryItemTextEdit();
+                //        dtgAuto_MiR_Status.RepositoryItems.Add(te);
+                //        row["DGV_MiR_Status_Door_T"] = robot.Door ?? "";
+
+
+                //        string[] Number = robot.RobotAlias.Split('#');
+
+                //        if (Number.Length >= 2)
+                //        {
+                //            bool result = Int16.TryParse(Number[1], out short number);
+
+                //            if (result)
+                //                row["DGV_MiR_Status_Robot_Name_orderby"] = Convert.ToInt16(Number[1]);
+                //            else
+                //                row["DGV_MiR_Status_Robot_Name_orderby"] = Convert.ToInt16(0);
+                //        }
+                //        else
+                //            row["DGV_MiR_Status_Robot_Name_orderby"] = Convert.ToInt16(0);
+
+                //        GridDT.Rows.InsertAt(row, GridCount);
+                //        GridCount++;
+                //    }
+                //}
 
                 if (Flag)
                 {
@@ -436,7 +553,7 @@ namespace ACS.Monitor
         private void Map_Load()
         {
             //선택한 모니터가 있는지 확인
-            if (ConfigData.DisplayMapNames is Dictionary<int, string>)
+            if (ConfigData.DisplayMapNames is Dictionary<string, string>)
             {
                 //선택한 모니터랑 이전 선택한 모니터 비교
                 if (ConfigData.DisplayMapNames.Except(Sub_DisplayMapNames).Any() || ConfigData.DisplayMapNames.Count != Sub_DisplayMapNames.Count)
@@ -444,7 +561,7 @@ namespace ACS.Monitor
                     //값 복사
                     Sub_DisplayMapNames.Clear();
 
-                    foreach (KeyValuePair<int, string> pair in ConfigData.DisplayMapNames)
+                    foreach (KeyValuePair<string, string> pair in ConfigData.DisplayMapNames)
                         Sub_DisplayMapNames.Add(pair.Key, pair.Value);
 
                     //TableLayoutPanel 행 열 정하기
@@ -624,107 +741,72 @@ namespace ACS.Monitor
         private void DrawMap()
         {
             string fleetIp = ConfigurationManager.AppSettings["sFleet_IP_Address_SV"];
-            List<MapData> mapDatas = new List<MapData>();
-
-            //MapData 코딩으로 넣어둠
-            mapDatas.Clear();
-            { MapData Data = new MapData { mapScale = 0.13333334f, mouseFirstLocation = new Point(263, 266), mouseMoveOffset = new Point(-150, 64), FloorName = "M3F" }; mapDatas.Add(Data); }
-            { MapData Data = new MapData { mapScale = 0.2166666f, mouseFirstLocation = new Point(146, 279), mouseMoveOffset = new Point(-96, 113), FloorName = "T3F" }; mapDatas.Add(Data); }
 
             //Map Task 끄기
             MapInit();
 
-            //Robotzoom 데이터 초기화
-            RobotzoomData.Clear();
-
             //Map 그리기
             int Datacount = 1;
+
+
             foreach (var item in ConfigData.DisplayMapNames)
             {
-                //선택한 맵 데이터 불러오기
-                if (mapDBdatas.Exists(x => x.Id == item.Key))
-                {
-                    //DB에서 데이터 가져오기
-                    var mapDBdata = mapDBdatas.Find(x => x.Id == item.Key);
+               
 
-                    //위에 MapData에서 데이터 가져오기
-                    var Data = new MapData();
-                    if (mapDatas.Exists(x => x.FloorName == mapDBdata.FloorName))
-                        Data = mapDatas.Find(x => x.FloorName == mapDBdata.FloorName);
-                    else
-                        Data = new MapData { mapScale = 0.600f, mouseFirstLocation = new Point(559, 420), mouseMoveOffset = new Point(0, 50), FloorName = mapDBdata.FloorName };//기본값
+                var FloorMapdata = uow.FloorMapIDConfigs.Find(f => f.FloorIndex == item.Value).FirstOrDefault();
+                if (FloorMapdata != null)
+                {
+                    if (FloorMapdata.MapData.mapScale == 0)
+                    {
+                        if (FloorMapdata.FloorName == "M3F")
+                        {
+                            FloorMapdata.MapData.mapScale = 0.13333334f;
+                            FloorMapdata.MapData.mouseFirstLocation = new Point(263, 266);
+                            FloorMapdata.MapData.mouseMoveOffset = new Point(-150, 64);
+                        }
+                        else if (FloorMapdata.FloorName == "T3F")
+                        {
+                            FloorMapdata.MapData.mapScale = 0.2166666f;
+                            FloorMapdata.MapData.mouseFirstLocation = new Point(146, 279);
+                            FloorMapdata.MapData.mouseMoveOffset = new Point(-96, 113);
+                        }
+                        else
+                        {
+                            FloorMapdata.MapData.mapScale = 0.600f;
+                            FloorMapdata.MapData.mouseFirstLocation = new Point(559, 420);
+                            FloorMapdata.MapData.mouseMoveOffset = new Point(-0, 50);
+                        }
+                    }
 
                     if (Datacount == 1)
                     {
-                        mainForm.DrawUCMapView(ucMapView1, mapDBdata, Data, fleetIp, true);
-
-                        RobotZoom robotZoom = new RobotZoom();
-                        robotZoom.view = ucMapView1;
-                        robotZoom.mapDBdata = mapDBdata;
-                        robotZoom.Data = Data;
-
-                        if (!RobotzoomData.ContainsKey(mapDBdata.MapID))
-                            RobotzoomData.Add(mapDBdata.MapID, robotZoom);
+                        mainForm.DbDrawUCMApView(ucMapView1, FloorMapdata, null, true);
+                        FloorMapdata.MapData.MapViewName = "ucMapView1";
                     }
                     else if (Datacount == 2)
                     {
-                        mainForm.DrawUCMapView(ucMapView2, mapDBdata, Data, fleetIp, true);
-
-                        RobotZoom robotZoom = new RobotZoom();
-                        robotZoom.view = ucMapView2;
-                        robotZoom.mapDBdata = mapDBdata;
-                        robotZoom.Data = Data;
-
-                        if (!RobotzoomData.ContainsKey(mapDBdata.MapID))
-                            RobotzoomData.Add(mapDBdata.MapID, robotZoom);
+                        mainForm.DbDrawUCMApView(ucMapView2, FloorMapdata, null, true);
+                        FloorMapdata.MapData.MapViewName = "ucMapView2";
                     }
                     else if (Datacount == 3)
                     {
-                        mainForm.DrawUCMapView(ucMapView3, mapDBdata, Data, fleetIp, true);
-
-                        RobotZoom robotZoom = new RobotZoom();
-                        robotZoom.view = ucMapView3;
-                        robotZoom.mapDBdata = mapDBdata;
-                        robotZoom.Data = Data;
-
-                        if (!RobotzoomData.ContainsKey(mapDBdata.MapID))
-                            RobotzoomData.Add(mapDBdata.MapID, robotZoom);
+                        mainForm.DbDrawUCMApView(ucMapView3, FloorMapdata, null, true);
+                        FloorMapdata.MapData.MapViewName = "ucMapView3";
                     }
                     else if (Datacount == 4)
                     {
-                        mainForm.DrawUCMapView(ucMapView4, mapDBdata, Data, fleetIp, true);
-
-                        RobotZoom robotZoom = new RobotZoom();
-                        robotZoom.view = ucMapView4;
-                        robotZoom.mapDBdata = mapDBdata;
-                        robotZoom.Data = Data;
-
-                        if (!RobotzoomData.ContainsKey(mapDBdata.MapID))
-                            RobotzoomData.Add(mapDBdata.MapID, robotZoom);
+                        mainForm.DbDrawUCMApView(ucMapView4, FloorMapdata, null, true);
+                        FloorMapdata.MapData.MapViewName = "ucMapView4";
                     }
                     else if (Datacount == 5)
                     {
-                        mainForm.DrawUCMapView(ucMapView5, mapDBdata, Data, fleetIp, true);
-
-                        RobotZoom robotZoom = new RobotZoom();
-                        robotZoom.view = ucMapView5;
-                        robotZoom.mapDBdata = mapDBdata;
-                        robotZoom.Data = Data;
-
-                        if (!RobotzoomData.ContainsKey(mapDBdata.MapID))
-                            RobotzoomData.Add(mapDBdata.MapID, robotZoom);
+                        mainForm.DbDrawUCMApView(ucMapView5, FloorMapdata, null, true);
+                        FloorMapdata.MapData.MapViewName = "ucMapView5";
                     }
                     else if (Datacount == 6)
                     {
-                        mainForm.DrawUCMapView(ucMapView6, mapDBdata, Data, fleetIp, true);
-
-                        RobotZoom robotZoom = new RobotZoom();
-                        robotZoom.view = ucMapView6;
-                        robotZoom.mapDBdata = mapDBdata;
-                        robotZoom.Data = Data;
-
-                        if (!RobotzoomData.ContainsKey(mapDBdata.MapID))
-                            RobotzoomData.Add(mapDBdata.MapID, robotZoom);
+                        mainForm.DbDrawUCMApView(ucMapView6, FloorMapdata, null, true);
+                        FloorMapdata.MapData.MapViewName = "ucMapView6";
                     }
                 }
 
@@ -931,7 +1013,6 @@ namespace ACS.Monitor
 
         private void gridView1_DoubleClick(object sender, EventArgs e)
         {
-            string fleetIp = ConfigurationManager.AppSettings["sFleet_IP_Address_SV"];
 
             DXMouseEventArgs ea = e as DXMouseEventArgs;
             GridView view = sender as GridView;
@@ -941,87 +1022,94 @@ namespace ACS.Monitor
             {
                 string RobotAlias = gridView1.GetDataRow(info.RowHandle)["DGV_MiR_Status_Robot_Alias"].ToString();
 
-                var RobotData = uow.Robots.DBGetAll().FirstOrDefault(x => x.RobotAlias == RobotAlias);
+                var RobotData = uow.Robots.GetAll().FirstOrDefault(x => x.RobotAlias == RobotAlias);
 
                 if (RobotData != null)
                 {
-                    RobotzoomData.TryGetValue(RobotData.MapID, out RobotZoom value);
-
-                    value.view.StopLoop();
-
-                    //T3F
-                    //Test 수정진행중 [김익교]
-                    //value.Data.mouseMoveOffset = new Point(-1375, -106);
-                    //value.Data.mouseFirstLocation = new Point(346, 176);
-                    if (RobotData.MapID == "f8b799ff-2879-11ef-b062-00012961a136")
+                    var RobotZoomMapDate = uow.FloorMapIDConfigs.Find(x => x.MapID == RobotData.MapID).FirstOrDefault();
+                    if (RobotZoomMapDate != null)
                     {
-                        //OFFSet =0 , =0 
-                        //robot좌표 31.4 /148.8
-                        //X는 31.4보다 작으면 +
-                        //X는 31.4보다 크면 -
-                        //Y는 148.8보다 작으면 -
-                        //Y는 148.8보다 크면 +
-                        int MapSizeWidth = (820 - value.view.ClientSize.Width) / 2;
-                        int MapSizeHeight = (311 - value.view.ClientSize.Height) / 2;
+                        UCMapView uCMapView = null;
+                        if (RobotZoomMapDate.MapData.MapViewName == "ucMapView1") uCMapView = ucMapView1;
+                        else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView2") uCMapView = ucMapView2;
+                        else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView3") uCMapView = ucMapView3;
+                        else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView4") uCMapView = ucMapView4;
+                        else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView5") uCMapView = ucMapView5;
+                        else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView6") uCMapView = ucMapView6;
 
-                        double OffSetRobotPOSX = (RobotData.Position_X - 31.4) * -1;
-                        double OffsetRobotPOSY = (148.8 - RobotData.Position_Y) * -1;
-                        int OffSetx = (int)Math.Round(OffSetRobotPOSX * 9.2) - MapSizeWidth;
-                        int Offsety = (int)Math.Round(OffsetRobotPOSY * 10.2) - MapSizeHeight;
-                        value.Data.mapScale = (float)0.5;
-                        value.Data.mouseMoveOffset = new Point(OffSetx, Offsety);
+                        if (uCMapView != null)
+                        {
+                            uCMapView.StopLoop();
+                            //T3F
+                            //Test 수정진행중 [김익교]
+                            //value.Data.mouseMoveOffset = new Point(-1375, -106);
+                            //value.Data.mouseFirstLocation = new Point(346, 176);
+                            if (RobotZoomMapDate.MapID == RobotData.MapID && RobotZoomMapDate.FloorName == "B1")
+                            {
+                                //OFFSet =0 , =0 
+                                //robot좌표 31.4 /148.8
+                                //X는 31.4보다 작으면 +
+                                //X는 31.4보다 크면 -
+                                //Y는 148.8보다 작으면 -
+                                //Y는 148.8보다 크면 +
+                                int MapSizeWidth = (820 - uCMapView.ClientSize.Width) / 2;
+                                int MapSizeHeight = (311 - uCMapView.ClientSize.Height) / 2;
+
+                                double OffSetRobotPOSX = (RobotData.Position_X - 31.4) * -1;
+                                double OffsetRobotPOSY = (148.8 - RobotData.Position_Y) * -1;
+                                int OffSetx = (int)Math.Round(OffSetRobotPOSX * 9.2) - MapSizeWidth;
+                                int Offsety = (int)Math.Round(OffsetRobotPOSY * 10.2) - MapSizeHeight;
+                                RobotZoomMapDate.MapData.mapScale = (float)0.5;
+                                RobotZoomMapDate.MapData.mouseMoveOffset = new Point(OffSetx, Offsety);
+                            }
+
+                            else if (RobotZoomMapDate.MapID == RobotData.MapID && RobotZoomMapDate.FloorName == "M3F") // M3F
+                            {
+                                //OFFSet =0 , =0 
+                                //robot좌표 29.650 /124.600
+                                //X는 29.6보다 작으면 +
+                                //X는 29.6보다 크면 -
+                                //Y는 124.6보다 작으면 -
+                                //Y는 124.6보다 크면 +
+                                int MapSizeWidth = (820 - uCMapView.ClientSize.Width) / 2;
+                                int MapSizeHeight = (311 - uCMapView.ClientSize.Height) / 2;
+
+                                double OffSetRobotPOSX = (RobotData.Position_X - 30) * -1;
+                                double OffsetRobotPOSY = (124.6 - RobotData.Position_Y) * -1;
+                                int OffSetx = (int)Math.Round(OffSetRobotPOSX * 9.2) - MapSizeWidth;
+                                int Offsety = (int)Math.Round(OffsetRobotPOSY * 10.2) - MapSizeHeight;
+                                RobotZoomMapDate.MapData.mapScale = (float)0.5;
+                                RobotZoomMapDate.MapData.mouseMoveOffset = new Point(OffSetx, Offsety);
+                            }
+
+                            else if (RobotZoomMapDate.MapID == RobotData.MapID && RobotZoomMapDate.FloorName == "T4F") // T4F
+                            {
+                                //OFFSet =0 , =0 
+                                //robot좌표 29.800 /50.300
+                                //X는 29.8보다 작으면 +
+                                //X는 29.8보다 크면 -
+                                //Y는 60.3보다 작으면 -
+                                //Y는 60.3보다 크면 +
+                                int MapSizeWidth = (820 - uCMapView.ClientSize.Width) / 2;
+                                int MapSizeHeight = (311 - uCMapView.ClientSize.Height) / 2;
+                                double OffSetRobotPOSX = (RobotData.Position_X - 29.8) * -1;
+                                double OffsetRobotPOSY = (60.3 - RobotData.Position_Y) * -1;
+                                int OffSetx = (int)Math.Round(OffSetRobotPOSX * 9.2) - MapSizeWidth;
+                                int Offsety = (int)Math.Round(OffsetRobotPOSY * 10.2) - MapSizeHeight;
+                                RobotZoomMapDate.MapData.mapScale = (float)0.8;
+                                RobotZoomMapDate.MapData.mouseMoveOffset = new Point(OffSetx, Offsety);
+                            }
+
+                            mainForm.DbDrawUCMApView(uCMapView, RobotZoomMapDate, null, false);
+                            
+                        }
                     }
-
-                    else if (RobotData.MapID == "55023e70-4df7-11ed-80b2-000129af8f1d") // M3F
-                    {
-                        //OFFSet =0 , =0 
-                        //robot좌표 29.650 /124.600
-                        //X는 29.6보다 작으면 +
-                        //X는 29.6보다 크면 -
-                        //Y는 124.6보다 작으면 -
-                        //Y는 124.6보다 크면 +
-                        int MapSizeWidth = (820 - value.view.ClientSize.Width) / 2;
-                        int MapSizeHeight = (311 - value.view.ClientSize.Height) / 2;
-
-                        double OffSetRobotPOSX = (RobotData.Position_X - 30) * -1;
-                        double OffsetRobotPOSY = (124.6 - RobotData.Position_Y) * -1;
-                        int OffSetx = (int)Math.Round(OffSetRobotPOSX * 9.2) - MapSizeWidth;
-                        int Offsety = (int)Math.Round(OffsetRobotPOSY * 10.2) - MapSizeHeight;
-                        value.Data.mapScale = (float)0.5;
-                        value.Data.mouseMoveOffset = new Point(OffSetx, Offsety);
-                    }
-
-                    else if (RobotData.MapID == "d33ff60f-27e2-11ef-8f55-a41cb4009956") // T4F
-                    {
-                        //OFFSet =0 , =0 
-                        //robot좌표 29.800 /50.300
-                        //X는 29.8보다 작으면 +
-                        //X는 29.8보다 크면 -
-                        //Y는 60.3보다 작으면 -
-                        //Y는 60.3보다 크면 +
-                        int MapSizeWidth = (820 - value.view.ClientSize.Width) / 2;
-                        int MapSizeHeight = (311 - value.view.ClientSize.Height) / 2;
-                        double OffSetRobotPOSX = (RobotData.Position_X - 29.8) * -1;
-                        double OffsetRobotPOSY = (60.3 - RobotData.Position_Y) * -1;
-                        int OffSetx = (int)Math.Round(OffSetRobotPOSX * 9.2) - MapSizeWidth;
-                        int Offsety = (int)Math.Round(OffsetRobotPOSY * 10.2) - MapSizeHeight;
-                        value.Data.mapScale = (float)0.8;
-                        value.Data.mouseMoveOffset = new Point(OffSetx, Offsety);
-                    }
-
-                    mainForm.DrawUCMapView(value.view, value.mapDBdata, value.Data, fleetIp, false);
+                    else
+                        MessageBox.Show("로봇을 찾을 수 없습니다.");
                 }
-                else
-                    MessageBox.Show("로봇을 찾을 수 없습니다.");
             }
         }
         #endregion
     }
 
-    public class RobotZoom
-    {
-        public UCMapView view { get; set; }
-        //public MapNameAlias mapDBdata { get; set; }
-        //public MapData Data { get; set; }
-    }
 }

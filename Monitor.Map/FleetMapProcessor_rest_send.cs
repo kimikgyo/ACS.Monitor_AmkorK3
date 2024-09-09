@@ -14,6 +14,7 @@ namespace Monitor.Map
             HttpResponseMessage response = null;
             try
             {
+
                 client = new HttpClient();
                 var header = new AuthenticationHeaderValue("Basic", "ZGlzdHJpYnV0b3I6NjJmMmYwZjFlZmYxMGQzMTUyYzk1ZjZmMDU5NjU3NmU0ODJiYjhlNDQ4MDY0MzNmNGNmOTI5NzkyODM0YjAxNA==");
                 client.DefaultRequestHeaders.Authorization = header;

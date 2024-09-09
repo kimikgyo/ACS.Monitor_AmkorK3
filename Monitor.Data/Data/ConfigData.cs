@@ -7,10 +7,15 @@ namespace Monitor.Data
 {
     public  class ConfigData
     {
-        // 모니터링에서 사용
+        // UCMapView 모니터링에서 사용
         public static IList<Robot> Robots = null;
+        public static IList<Job> Jobs = null;
+        public static IList<FloorMapIdConfigModel> FloorMapIdConfigs = null;
+        public static IList<CustomMapModel> CustomMaps = null;
+        public static IList<FleetPositionModel> FleetPositions = null;
+
         public static Dictionary<string, string> DisplayRobotNames;
-        public static Dictionary<int, string> DisplayMapNames;
+        public static Dictionary<string, string> DisplayMapNames;
         public static int MonitorPcList_MaxNum = 2;
 
         //MiR 개수 설정

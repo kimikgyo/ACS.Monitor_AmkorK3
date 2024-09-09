@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monitor.Common;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -29,114 +30,131 @@ namespace Monitor.Map
 
         public int MapNo { get; set; }
 
-
-        public Bitmap GetRenderImage(Size drawingAreaSize, Point moveOffset, FleetMap map, IList<FleetRobot> robots, float scaleFactorH = 1.0F, float scaleFactorV = 1.0F)
+        public Bitmap GetRenderImage(Size drawingAreaSize, Point moveOffset, FleetMap map, Image Image, IList<FleetPositionModel> fleetPositionsDB, IList<FleetRobot> robots, float scaleFactorH = 1.0F, float scaleFactorV = 1.0F)
         {
-            return GetRenderImage(drawingAreaSize, moveOffset, map, map.Image, robots, scaleFactorH, scaleFactorV);
-        }
-
-        public Bitmap GetRenderImage(Size drawingAreaSize, Point moveOffset, FleetMap map, Image customImage, IList<FleetRobot> robots, float scaleFactorH = 1.0F, float scaleFactorV = 1.0F)
-        {
-
-            // create bitmap (for double-buffering)
-            Bitmap bitmap = new Bitmap(drawingAreaSize.Width, drawingAreaSize.Height);
-
-            lock (lockObj)
+            try
             {
-                using (Graphics g = Graphics.FromImage(bitmap))
+                // create bitmap (for double-buffering)
+                Bitmap bitmap = new Bitmap(drawingAreaSize.Width, drawingAreaSize.Height);
+
+                lock (lockObj)
                 {
-                    g.SmoothingMode = SmoothingMode.AntiAlias;
-                    g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-                    g.InterpolationMode = InterpolationMode.High;
-
-                    // map 변환
-                    float dx = moveOffset.X;
-                    float dy = moveOffset.Y;
-                    g.TranslateTransform(dx, dy); // map을 dx,dy만큼 이동시킨다
-                    g.ScaleTransform(scaleFactorH, scaleFactorV); // map을 스케일링 한다
-
-                    //Console.WriteLine($"MapName = {map.Name} / drawingAreaSize Width= {drawingAreaSize.Width} / drawingAreaSize Width= {drawingAreaSize.Height} || GetRenderImage moveOffset X= {moveOffset.X} / moveOffset Y= {moveOffset.Y}");
-
-                    //Test[Map = Customlmage / Robot = Fleet ]
-                    float 맵일치보정좌표X = 114;
-                    float 맵일치보정좌표Y = 305;
-
-                    // draw all
-                    g.Clear(Color.Gray);
-                    //((Bitmap)mapImage).MakeTransparent(Color.White); // white 색상을                                                                                                                                                 투명으로 설정한다
-
-                    //DataBaseMapImage
-                    //g.DrawImage(customImage, 0, 0);
-                    g.DrawImage(customImage, new Rectangle(0, 0, customImage.Width, customImage.Height));
-                    g.DrawRectangle(new Pen(Color.Red, 5), new Rectangle(0, 0, customImage.Width, customImage.Height));
-                    //customImageDrawText(g, 352, 63, textFont4, "convertedPoint");
-                    //customImageDrawText(g, 25, 23, textFont4, "mappingPoint");
-
-                    //사각형그리기
-
-                    //Fleet
-                    g.DrawImage(map.Image, 0, 0);
-                    //g.DrawRectangle(new Pen(Color.Red, 5), new Rectangle(0, 0, map.Image.Width, map.Image.Height));
-
-                    DrawPositions(g, map);
-                    Console.WriteLine($"FleetPosCenterPoint = {FleetPosCenterPoint}");
-
-                    customImageDrawPositions(g, map.Positions, customImage, 맵일치보정좌표X, 맵일치보정좌표Y);
-                    Console.WriteLine($"ImagePosCenterPoint = {ImagePosCenterPoint}");
-
-                    //// test
-                    //var rects = new List<RectangleF>();
-                    //rects.Add(new RectangleF(32.4f, 7.2f, 34.45f - 32.4f, 8.25f - 7.2f));
-                    //rects.Add(new RectangleF(18f, 9.8f, 30f - 18f, 13f - 9.8f));
-                    //DrawRectangles(g, map, rects);
-
-                    if (robots != null)
+                    using (Graphics g = Graphics.FromImage(bitmap))
                     {
-                        foreach (var robot in robots)
+                        g.SmoothingMode = SmoothingMode.AntiAlias;
+                        g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                        g.InterpolationMode = InterpolationMode.High;
+
+                        // map 변환
+                        float dx = moveOffset.X;
+                        float dy = moveOffset.Y;
+                        g.TranslateTransform(dx, dy); // map을 dx,dy만큼 이동시킨다
+                        g.ScaleTransform(scaleFactorH, scaleFactorV); // map을 스케일링 한다
+
+                        float 맵일치보정좌표X = 114;
+                        float 맵일치보정좌표Y = 305;
+
+                        // draw all
+                        g.Clear(Color.Gray);
+
+                        //DataBase
+                        if (Image != null && fleetPositionsDB != null)
                         {
-                            //FleetMap
-                            DrawRobot(g, map, robot);
-                            //DrawPositions(g, map);
-                            //customMap
-                            customImageDrawRobot(g, customImage, robot);
-                            //customImageDrawPositions(g, map, 맵일치보정좌표X, 맵일치보정좌표Y);
+                            //DataBaseMapImage
+                            //g.DrawImage(customImage, 0, 0);
+                            g.DrawImage(Image, new Rectangle(0, 0, Image.Width, Image.Height));
+                            g.DrawRectangle(new Pen(Color.Red, 5), new Rectangle(0, 0, Image.Width, Image.Height));
+                            DBImageDrawPositions(g, fleetPositionsDB, Image);
 
-                            //Console.WriteLine($"RobotName = {robot.RobotName} / RobotX = {robot.PosX} / RobotY = {robot.PosY} / RobotCenterPoint = {RobotcenterPoint}");
-                            if (robot.StateText == "Executing" && robot.MissionText.Contains("Moving to"))
+                            if (robots != null)
                             {
-
-                                foreach (var position in map.Positions)
+                                foreach (var robot in robots)
                                 {
 
-                                    string positionName = $"'{position.Name}'";
+                                    DBImageDrawRobot(g, Image, robot);
 
-                                    string[] NameSplit = robot.MissionText.Split(' ');
-
-                                    //string NameReplace = robot.MissionText.Replace("Moving to", "");
-
-                                    if (NameSplit[2].StartsWith(positionName))
+                                    if (robot.StateText == "Executing" && robot.MissionText.Contains("Moving to"))
                                     {
-                                        //customImageDrawPositions(g, map, 맵일치보정좌표X, 맵일치보정좌표Y, position.Name);
-                                        Draw점선그리기(g, RobotcenterPoint, ImagePosCenterPoint);
-                                        //Console.WriteLine($"RobotName = {robot.RobotName} /  / RobotCenterPoint = {RobotcenterPoint} / POSCenterPoint = {POScenterPoint}");
+
+                                        foreach (var position in fleetPositionsDB)
+                                        {
+
+                                            string positionName = $"'{position.Name}'";
+
+                                            string[] NameSplit = robot.MissionText.Split(' ');
+
+                                            //string NameReplace = robot.MissionText.Replace("Moving to", "");
+
+                                            if (NameSplit[2].StartsWith(positionName))
+                                            {
+                                                //customImageDrawPositions(g, map, 맵일치보정좌표X, 맵일치보정좌표Y, position.Name);
+                                                Draw점선그리기(g, RobotcenterPoint, ImagePosCenterPoint);
+                                                //Console.WriteLine($"RobotName = {robot.RobotName} /  / RobotCenterPoint = {RobotcenterPoint} / POSCenterPoint = {POScenterPoint}");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            //customImageDrawText(g, 352, 63, textFont4, "convertedPoint");
+                            //customImageDrawText(g, 25, 23, textFont4, "mappingPoint");
+                            Console.WriteLine($"ImagePosCenterPoint = {ImagePosCenterPoint}");
+                        }
+                        //사각형그리기
+                        //Fleet
+                        else if (map != null)
+                        {
+                            g.DrawImage(map.Image, 0, 0);
+                            //g.DrawRectangle(new Pen(Color.Red, 5), new Rectangle(0, 0, map.Image.Width, map.Image.Height));
+                            DrawPositions(g, map);
+                            Console.WriteLine($"FleetPosCenterPoint = {FleetPosCenterPoint}");
+
+                            if (robots != null)
+                            {
+                                foreach (var robot in robots)
+                                {
+                                    DrawRobot(g, map, robot);
+
+                                    if (robot.StateText == "Executing" && robot.MissionText.Contains("Moving to"))
+                                    {
+
+                                        foreach (var position in map.Positions)
+                                        {
+
+                                            string positionName = $"'{position.Name}'";
+
+                                            string[] NameSplit = robot.MissionText.Split(' ');
+
+                                            //string NameReplace = robot.MissionText.Replace("Moving to", "");
+
+                                            if (NameSplit[2].StartsWith(positionName))
+                                            {
+                                                //customImageDrawPositions(g, map, 맵일치보정좌표X, 맵일치보정좌표Y, position.Name);
+                                                Draw점선그리기(g, RobotcenterPoint, ImagePosCenterPoint);
+                                                //Console.WriteLine($"RobotName = {robot.RobotName} /  / RobotCenterPoint = {RobotcenterPoint} / POSCenterPoint = {POScenterPoint}");
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
+
+                        g.ResetTransform();
                     }
-
-
-                    g.ResetTransform();
                 }
-            }
 
-            return bitmap;
+                return bitmap;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"EX = {ex.InnerException} /  {ex.Message} / {ex.StackTrace}");
+                return null;
+            }
         }
 
         //DBImage
-        public PointF customMapImageGetScaledMapPoint(Point moveOffset, Image custommapImage, PointF point, float scaleFactorH = 1.0F, float scaleFactorV = 1.0F)
+        public PointF DBMapImageGetScaledMapPoint(Point moveOffset, Image DBmapImage, PointF point, float scaleFactorH = 1.0F, float scaleFactorV = 1.0F)
         {
-            if (custommapImage == null) return Point.Empty;
+            if (DBmapImage == null) return Point.Empty;
 
             float dx = moveOffset.X;
             float dy = moveOffset.Y;
@@ -151,13 +169,13 @@ namespace Monitor.Map
             Console.WriteLine($"convertedPoint = {convertedPoint} Text 좌측상단 좌표");
 
             // 변환한 point값으로 map에서의 좌표값을 구한다
-            PointF mappingPoint = customMapImageGetMapPoint(custommapImage, convertedPoint);
+            PointF mappingPoint = DBMapImageGetMapPoint(DBmapImage, convertedPoint);
 
             //Console.WriteLine($"GetScaledMapPoint = {mappingPoint.X,-6:0.00}, {mappingPoint.Y,-6:0.00}");
             return mappingPoint;
         }
 
-        private PointF customMapImageGetMapPoint(Image customImage, PointF point)
+        private PointF DBMapImageGetMapPoint(Image DBmapImage, PointF point)
         {
             float 좌표차이 = 0.1f;
             float Resolution = 0.005f;
@@ -170,7 +188,7 @@ namespace Monitor.Map
 
                 x = x + 305;
                 y = y - 114;
-                int dataBaseImageHeight = customImage.Height + 118;
+                int dataBaseImageHeight = DBmapImage.Height + 118;
 
                 y = dataBaseImageHeight + y;
 
@@ -182,7 +200,7 @@ namespace Monitor.Map
             }
         }
 
-        private void customImageDrawPositions(Graphics g, List<FleetPosition> fleetPositions, Image DataBaseImage, float 맵일치보정좌표X, float 맵일치보정좌표Y/*, string PositionName*/)
+        private void DBImageDrawPositions(Graphics g, IList<FleetPositionModel> fleetPositions, Image DataBaseImage/*, string PositionName*/)
         {
             foreach (var pos in fleetPositions)
             {
@@ -253,7 +271,7 @@ namespace Monitor.Map
                 //if (pos.Name == PositionName)
                 {
 
-                    Sub_customImageDrawPosition(g, pos, DataBaseImage, 맵일치보정좌표X, 맵일치보정좌표Y);
+                    Sub_DBImageDrawPosition(g, pos, DataBaseImage);
                 }
 
 
@@ -300,7 +318,7 @@ namespace Monitor.Map
             }
         }
 
-        private void Sub_customImageDrawPosition(Graphics g, FleetPosition pos, Image DataBaseImage, float 맵일치보정좌표X, float 맵일치보정좌표Y)
+        private void Sub_DBImageDrawPosition(Graphics g, FleetPositionModel pos, Image DataBaseImage)
         {
             //float radius = 9.5f; //7.5f;
             //float halfSize = 9.5f; //7.5f;
@@ -401,7 +419,7 @@ namespace Monitor.Map
             //g.DrawString(robotInfo, font2, Brushes.Magenta, rt2);
         }
 
-        private void customImageDrawRobot(Graphics g, Image DataBaseImage, FleetRobot robot)
+        private void DBImageDrawRobot(Graphics g, Image DataBaseImage, FleetRobot robot)
         {
 
             int FleetMapSizeX = 443;
@@ -503,6 +521,7 @@ namespace Monitor.Map
             RobotcenterPoint = centerPoint;
             //Console.WriteLine($"CustomrobotCenter = {centerPoint}");
 
+
             // 좌표계 회전 변환
             Matrix matrix = g.Transform;
 
@@ -546,7 +565,7 @@ namespace Monitor.Map
             //g.Transform = matrix;
         }
 
-        private void customImageDrawText(Graphics g, float x, float y, Font font,/* Brush brush,*/ string text)
+        private void DBImageDrawText(Graphics g, float x, float y, Font font,/* Brush brush,*/ string text)
         {
 
             //float x = (float)pos.PosX / (float)map.Resolution;
@@ -564,7 +583,6 @@ namespace Monitor.Map
             g.DrawString(text, font, Brushes.Black, rect1);
             // //g.DrawString(text, font, brush, x, y);
         }
-
 
         //fleetMap
         public PointF GetScaledMapPoint(Point moveOffset, FleetMap map, PointF point, float scaleFactorH = 1.0F, float scaleFactorV = 1.0F)

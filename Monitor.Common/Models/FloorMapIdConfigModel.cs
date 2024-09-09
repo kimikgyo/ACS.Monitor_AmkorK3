@@ -17,7 +17,7 @@ namespace Monitor.Common
         public string MapImageData { get; set; }    //Map Image Data
         public int DisplayFlag { get; set; }        //그리드 표시 관련 신호
 
-        public InItMapData InItMapData = new InItMapData(); // 레지스터.  데이터 갱신은 MiR_Get_Register()함수 이용한다.
+        public MapData MapData = new MapData(); // 레지스터.  데이터 갱신은 MiR_Get_Register()함수 이용한다.
         public override string ToString()
         {
 
@@ -27,8 +27,9 @@ namespace Monitor.Common
                    $"DisplayFlag={DisplayFlag,-5}";
         }
     }
-    public class InItMapData
+    public class MapData
     {
+        public string MapViewName { get; set; }
         public float mapScale { get; set; }
         public Point mouseFirstLocation { get; set; }
         public Point mouseMoveOffset { get; set; }

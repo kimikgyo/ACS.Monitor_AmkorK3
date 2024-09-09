@@ -56,23 +56,26 @@ namespace ACS.Monitor
             this.elevatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.callSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItem_Robot = new System.Windows.Forms.ToolStripMenuItem();
-            this.CH_SAMB1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CH_SAMB2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CH_SAMB3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CH_SAMB4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CH_SAMB5 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CH_SAMB6 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CH_SAMB7 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CH_SAMB8 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CH_SAMB9 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CH_SAMB10 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CH_SAMB11 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CH_TAMB1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CH_Robot1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CH_Robot2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CH_Robot3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CH_Robot4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CH_Robot5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CH_Robot6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CH_Robot7 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CH_Robot8 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CH_Robot9 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CH_Robot10 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CH_Robot11 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CH_Robot12 = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItem_Map = new System.Windows.Forms.ToolStripMenuItem();
-            this.Ch_2F = new System.Windows.Forms.ToolStripMenuItem();
-            this.Ch_3F = new System.Windows.Forms.ToolStripMenuItem();
-            this.Ch_4F = new System.Windows.Forms.ToolStripMenuItem();
-            this.Ch_6F = new System.Windows.Forms.ToolStripMenuItem();
+            this.Ch_Floor1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.Ch_Floor2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.Ch_Floor3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.Ch_Floor4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.Ch_Floor5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.Ch_Floor6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.Ch_Floor7 = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItem_History = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStrip_JobHistory = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStrip_WaitPositionTime = new System.Windows.Forms.ToolStripMenuItem();
@@ -270,8 +273,8 @@ namespace ACS.Monitor
             // 
             // DesignPanelControl
             // 
-            this.DesignPanelControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.DesignPanelControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DesignPanelControl.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.DesignPanelControl.ContentImageAlignment = System.Drawing.ContentAlignment.TopCenter;
@@ -368,18 +371,18 @@ namespace ACS.Monitor
             // 
             this.MenuItem_Robot.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.MenuItem_Robot.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CH_SAMB1,
-            this.CH_SAMB2,
-            this.CH_SAMB3,
-            this.CH_SAMB4,
-            this.CH_SAMB5,
-            this.CH_SAMB6,
-            this.CH_SAMB7,
-            this.CH_SAMB8,
-            this.CH_SAMB9,
-            this.CH_SAMB10,
-            this.CH_SAMB11,
-            this.CH_TAMB1});
+            this.CH_Robot1,
+            this.CH_Robot2,
+            this.CH_Robot3,
+            this.CH_Robot4,
+            this.CH_Robot5,
+            this.CH_Robot6,
+            this.CH_Robot7,
+            this.CH_Robot8,
+            this.CH_Robot9,
+            this.CH_Robot10,
+            this.CH_Robot11,
+            this.CH_Robot12});
             this.MenuItem_Robot.Font = new System.Drawing.Font("맑은 고딕", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.MenuItem_Robot.Name = "MenuItem_Robot";
             this.MenuItem_Robot.Size = new System.Drawing.Size(102, 43);
@@ -387,134 +390,161 @@ namespace ACS.Monitor
             this.MenuItem_Robot.MouseLeave += new System.EventHandler(this.MenuItem_MouseLeave);
             this.MenuItem_Robot.MouseHover += new System.EventHandler(this.MenuItem_MouseHover);
             // 
-            // CH_SAMB1
+            // CH_Robot1
             // 
-            this.CH_SAMB1.CheckOnClick = true;
-            this.CH_SAMB1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.CH_SAMB1.Name = "CH_SAMB1";
-            this.CH_SAMB1.Size = new System.Drawing.Size(214, 42);
-            this.CH_SAMB1.Text = "SAMB#1";
-            this.CH_SAMB1.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
-            this.CH_SAMB1.Click += new System.EventHandler(this.RobotCH_Click);
+            this.CH_Robot1.CheckOnClick = true;
+            this.CH_Robot1.Enabled = false;
+            this.CH_Robot1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.CH_Robot1.Name = "CH_Robot1";
+            this.CH_Robot1.Size = new System.Drawing.Size(197, 42);
+            this.CH_Robot1.Text = "Robot1";
+            this.CH_Robot1.Visible = false;
+            this.CH_Robot1.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
+            this.CH_Robot1.Click += new System.EventHandler(this.RobotCH_Click);
             // 
-            // CH_SAMB2
+            // CH_Robot2
             // 
-            this.CH_SAMB2.CheckOnClick = true;
-            this.CH_SAMB2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.CH_SAMB2.Name = "CH_SAMB2";
-            this.CH_SAMB2.Size = new System.Drawing.Size(214, 42);
-            this.CH_SAMB2.Text = "SAMB#2";
-            this.CH_SAMB2.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
-            this.CH_SAMB2.Click += new System.EventHandler(this.RobotCH_Click);
+            this.CH_Robot2.CheckOnClick = true;
+            this.CH_Robot2.Enabled = false;
+            this.CH_Robot2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.CH_Robot2.Name = "CH_Robot2";
+            this.CH_Robot2.Size = new System.Drawing.Size(197, 42);
+            this.CH_Robot2.Text = "Robot2";
+            this.CH_Robot2.Visible = false;
+            this.CH_Robot2.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
+            this.CH_Robot2.Click += new System.EventHandler(this.RobotCH_Click);
             // 
-            // CH_SAMB3
+            // CH_Robot3
             // 
-            this.CH_SAMB3.CheckOnClick = true;
-            this.CH_SAMB3.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.CH_SAMB3.Name = "CH_SAMB3";
-            this.CH_SAMB3.Size = new System.Drawing.Size(214, 42);
-            this.CH_SAMB3.Text = "SAMB#3";
-            this.CH_SAMB3.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
-            this.CH_SAMB3.Click += new System.EventHandler(this.RobotCH_Click);
+            this.CH_Robot3.CheckOnClick = true;
+            this.CH_Robot3.Enabled = false;
+            this.CH_Robot3.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.CH_Robot3.Name = "CH_Robot3";
+            this.CH_Robot3.Size = new System.Drawing.Size(197, 42);
+            this.CH_Robot3.Text = "Robot3";
+            this.CH_Robot3.Visible = false;
+            this.CH_Robot3.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
+            this.CH_Robot3.Click += new System.EventHandler(this.RobotCH_Click);
             // 
-            // CH_SAMB4
+            // CH_Robot4
             // 
-            this.CH_SAMB4.CheckOnClick = true;
-            this.CH_SAMB4.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.CH_SAMB4.Name = "CH_SAMB4";
-            this.CH_SAMB4.Size = new System.Drawing.Size(214, 42);
-            this.CH_SAMB4.Text = "SAMB#4";
-            this.CH_SAMB4.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
-            this.CH_SAMB4.Click += new System.EventHandler(this.RobotCH_Click);
+            this.CH_Robot4.CheckOnClick = true;
+            this.CH_Robot4.Enabled = false;
+            this.CH_Robot4.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.CH_Robot4.Name = "CH_Robot4";
+            this.CH_Robot4.Size = new System.Drawing.Size(197, 42);
+            this.CH_Robot4.Text = "Robot4";
+            this.CH_Robot4.Visible = false;
+            this.CH_Robot4.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
+            this.CH_Robot4.Click += new System.EventHandler(this.RobotCH_Click);
             // 
-            // CH_SAMB5
+            // CH_Robot5
             // 
-            this.CH_SAMB5.CheckOnClick = true;
-            this.CH_SAMB5.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.CH_SAMB5.Name = "CH_SAMB5";
-            this.CH_SAMB5.Size = new System.Drawing.Size(214, 42);
-            this.CH_SAMB5.Text = "SAMB#5";
-            this.CH_SAMB5.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
-            this.CH_SAMB5.Click += new System.EventHandler(this.RobotCH_Click);
+            this.CH_Robot5.CheckOnClick = true;
+            this.CH_Robot5.Enabled = false;
+            this.CH_Robot5.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.CH_Robot5.Name = "CH_Robot5";
+            this.CH_Robot5.Size = new System.Drawing.Size(197, 42);
+            this.CH_Robot5.Text = "Robot5";
+            this.CH_Robot5.Visible = false;
+            this.CH_Robot5.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
+            this.CH_Robot5.Click += new System.EventHandler(this.RobotCH_Click);
             // 
-            // CH_SAMB6
+            // CH_Robot6
             // 
-            this.CH_SAMB6.CheckOnClick = true;
-            this.CH_SAMB6.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.CH_SAMB6.Name = "CH_SAMB6";
-            this.CH_SAMB6.Size = new System.Drawing.Size(214, 42);
-            this.CH_SAMB6.Text = "SAMB#6";
-            this.CH_SAMB6.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
-            this.CH_SAMB6.Click += new System.EventHandler(this.RobotCH_Click);
+            this.CH_Robot6.CheckOnClick = true;
+            this.CH_Robot6.Enabled = false;
+            this.CH_Robot6.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.CH_Robot6.Name = "CH_Robot6";
+            this.CH_Robot6.Size = new System.Drawing.Size(197, 42);
+            this.CH_Robot6.Text = "Robot6";
+            this.CH_Robot6.Visible = false;
+            this.CH_Robot6.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
+            this.CH_Robot6.Click += new System.EventHandler(this.RobotCH_Click);
             // 
-            // CH_SAMB7
+            // CH_Robot7
             // 
-            this.CH_SAMB7.CheckOnClick = true;
-            this.CH_SAMB7.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.CH_SAMB7.Name = "CH_SAMB7";
-            this.CH_SAMB7.Size = new System.Drawing.Size(214, 42);
-            this.CH_SAMB7.Text = "SAMB#7";
-            this.CH_SAMB7.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
-            this.CH_SAMB7.Click += new System.EventHandler(this.RobotCH_Click);
+            this.CH_Robot7.CheckOnClick = true;
+            this.CH_Robot7.Enabled = false;
+            this.CH_Robot7.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.CH_Robot7.Name = "CH_Robot7";
+            this.CH_Robot7.Size = new System.Drawing.Size(197, 42);
+            this.CH_Robot7.Text = "Robot7";
+            this.CH_Robot7.Visible = false;
+            this.CH_Robot7.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
+            this.CH_Robot7.Click += new System.EventHandler(this.RobotCH_Click);
             // 
-            // CH_SAMB8
+            // CH_Robot8
             // 
-            this.CH_SAMB8.CheckOnClick = true;
-            this.CH_SAMB8.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.CH_SAMB8.Name = "CH_SAMB8";
-            this.CH_SAMB8.Size = new System.Drawing.Size(214, 42);
-            this.CH_SAMB8.Text = "SAMB#8";
-            this.CH_SAMB8.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
-            this.CH_SAMB8.Click += new System.EventHandler(this.RobotCH_Click);
+            this.CH_Robot8.CheckOnClick = true;
+            this.CH_Robot8.Enabled = false;
+            this.CH_Robot8.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.CH_Robot8.Name = "CH_Robot8";
+            this.CH_Robot8.Size = new System.Drawing.Size(197, 42);
+            this.CH_Robot8.Text = "Robot8";
+            this.CH_Robot8.Visible = false;
+            this.CH_Robot8.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
+            this.CH_Robot8.Click += new System.EventHandler(this.RobotCH_Click);
             // 
-            // CH_SAMB9
+            // CH_Robot9
             // 
-            this.CH_SAMB9.CheckOnClick = true;
-            this.CH_SAMB9.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.CH_SAMB9.Name = "CH_SAMB9";
-            this.CH_SAMB9.Size = new System.Drawing.Size(214, 42);
-            this.CH_SAMB9.Text = "SAMB#9";
-            this.CH_SAMB9.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
-            this.CH_SAMB9.Click += new System.EventHandler(this.RobotCH_Click);
+            this.CH_Robot9.CheckOnClick = true;
+            this.CH_Robot9.Enabled = false;
+            this.CH_Robot9.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.CH_Robot9.Name = "CH_Robot9";
+            this.CH_Robot9.Size = new System.Drawing.Size(197, 42);
+            this.CH_Robot9.Text = "Robot9";
+            this.CH_Robot9.Visible = false;
+            this.CH_Robot9.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
+            this.CH_Robot9.Click += new System.EventHandler(this.RobotCH_Click);
             // 
-            // CH_SAMB10
+            // CH_Robot10
             // 
-            this.CH_SAMB10.CheckOnClick = true;
-            this.CH_SAMB10.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.CH_SAMB10.Name = "CH_SAMB10";
-            this.CH_SAMB10.Size = new System.Drawing.Size(214, 42);
-            this.CH_SAMB10.Text = "SAMB#10";
-            this.CH_SAMB10.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
-            this.CH_SAMB10.Click += new System.EventHandler(this.RobotCH_Click);
+            this.CH_Robot10.CheckOnClick = true;
+            this.CH_Robot10.Enabled = false;
+            this.CH_Robot10.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.CH_Robot10.Name = "CH_Robot10";
+            this.CH_Robot10.Size = new System.Drawing.Size(197, 42);
+            this.CH_Robot10.Text = "Robot10";
+            this.CH_Robot10.Visible = false;
+            this.CH_Robot10.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
+            this.CH_Robot10.Click += new System.EventHandler(this.RobotCH_Click);
             // 
-            // CH_SAMB11
+            // CH_Robot11
             // 
-            this.CH_SAMB11.CheckOnClick = true;
-            this.CH_SAMB11.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.CH_SAMB11.Name = "CH_SAMB11";
-            this.CH_SAMB11.Size = new System.Drawing.Size(214, 42);
-            this.CH_SAMB11.Text = "SAMB#11";
-            this.CH_SAMB11.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
-            this.CH_SAMB11.Click += new System.EventHandler(this.RobotCH_Click);
+            this.CH_Robot11.CheckOnClick = true;
+            this.CH_Robot11.Enabled = false;
+            this.CH_Robot11.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.CH_Robot11.Name = "CH_Robot11";
+            this.CH_Robot11.Size = new System.Drawing.Size(197, 42);
+            this.CH_Robot11.Text = "Robot11";
+            this.CH_Robot11.Visible = false;
+            this.CH_Robot11.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
+            this.CH_Robot11.Click += new System.EventHandler(this.RobotCH_Click);
             // 
-            // CH_TAMB1
+            // CH_Robot12
             // 
-            this.CH_TAMB1.CheckOnClick = true;
-            this.CH_TAMB1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.CH_TAMB1.Name = "CH_TAMB1";
-            this.CH_TAMB1.Size = new System.Drawing.Size(214, 42);
-            this.CH_TAMB1.Text = "TAMB#1";
-            this.CH_TAMB1.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
-            this.CH_TAMB1.Click += new System.EventHandler(this.RobotCH_Click);
+            this.CH_Robot12.CheckOnClick = true;
+            this.CH_Robot12.Enabled = false;
+            this.CH_Robot12.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.CH_Robot12.Name = "CH_Robot12";
+            this.CH_Robot12.Size = new System.Drawing.Size(197, 42);
+            this.CH_Robot12.Text = "Robot12";
+            this.CH_Robot12.Visible = false;
+            this.CH_Robot12.CheckedChanged += new System.EventHandler(this.Robot_CheckedChanged);
+            this.CH_Robot12.Click += new System.EventHandler(this.RobotCH_Click);
             // 
             // MenuItem_Map
             // 
             this.MenuItem_Map.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.MenuItem_Map.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Ch_2F,
-            this.Ch_3F,
-            this.Ch_4F,
-            this.Ch_6F});
+            this.Ch_Floor1,
+            this.Ch_Floor2,
+            this.Ch_Floor3,
+            this.Ch_Floor4,
+            this.Ch_Floor5,
+            this.Ch_Floor6,
+            this.Ch_Floor7});
             this.MenuItem_Map.Font = new System.Drawing.Font("맑은 고딕", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.MenuItem_Map.Name = "MenuItem_Map";
             this.MenuItem_Map.Size = new System.Drawing.Size(84, 43);
@@ -522,49 +552,87 @@ namespace ACS.Monitor
             this.MenuItem_Map.MouseLeave += new System.EventHandler(this.MenuItem_MouseLeave);
             this.MenuItem_Map.MouseHover += new System.EventHandler(this.MenuItem_MouseHover);
             // 
-            // Ch_2F
+            // Ch_Floor1
             // 
-            this.Ch_2F.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Ch_2F.CheckOnClick = true;
-            this.Ch_2F.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.Ch_2F.Name = "Ch_2F";
-            this.Ch_2F.Size = new System.Drawing.Size(204, 42);
-            this.Ch_2F.Text = "2F - T2F";
-            this.Ch_2F.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.Ch_2F.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
-            this.Ch_2F.Click += new System.EventHandler(this.FloorCH_Click);
+            this.Ch_Floor1.Enabled = false;
+            this.Ch_Floor1.Name = "Ch_Floor1";
+            this.Ch_Floor1.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor1.Text = "Floor1";
+            this.Ch_Floor1.Visible = false;
+            this.Ch_Floor1.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
+            this.Ch_Floor1.Click += new System.EventHandler(this.FloorCH_Click);
             // 
-            // Ch_3F
+            // Ch_Floor2
             // 
-            this.Ch_3F.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.Ch_3F.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Ch_3F.CheckOnClick = true;
-            this.Ch_3F.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.Ch_3F.Name = "Ch_3F";
-            this.Ch_3F.Size = new System.Drawing.Size(204, 42);
-            this.Ch_3F.Text = "3F - T3F";
-            this.Ch_3F.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
-            this.Ch_3F.Click += new System.EventHandler(this.FloorCH_Click);
+            this.Ch_Floor2.Enabled = false;
+            this.Ch_Floor2.Name = "Ch_Floor2";
+            this.Ch_Floor2.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor2.Text = "Floor2";
+            this.Ch_Floor2.Visible = false;
+            this.Ch_Floor2.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
+            this.Ch_Floor2.Click += new System.EventHandler(this.FloorCH_Click);
             // 
-            // Ch_4F
+            // Ch_Floor3
             // 
-            this.Ch_4F.CheckOnClick = true;
-            this.Ch_4F.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.Ch_4F.Name = "Ch_4F";
-            this.Ch_4F.Size = new System.Drawing.Size(204, 42);
-            this.Ch_4F.Text = "4F - T4F";
-            this.Ch_4F.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
-            this.Ch_4F.Click += new System.EventHandler(this.FloorCH_Click);
+            this.Ch_Floor3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Ch_Floor3.CheckOnClick = true;
+            this.Ch_Floor3.Enabled = false;
+            this.Ch_Floor3.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.Ch_Floor3.Name = "Ch_Floor3";
+            this.Ch_Floor3.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor3.Text = "Floor3";
+            this.Ch_Floor3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Ch_Floor3.Visible = false;
+            this.Ch_Floor3.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
+            this.Ch_Floor3.Click += new System.EventHandler(this.FloorCH_Click);
             // 
-            // Ch_6F
+            // Ch_Floor4
             // 
-            this.Ch_6F.CheckOnClick = true;
-            this.Ch_6F.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.Ch_6F.Name = "Ch_6F";
-            this.Ch_6F.Size = new System.Drawing.Size(204, 42);
-            this.Ch_6F.Text = "6F - M3F";
-            this.Ch_6F.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
-            this.Ch_6F.Click += new System.EventHandler(this.FloorCH_Click);
+            this.Ch_Floor4.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.Ch_Floor4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Ch_Floor4.CheckOnClick = true;
+            this.Ch_Floor4.Enabled = false;
+            this.Ch_Floor4.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.Ch_Floor4.Name = "Ch_Floor4";
+            this.Ch_Floor4.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor4.Text = "Floor4";
+            this.Ch_Floor4.Visible = false;
+            this.Ch_Floor4.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
+            this.Ch_Floor4.Click += new System.EventHandler(this.FloorCH_Click);
+            // 
+            // Ch_Floor5
+            // 
+            this.Ch_Floor5.CheckOnClick = true;
+            this.Ch_Floor5.Enabled = false;
+            this.Ch_Floor5.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.Ch_Floor5.Name = "Ch_Floor5";
+            this.Ch_Floor5.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor5.Text = "Floor5";
+            this.Ch_Floor5.Visible = false;
+            this.Ch_Floor5.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
+            this.Ch_Floor5.Click += new System.EventHandler(this.FloorCH_Click);
+            // 
+            // Ch_Floor6
+            // 
+            this.Ch_Floor6.Enabled = false;
+            this.Ch_Floor6.Name = "Ch_Floor6";
+            this.Ch_Floor6.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor6.Text = "Floor6";
+            this.Ch_Floor6.Visible = false;
+            this.Ch_Floor6.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
+            this.Ch_Floor6.Click += new System.EventHandler(this.FloorCH_Click);
+            // 
+            // Ch_Floor7
+            // 
+            this.Ch_Floor7.CheckOnClick = true;
+            this.Ch_Floor7.Enabled = false;
+            this.Ch_Floor7.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.Ch_Floor7.Name = "Ch_Floor7";
+            this.Ch_Floor7.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor7.Text = "Floor7";
+            this.Ch_Floor7.Visible = false;
+            this.Ch_Floor7.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
+            this.Ch_Floor7.Click += new System.EventHandler(this.FloorCH_Click);
             // 
             // MenuItem_History
             // 
@@ -724,29 +792,29 @@ namespace ACS.Monitor
         private System.Windows.Forms.ToolStripMenuItem ToolStrip_JobHistory;
         private System.Windows.Forms.ToolStripMenuItem ToolStrip_WaitPositionTime;
         private System.Windows.Forms.ToolStripMenuItem MenuItem_Map;
-        private System.Windows.Forms.ToolStripMenuItem Ch_2F;
-        private System.Windows.Forms.ToolStripMenuItem Ch_3F;
+        private System.Windows.Forms.ToolStripMenuItem Ch_Floor3;
+        private System.Windows.Forms.ToolStripMenuItem Ch_Floor4;
         private DevExpress.XtraEditors.PictureEdit pictureEdit1;
         private DevExpress.XtraEditors.PanelControl DesignPanelControl;
-        private System.Windows.Forms.ToolStripMenuItem Ch_4F;
-        private System.Windows.Forms.ToolStripMenuItem Ch_6F;
+        private System.Windows.Forms.ToolStripMenuItem Ch_Floor5;
+        private System.Windows.Forms.ToolStripMenuItem Ch_Floor7;
         private System.Windows.Forms.ToolStripMenuItem MenuItem_Setting;
         private System.Windows.Forms.ToolStripMenuItem elevatorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem callSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MenuItem_MainView;
         private System.Windows.Forms.ToolStripMenuItem MenuItem_Robot;
-        private System.Windows.Forms.ToolStripMenuItem CH_SAMB1;
-        private System.Windows.Forms.ToolStripMenuItem CH_SAMB2;
-        private System.Windows.Forms.ToolStripMenuItem CH_SAMB3;
-        private System.Windows.Forms.ToolStripMenuItem CH_SAMB4;
-        private System.Windows.Forms.ToolStripMenuItem CH_SAMB5;
-        private System.Windows.Forms.ToolStripMenuItem CH_SAMB6;
-        private System.Windows.Forms.ToolStripMenuItem CH_SAMB7;
-        private System.Windows.Forms.ToolStripMenuItem CH_SAMB8;
-        private System.Windows.Forms.ToolStripMenuItem CH_SAMB9;
-        private System.Windows.Forms.ToolStripMenuItem CH_SAMB10;
-        private System.Windows.Forms.ToolStripMenuItem CH_SAMB11;
-        private System.Windows.Forms.ToolStripMenuItem CH_TAMB1;
+        private System.Windows.Forms.ToolStripMenuItem CH_Robot1;
+        private System.Windows.Forms.ToolStripMenuItem CH_Robot2;
+        private System.Windows.Forms.ToolStripMenuItem CH_Robot3;
+        private System.Windows.Forms.ToolStripMenuItem CH_Robot4;
+        private System.Windows.Forms.ToolStripMenuItem CH_Robot5;
+        private System.Windows.Forms.ToolStripMenuItem CH_Robot6;
+        private System.Windows.Forms.ToolStripMenuItem CH_Robot7;
+        private System.Windows.Forms.ToolStripMenuItem CH_Robot8;
+        private System.Windows.Forms.ToolStripMenuItem CH_Robot9;
+        private System.Windows.Forms.ToolStripMenuItem CH_Robot10;
+        private System.Windows.Forms.ToolStripMenuItem CH_Robot11;
+        private System.Windows.Forms.ToolStripMenuItem CH_Robot12;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         public DevExpress.Utils.FlyoutPanelControl flyoutPanelControl1;
         public DevExpress.Utils.FlyoutPanel flyoutPanel1;
@@ -754,5 +822,8 @@ namespace ACS.Monitor
         public DevExpress.Utils.FlyoutPanelControl flyoutPanelControl2;
         private DevExpress.XtraEditors.PanelControl panelControl2;
         private DevExpress.XtraEditors.LabelControl L_Login;
+        private System.Windows.Forms.ToolStripMenuItem Ch_Floor1;
+        private System.Windows.Forms.ToolStripMenuItem Ch_Floor2;
+        private System.Windows.Forms.ToolStripMenuItem Ch_Floor6;
     }
 }

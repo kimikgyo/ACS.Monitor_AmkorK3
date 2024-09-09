@@ -17,25 +17,55 @@ namespace Monitor.Data
 
         private readonly List<FleetPositionModel> _fleetPositionModels = new List<FleetPositionModel>(); // cache data
 
-
+        private readonly static object lockObj = new object();
         public FleetPositionRepository(string connectionString)
         {
             this.connectionString = connectionString;
-           
+            DBLoad();
         }
-       
-        private void Load()
-        {
-            _fleetPositionModels.Clear();
-            using (var con = new SqlConnection(connectionString))
-            {
-                foreach (var aCSChargerCountConfigModel in con.Query<FleetPositionModel>("SELECT * FROM FleetPosition"))
-                {
 
-                    _fleetPositionModels.Add(aCSChargerCountConfigModel);
+        private void DBLoad()
+        {
+            lock (lockObj)
+            {
+                _fleetPositionModels.Clear();
+                using (var con = new SqlConnection(connectionString))
+                {
+                    foreach (var fleetPosition in con.Query<FleetPositionModel>("SELECT * FROM FleetPosition"))
+                    {
+
+                        _fleetPositionModels.Add(fleetPosition);
+                    }
                 }
             }
         }
+
+        public List<FleetPositionModel> Update()
+        {
+            lock (lockObj)
+            {
+                using (var con = new SqlConnection(connectionString))
+                {
+                    foreach (var fleetPosition in con.Query<FleetPositionModel>("SELECT * FROM FleetPosition"))
+                    {
+                        var Updata = _fleetPositionModels.FirstOrDefault(x => x.Id == fleetPosition.Id);
+                        if (Updata != null)
+                        {
+                            Updata.Id = fleetPosition.Id;
+                            Updata.Name = fleetPosition.Name;
+                            Updata.MapID = fleetPosition.MapID;
+                            Updata.Guid = fleetPosition.Guid;
+                            Updata.TypeID = fleetPosition.TypeID;
+                            Updata.PosX = fleetPosition.PosX;
+                            Updata.PosY = fleetPosition.PosY;
+                            Updata.Orientation = fleetPosition.Orientation;
+                        }
+                    }
+                    return _fleetPositionModels;
+                }
+            }
+        }
+
         //DB 추가하기
         public FleetPositionModel Add(FleetPositionModel model)
         {
@@ -134,7 +164,7 @@ namespace Monitor.Data
         }
         public void AllRemove()
         {
-            lock(this)
+            lock (this)
             {
                 _fleetPositionModels.Clear();
                 using (var con = new SqlConnection(connectionString))

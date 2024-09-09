@@ -3,6 +3,7 @@ using ACS.Monitor.Properties;
 using ACS.Monitor.Utilities;
 using DevExpress.XtraEditors;
 using log4net;
+using Monitor.Common;
 using Monitor.Data;
 using Monitor.Map;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -27,14 +29,12 @@ namespace ACS.Monitor
 
         public string MapID { get; set; }
         public string UriStr { get; set; }
-        private readonly UnitOfWork uow;
 
         // map 관련 변수
         private FleetMapProcessor mapProcessor = null;
         private FleetMap map = null;
         private List<int> robotIdList = null;
         private List<FleetRobot> robotsInfo = null;
-        private bool bMapProcInit = false;
         private Image backgroundImage = null;
         private float mapScale = 1.0f;
         private string mapName = null;
@@ -44,19 +44,20 @@ namespace ACS.Monitor
         private Point mouseMoveOffset = Point.Empty;
 
         // custom map 관련 변수
-        //private bool customMapMode = false;      // map mode (0=fleet / 1=custom)
-        private bool customMapMode = true;      // map mode (0=fleet / 1=custom)
-        private bool needMapUpdate = true;      // db map image를 다시 로드해야 할때 true. (기동시에는 무조건 로드해야하므로 true)
-        private Image dbMapImage = null;        // db map image
+        private bool customMapMode = false;      // map mode (0=fleet / 1=custom)
+        private bool customMapUpdate = true;    // db map image를 다시 로드해야 할때 true. (기동시에는 무조건 로드해야하므로 true)
+        private bool ACSDbMapMode = true;      // map mode (0=fleet / 1=FloorMapId DateBase)
+        private bool ACSDbMapUpdate = true;     // db map image를 다시 로드해야 할때 true. (기동시에는 무조건 로드해야하므로 true)
+        private bool FleetMapMode = false;      // map mode (0=fleet / 1=FloorMapId DateBase)
+        private bool FleetMapUpdate = true;     // db map image를 다시 로드해야 할때 true. (기동시에는 무조건 로드해야하므로 true)
+        private Image DbMapImage = null;        // db map image
+
         private DateTime oldDbUpdatedTime = default; // keep map UpdateDime
         private readonly Bitmap blankBitmap = new Bitmap(2000, 2000);
-
-
 
         public UCMapView()
         {
             InitializeComponent();
-            this.uow = new UnitOfWork();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -76,30 +77,32 @@ namespace ACS.Monitor
             AppConfiguration.SetAppConfig($"MapOffset_{mapName}", JsonConvert.SerializeObject(this.mouseMoveOffset));
         }
 
-        public void Init(float mapScale, Point mouseFirstLocation, Point mouseMoveOffset, string mapName, bool Flag)
+        public void Init(FloorMapIdConfigModel floorMapIdConfig, string fleetIp, bool Flag)
         {
             // init map handler
             var logger = LogManager.GetLogger("Event");
-
-            this.Map_ID.Text = mapName;
-            this.mapName = mapName;
-            this.mapScale = mapScale;
-            this.mouseFirstLocation = mouseFirstLocation;
-            this.mouseMoveOffset = mouseMoveOffset;
-
+           
             try
             {
                 if (Flag)
                 {
-                    this.mapScale = JsonConvert.DeserializeObject<float>(ConfigurationManager.AppSettings[$"MapScale_{mapName}"]);
-                    this.mouseFirstLocation = JsonConvert.DeserializeObject<Point>(ConfigurationManager.AppSettings[$"MapLocation_{mapName}"]);
-                    this.mouseMoveOffset = JsonConvert.DeserializeObject<Point>(ConfigurationManager.AppSettings[$"MapOffset_{mapName}"]);
+                    floorMapIdConfig.MapData.mapScale = JsonConvert.DeserializeObject<float>(ConfigurationManager.AppSettings[$"MapScale_{floorMapIdConfig.FloorName}"]);
+                    floorMapIdConfig.MapData.mouseFirstLocation = JsonConvert.DeserializeObject<Point>(ConfigurationManager.AppSettings[$"MapLocation_{floorMapIdConfig.FloorName}"]);
+                    floorMapIdConfig.MapData.mouseMoveOffset = JsonConvert.DeserializeObject<Point>(ConfigurationManager.AppSettings[$"MapOffset_{floorMapIdConfig.FloorName}"]);
+
                 }
             }
             catch
             {
-
+               
             }
+
+            this.Map_ID.Text = floorMapIdConfig.FloorName;
+            this.mapName = floorMapIdConfig.FloorName;
+            this.mapScale = floorMapIdConfig.MapData.mapScale;
+            this.mouseFirstLocation = floorMapIdConfig.MapData.mouseFirstLocation;
+            this.mouseMoveOffset = floorMapIdConfig.MapData.mouseMoveOffset;
+
 
             mapProcessor = new FleetMapProcessor(logger, UriStr, mapName);
 
@@ -109,19 +112,36 @@ namespace ACS.Monitor
             this.pictureBox1.MouseMove += PictureBox1_MouseMove;
             this.pictureBox1.Resize += PictureBox1_Resize;
 
-            //this.pictureBox1.SizeMode = PictureBoxSizeMode.Normal;// 변경 금지!!
-            this.pictureBox1.Dock = DockStyle.Fill;
             if (backgroundImage == null) PictureBox1_Resize(this, null);
-
+            this.pictureBox1.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Stretch; // 또는 다른 모드;// 변경 금지!!
+            this.pictureBox1.Dock = DockStyle.Fill;
             this.pictureBox1.Visible = true;
 
+            // FleetMap
+            chkFleetMap.CheckState = FleetMapMode ? CheckState.Checked : CheckState.Unchecked;
+            chkFleetMap.Click += (s, e) =>
+            {
+                FleetMapMode = !chkFleetMap.Checked;
+                FleetMapUpdate = !chkFleetMap.Checked;
+            };
             // custom map 체크박스 설정
             chkCustomMap.CheckState = customMapMode ? CheckState.Checked : CheckState.Unchecked;
             chkCustomMap.Click += (s, e) =>
             {
-                customMapMode = chkCustomMap.Checked;
-                needMapUpdate = chkCustomMap.Checked;
+                customMapMode = !chkCustomMap.Checked;
+                customMapUpdate = !chkCustomMap.Checked;
+
             };
+            //ACSMap 체크박스 설정
+            chkACSDbMap.CheckState = ACSDbMapMode ? CheckState.Checked : CheckState.Unchecked;
+            chkACSDbMap.Click += (s, e) =>
+            {
+                ACSDbMapMode = !chkACSDbMap.Checked;
+                ACSDbMapUpdate = !chkACSDbMap.Checked;
+            };
+            if (FleetMapMode) { customMapMode = false; ACSDbMapMode = false; }
+            if (customMapMode) { ACSDbMapMode = false; FleetMapMode = false; }
+            if (ACSDbMapMode) { customMapMode = false; FleetMapMode = false; }
 
             // display info 체크박스 설정
             cb_DisplayInfo.Click += (s, e) => btnMapDownload.Visible = cb_DisplayInfo.Checked;
@@ -151,6 +171,8 @@ namespace ACS.Monitor
 
             // 배경 이미지 크기 조정
             backgroundImage = ImageUtils.ImageTransparency.ResizeImage(backgroundImage, pictureBox1.ClientSize);
+
+
         }
 
 
@@ -180,6 +202,7 @@ namespace ACS.Monitor
                 while (!stopRequest)
                 {
                     MapHandlerProc1();
+                    RobotHanlerProc1();
                     Thread.Sleep(100);
                 }
 
@@ -211,6 +234,7 @@ namespace ACS.Monitor
                         sw.Reset();
                         sw.Start();
 
+
                         MapHandlerProc2();
                     }
                     Thread.Sleep(100);
@@ -222,160 +246,143 @@ namespace ACS.Monitor
         }
 
 
+
+
         private void MapHandlerProc1()
         {
-            // ================ map 정보는 최초 한번만 읽어온다 
-            if (!bMapProcInit)
+            //Fleet
+            if (FleetMapMode && FleetMapUpdate)
             {
                 // get map data
                 map = mapProcessor.GetMap(MapID);
                 if (map == null) return;
 
-                bMapProcInit = true;
+                FleetMapUpdate = false;
             }
 
-            // ================ robot 정보를 읽어와서 map 위에 표시한다
-            // get robot id list
-            robotIdList = mapProcessor.GetRobotIdList(); // fleet 에 요청해서 구하기
-            //robotIdList = new List<int> { 6, 7 }; // 직접 설정하기
-
-            //get robots info
-            if (robotIdList != null)
+            //Custom
+            else if (customMapMode)
             {
-                robotsInfo = mapProcessor.GetRobots(robotIdList);
+                lock (lockObj)
+                {
+                    if (customMapUpdate)
+                    {
+                        DbMapImage?.Dispose();
+                        DbMapImage = null;
+                        var MapData = ConfigData.CustomMaps.FirstOrDefault(x => x.MapName == mapName);
+                        if (MapData != null)
+                        {
+                            string imageData = MapData.MapImageData;
+                            DbMapImage = _GetImageFromDB(imageData);
+                        }
+                    }
+
+                    else
+                    {
+                        var customMaps = ConfigData.CustomMaps.FirstOrDefault(x => x.MapName == mapName);
+                        if (customMaps != null)
+                        {
+                            if (customMaps.UpdateTime != oldDbUpdatedTime)
+                            {
+                                customMapUpdate = false;
+                                oldDbUpdatedTime = customMaps.UpdateTime;
+                            }
+                        }
+                    }
+                }
             }
-            else
+
+            //DB
+            if (ACSDbMapMode && ACSDbMapUpdate)
             {
-                robotsInfo = null;
+                lock (lockObj)
+                {
+                    DbMapImage?.Dispose();
+                    DbMapImage = null;
+                    var MapData = ConfigData.FloorMapIdConfigs.FirstOrDefault(x => x.MapID == MapID);
+                    if (MapData != null)
+                    {
+                        DbMapImage = _GetImageFromDB(MapData.MapImageData);
+                        if (DbMapImage == null) return;
+                        ACSDbMapUpdate = false;
+                    }
+                }
             }
 
+        }
 
-            // ================ (DB정보로 변경!!)
+        private void RobotHanlerProc1()
+        {
+            //Fleet ================ robot 정보를 읽어와서 map 위에 표시한다
+            //robotIdList = mapProcessor.GetRobotIdList(); // fleet 에 요청해서 구하기
 
-            //if (ConfigData.Robots != null)
+            ////get robots info
+            //if (robotIdList != null)
             //{
-            //    //// get robot id list
-            //    robotIdList = ConfigData.Robots.Select(r => r.RobotID).ToList();
-
-            //    //// get robots info
-            //    robotsInfo = ConfigData.Robots.Select(r => new FleetRobot()
-            //    {
-            //        RobotID = r.RobotID,
-            //        RobotName = r.RobotName,
-            //        MapID = r.MapID,
-            //        PosX = r.Position_X,
-            //        PosY = r.Position_Y,
-            //        Orientation = r.Position_Orientation,
-            //        DistanceToTarget = r.DistanceToNextTarget,
-            //        BatteryPercent = r.BatteryPercent,
-            //        MissionQueueID = Convert.ToString(r.MissionQueueID),
-            //        MissionText = r.MissionText,
-            //        StateID = Convert.ToString(r.StateID),
-            //        StateText = r.StateText,
-            //        IP = r.RobotIp,
-            //        FleetState = Convert.ToString(r.Fleet_State),
-            //        FleetStateText = r.Fleet_State_Text,
-            //        RobotAlias = r.RobotAlias,  // <=== DB에만 존재하는 데이터
-            //    }).ToList();
+            //    robotsInfo = mapProcessor.GetRobots(robotIdList);
             //}
+            //else
+            //{
+            //    robotsInfo = null;
+            //}
+
+
+            //DB ================ get robots info (로봇 전체[DataBase])
+            robotsInfo = ConfigData.Robots.Select(r => new FleetRobot()
+            {
+                RobotID = r.RobotID,
+                RobotName = r.RobotName,
+                MapID = r.MapID,
+                PosX = r.Position_X,
+                PosY = r.Position_Y,
+                Orientation = r.Position_Orientation,
+                DistanceToTarget = r.DistanceToNextTarget,
+                BatteryPercent = r.BatteryPercent,
+                MissionQueueID = Convert.ToString(r.MissionQueueID),
+                MissionText = r.MissionText,
+                StateID = Convert.ToString(r.StateID),
+                StateText = r.StateText,
+                IP = r.RobotIp,
+                FleetState = Convert.ToString(r.Fleet_State),
+                FleetStateText = r.Fleet_State_Text,
+                RobotAlias = r.RobotAlias,  // <=== DB에만 존재하는 데이터
+            }).ToList();
 
 
             // ================ filter robots (화면에 표시될 로봇만 필터링)
-            //if (robotsInfo != null && ConfigData.DisplayRobotNames != null)
-            //{
-            //    var filteredRobotIdList = new List<int>();
-            //    var filteredRobots = new List<FleetRobot>();
+            if (robotsInfo != null && ConfigData.DisplayRobotNames != null)
+            {
+                var filteredRobots = new List<FleetRobot>();
 
-            //    foreach (var robot in robotsInfo)
-            //    {
-            //        if (ConfigData.DisplayRobotNames.ContainsKey(robot.RobotName))
-            //        {
-            //            filteredRobotIdList.Add(robot.RobotID);
-            //            filteredRobots.Add(robot);
-            //        }
-            //        else
-            //        {
-            //            EventLogger.Info(robot);
-            //        }
-            //    }
-            //    robotIdList = filteredRobotIdList;
-            //    robotsInfo = filteredRobots;
-            //}
+                foreach (var robot in robotsInfo)
+                {
+                    if (ConfigData.DisplayRobotNames.ContainsKey(robot.RobotName) && robot.MapID == this.MapID)
+                    {
+                        filteredRobots.Add(robot);
+                    }
+                    //else
+                    //{
+                    //    EventLogger.Info($"Not Chacked {robot}");
+                    //}
+                }
+                robotsInfo.Clear();
+                robotsInfo = filteredRobots;
+            }
 
             // ================ filter robots (mapid가 일치하는 로봇만 필터링)
             //if (robotsInfo != null)
             //{
-            //    var filteredRobotIdList = new List<int>();
             //    var filteredRobots = new List<FleetRobot>();
             //    foreach (var robot in robotsInfo)
             //    {
             //        if (robot.MapID == this.MapID)
             //        {
-            //            filteredRobotIdList.Add(robot.RobotID);
             //            filteredRobots.Add(robot);
             //        }
             //    }
-            //    robotIdList = filteredRobotIdList;
+            //    robotsInfo.Clear();
             //    robotsInfo = filteredRobots;
             //}
-
-
-            // =====================================
-            // DB 맵 이미지가 변경되었으면, 읽어와서 이미지 새로 생성한다
-            if (needMapUpdate)
-            {
-                lock (lockObj)
-                {
-                    dbMapImage?.Dispose();
-                    dbMapImage = null;
-                    dbMapImage = _GetImageFromDB();
-                }
-            }
-            else
-            {
-                var newDbUpdateTime = uow.CustomMaps.GetMapImageTime(mapName);
-                if (newDbUpdateTime != oldDbUpdatedTime)
-                {
-                    needMapUpdate = true;
-                    oldDbUpdatedTime = newDbUpdateTime;
-                }
-            }
-
-
-            // =====================================
-            // DB에서 이미지 데이터 가져와서 이미지 생성한다
-            //Image _GetImageFromDB()
-            //{
-            //    try
-            //    {
-            //        // 새로운 이미지 생성한다 (DB에서 가져온 이미지)
-            //        string imageData = CustomMaps.GetMapImageData(mapName);
-            //        Image image = CustomMaps.ConvertEncodedStringToImage(imageData);
-            //        // map update flag 리셋한다
-            //        needMapUpdate = false;
-            //        EventLogger.Info($"map image loaded! ({mapName})");
-            //        return image;
-            //    }
-            //    catch (Exception ex) { EventLogger.Info($"_GetImageFromDB() Exception: MapName={mapName}     {ex}"); }
-            //    return null;
-            //}
-
-        }
-
-        private Image _GetImageFromDB()
-        {
-            try
-            {
-                // 새로운 이미지 생성한다 (DB에서 가져온 이미지)
-                string imageData = uow.CustomMaps.GetMapImageData(mapName);
-                Image image = uow.CustomMaps.ConvertEncodedStringToImage(imageData);
-                // map update flag 리셋한다
-                needMapUpdate = false;
-                EventLogger.Info($"map image loaded! ({mapName})");
-                return image;
-            }
-            catch (Exception ex) { EventLogger.Info($"_GetImageFromDB() Exception: MapName={mapName}     {ex}"); }
-            return null;
         }
 
         private void MapHandlerProc2()
@@ -392,19 +399,22 @@ namespace ACS.Monitor
                 {
                     this.BeginInvoke(new Action(() =>
                     {
-                        //cb_DisplayInfo.Visible = false;
+                        button1.Visible = true;
+                        button2.Visible = true;
+                        button3.Visible = true;
+                        btnMapDownload.Visible = true;
                         cb_DisplayInfo.Visible = true;
-                        chkCustomMap.Visible = false;
-                        Map_ID.Visible = true;
-                        pictureBox1.Visible = true;
+                        chkCustomMap.Visible = true;
+                        chkACSDbMap.Visible = true;
+                        chkFleetMap.Visible = true;
+                        textBox1.Visible = true;
+                        lbl_ClickPosInfo.Visible = true;
                     }));
                 }
 
+                if (ACSDbMapMode || customMapMode) renderImage = Make_RenderImage(DbMapImage);        // DB Image
+                else if (FleetMapMode) renderImage = Make_RenderImage(map.Image);  // fleet image
 
-                //if (customMapMode)
-                    renderImage = Make_RenderImage_DB(dbMapImage);    // db image
-                //else
-                    //renderImage = Make_RenderImage_Fleet(map.Image);  // fleet image
             }
 
             if (renderImage == null) return;
@@ -492,7 +502,6 @@ namespace ACS.Monitor
                             this.pictureBox1.Image?.Dispose();
                             this.pictureBox1.Image = img;
                             this.pictureBox1.Refresh();
-
                         }));
                     }
                 }
@@ -521,14 +530,38 @@ namespace ACS.Monitor
         }
 
 
-        private Bitmap Make_RenderImage_DB(Image image)
+        private Image _GetImageFromDB(string imageData)
+        {
+            try
+            {
+                Image image = null;
+                // 새로운 이미지 생성한다 (DB에서 가져온 이미지)
+                byte[] mapDecodedBytes = Convert.FromBase64String(imageData);
+                using (var ms = new MemoryStream(mapDecodedBytes))
+                {
+                    image = Image.FromStream(ms);
+                }
+                EventLogger.Info($"map image loaded! ({mapName})");
+                return image;
+            }
+            catch (Exception ex) { EventLogger.Info($"_GetImageFromDB() Exception: MapName={mapName}     {ex}"); }
+            return null;
+        }
+
+        private Bitmap Make_RenderImage(Image image)
         {
             Bitmap renderImage;
 
             // DB 이미지가 있을때 렌더링 이미지 생성
             if (image != null)
             {
-                renderImage = mapProcessor.GetRenderImage(pictureBox1.ClientSize, mouseMoveOffset, map, image, robotsInfo, mapScale, mapScale);
+                if (FleetMapMode) renderImage = mapProcessor.GetRenderImage(pictureBox1.ClientSize, mouseMoveOffset, map, null, null, robotsInfo, mapScale, mapScale);
+                else
+                {
+
+
+                    renderImage = mapProcessor.GetRenderImage(pictureBox1.ClientSize, mouseMoveOffset, null, image, ConfigData.FleetPositions, robotsInfo, mapScale, mapScale);
+                }
             }
             // DB 이미지가 없을때는 빈 이미지 생성
             else
@@ -546,65 +579,111 @@ namespace ACS.Monitor
             return renderImage;
         }
 
-        private Bitmap Make_RenderImage_Fleet(Image image)
-        {
-            // 받은 이미지로 렌더링 이미지 생성
-            return mapProcessor.GetRenderImage(pictureBox1.ClientSize, mouseMoveOffset, map, image, robotsInfo, mapScale, mapScale);
-        }
-
 
         // 마우스 클릭으로 로봇 위치 확인하기
         private void PictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
+            Image MapImage = null;
             if (robotsInfo == null) return;
-            if (map == null) return;
-            Image customMapImage = _GetImageFromDB();
             Point clickPoint = e.Location;
-            
-           PointF scaledClickPoint = mapProcessor.customMapImageGetScaledMapPoint(mouseMoveOffset, customMapImage, clickPoint, mapScale, mapScale);
-            //PointF scaledClickPoint = mapProcessor.GetScaledMapPoint(mouseMoveOffset, map, clickPoint, mapScale, mapScale);
-
-            Console.WriteLine($"ClickPoint = {clickPoint} , scaledClickPointX = {scaledClickPoint.X} , scaledClickPointY = {scaledClickPoint.Y}");
-
-            var posList = map.Positions.Where(p =>
-            {
-                return
-                    p.PosX > (scaledClickPoint.X - .6) &&
-                    p.PosX < (scaledClickPoint.X + .6) &&
-                    p.PosY > (scaledClickPoint.Y - .6) &&
-                    p.PosY < (scaledClickPoint.Y + .6);
-            });
-
-
+            PointF scaledClickPoint = new PointF();
             var sb = new StringBuilder();
-
-            foreach (var pos in posList)
+            if (customMapMode)
             {
-                Debug.WriteLine($"{clickPoint}  mapXY={scaledClickPoint}   type={pos.TypeID,-2}    pos={pos.Name}");
-                sb.AppendLine($"{clickPoint}  mapXY={scaledClickPoint}   type={pos.TypeID,-2}    pos={pos.Name}");
+                var MapData = ConfigData.CustomMaps.FirstOrDefault(x => x.MapName == mapName);
+                if (MapData != null) MapImage = _GetImageFromDB(MapData.MapImageData);
+            }
+            else if (ACSDbMapMode)
+            {
+                var MapData = ConfigData.FloorMapIdConfigs.FirstOrDefault(x => x.MapID == MapID);
+                if (MapData != null) MapImage = _GetImageFromDB(MapData.MapImageData);
             }
 
-            var robotList = robotsInfo.Where(r =>
+            if (map != null)
             {
-                return
-                    r.PosX > (scaledClickPoint.X - .6) &&
-                    r.PosX < (scaledClickPoint.X + .6) &&
-                    r.PosY > (scaledClickPoint.Y - .6) &&
-                    r.PosY < (scaledClickPoint.Y + .6);
-            });
+                scaledClickPoint = mapProcessor.GetScaledMapPoint(mouseMoveOffset, map, clickPoint, mapScale, mapScale);
 
-            foreach (var robot in robotList)
-            {
-                Debug.WriteLine($"{clickPoint}  mapXY={scaledClickPoint}  robot={robot.RobotName}");
-                sb.AppendLine($"{clickPoint}  mapXY={scaledClickPoint}  robot={robot.RobotName}");
+                var posList = map.Positions.Where(p =>
+                {
+                    return
+                        p.PosX > (scaledClickPoint.X - .6) &&
+                        p.PosX < (scaledClickPoint.X + .6) &&
+                        p.PosY > (scaledClickPoint.Y - .6) &&
+                        p.PosY < (scaledClickPoint.Y + .6);
+                });
+                Console.WriteLine($"ClickPoint = {clickPoint} , scaledClickPointX = {scaledClickPoint.X} , scaledClickPointY = {scaledClickPoint.Y}");
+
+
+                foreach (var pos in posList)
+                {
+                    Debug.WriteLine($"{clickPoint}  mapXY={scaledClickPoint}   type={pos.TypeID,-2}    pos={pos.Name}");
+                    sb.AppendLine($"{clickPoint}  mapXY={scaledClickPoint}   type={pos.TypeID,-2}    pos={pos.Name}");
+                }
+                var robotList = robotsInfo.Where(r =>
+                {
+                    return
+                        r.PosX > (scaledClickPoint.X - .6) &&
+                        r.PosX < (scaledClickPoint.X + .6) &&
+                        r.PosY > (scaledClickPoint.Y - .6) &&
+                        r.PosY < (scaledClickPoint.Y + .6);
+                });
+
+                foreach (var robot in robotList)
+                {
+                    Debug.WriteLine($"{clickPoint}  mapXY={scaledClickPoint}  robot={robot.RobotName}");
+                    sb.AppendLine($"{clickPoint}  mapXY={scaledClickPoint}  robot={robot.RobotName}");
+                }
+
+                if (posList.Count() == 0 && robotList.Count() == 0)
+                {
+                    Debug.WriteLine($"{clickPoint}  mapXY={scaledClickPoint}");
+                    sb.AppendLine($"{clickPoint}  mapXY={scaledClickPoint}");
+                }
+
+
             }
-
-            if (posList.Count() == 0 && robotList.Count() == 0)
+            else if (MapImage != null)
             {
-                Debug.WriteLine($"{clickPoint}  mapXY={scaledClickPoint}");
-                sb.AppendLine($"{clickPoint}  mapXY={scaledClickPoint}");
-            }
+                scaledClickPoint = mapProcessor.DBMapImageGetScaledMapPoint(mouseMoveOffset, MapImage, clickPoint, mapScale, mapScale);
 
+                var posList = ConfigData.FleetPositions.Where(p =>
+                {
+                    return
+                        p.PosX > (scaledClickPoint.X - .6) &&
+                        p.PosX < (scaledClickPoint.X + .6) &&
+                        p.PosY > (scaledClickPoint.Y - .6) &&
+                        p.PosY < (scaledClickPoint.Y + .6);
+                });
+                Console.WriteLine($"ClickPoint = {clickPoint} , scaledClickPointX = {scaledClickPoint.X} , scaledClickPointY = {scaledClickPoint.Y}");
+
+
+                foreach (var pos in posList)
+                {
+                    Debug.WriteLine($"{clickPoint}  mapXY={scaledClickPoint}   type={pos.TypeID,-2}    pos={pos.Name}");
+                    sb.AppendLine($"{clickPoint}  mapXY={scaledClickPoint}   type={pos.TypeID,-2}    pos={pos.Name}");
+                }
+
+                var robotList = robotsInfo.Where(r =>
+                {
+                    return
+                        r.PosX > (scaledClickPoint.X - .6) &&
+                        r.PosX < (scaledClickPoint.X + .6) &&
+                        r.PosY > (scaledClickPoint.Y - .6) &&
+                        r.PosY < (scaledClickPoint.Y + .6);
+                });
+
+                foreach (var robot in robotList)
+                {
+                    Debug.WriteLine($"{clickPoint}  mapXY={scaledClickPoint}  robot={robot.RobotName}");
+                    sb.AppendLine($"{clickPoint}  mapXY={scaledClickPoint}  robot={robot.RobotName}");
+                }
+
+                if (posList.Count() == 0 && robotList.Count() == 0)
+                {
+                    Debug.WriteLine($"{clickPoint}  mapXY={scaledClickPoint}");
+                    sb.AppendLine($"{clickPoint}  mapXY={scaledClickPoint}");
+                }
+            }
 
             if (cb_DisplayInfo.Checked)
             {
@@ -667,8 +746,6 @@ namespace ACS.Monitor
         }
 
 
-
-
         private void button1_Click(object sender, EventArgs e)
         {
             button1.Enabled = false;
@@ -685,8 +762,6 @@ namespace ACS.Monitor
 
             StopLoop();
         }
-
-
 
 
         private void btnMapDownload_Click(object sender, EventArgs e)
@@ -720,8 +795,9 @@ namespace ACS.Monitor
 
             // reload map image
             StopLoop();
-            bMapProcInit = false;
-            needMapUpdate = true;
+            if (ACSDbMapMode) ACSDbMapUpdate = true;
+            else if (FleetMapMode) FleetMapUpdate = true;
+            else if (customMapMode) customMapUpdate = true;
             StartLoop();
 
             //btnMapReload.Enabled = true;
@@ -730,16 +806,21 @@ namespace ACS.Monitor
         public void ReStartResetData()
         {
             StopLoop();
-            bMapProcInit = false; // 맵 정보 다시 읽기
-            needMapUpdate = true; // DB,Fleet 체크박스
-
+            if (ACSDbMapMode) ACSDbMapUpdate = true;
+            else if (FleetMapMode) FleetMapUpdate = true;
+            else if (customMapMode) customMapUpdate = true;
             this.BeginInvoke(new Action(() =>
             {
+                button1.Visible = true;
+                button2.Visible = true;
+                button3.Visible = true;
+                btnMapDownload.Visible = true;
                 cb_DisplayInfo.Visible = true;
-                //cb_DisplayInfo.Visible = false;
-                chkCustomMap.Visible = false;
-                Map_ID.Visible = false;
-                pictureBox1.Visible = false;
+                chkCustomMap.Visible = true;
+                chkACSDbMap.Visible = true;
+                chkFleetMap.Visible = true;
+                textBox1.Visible = true;
+                lbl_ClickPosInfo.Visible = true;
             }));
         }
 

@@ -94,6 +94,29 @@ namespace Monitor.Data
                 //}
             }
         }
+        public List<Mission> DBLoad()
+        {
+            _missions.Clear();
+            using (var con = new SqlConnection(connectionString))
+            {
+                foreach (var job in con.Query<Mission>("SELECT * FROM Missions"))
+                {
+                    _missions.Add(job);
+                }
+                return _missions.ToList();
+            }
+        }
+
+        public List<Mission> DBGetAll()
+        {
+            lock (this)
+            {
+                using (var con = new SqlConnection(connectionString))
+                {
+                    return con.Query<Mission>("SELECT * FROM Missions").ToList();
+                }
+            }
+        }
 
         public Mission GetById(int id)
         {

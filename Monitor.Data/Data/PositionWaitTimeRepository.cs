@@ -47,7 +47,19 @@ namespace Monitor.Data
                 }
             }
         }
+        public List<PositionWaitTimeModel> DBLoad()
+        {
+            _positionWaitTimeModels.Clear();
+            using (var con = new SqlConnection(connectionString))
+            {
+                foreach (var positionWaitTime in con.Query<PositionWaitTimeModel>("SELECT * FROM PositionWaitTime"))
+                {
 
+                    _positionWaitTimeModels.Add(positionWaitTime);
+                }
+                return _positionWaitTimeModels;
+            }
+        }
         public void Add(PositionWaitTimeModel positionWaitTimeModel)
         {
             using (var con = new SqlConnection(connectionString))

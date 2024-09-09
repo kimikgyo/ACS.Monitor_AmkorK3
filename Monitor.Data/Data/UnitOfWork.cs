@@ -15,8 +15,8 @@ namespace Monitor.Data
         // AMKOR-K5
 #if LOCALDB
 
-        public static readonly string DB1 = @"Data Source=.\SQLEXPRESS;Initial Catalog=AmkorK3_AMB;User ID = sa; Password=acsserver;Connect Timeout=30;"; // My(Kimikgyo) PC
-        public static readonly string DB2 = @"Data Source=.\SQLEXPRESS;Initial Catalog=AmkorK3_AMB;User ID = sa; Password=acsserver;Connect Timeout=30;"; // My(Kimikgyo) PC
+        public static readonly string DB1 = @"Data Source=.\SQLEXPRESS;Initial Catalog=RobotAPI;User ID = sa; Password=acsserver;Connect Timeout=30;"; // My(Kimikgyo) PC
+        public static readonly string DB2 = @"Data Source=.\SQLEXPRESS;Initial Catalog=RobotAPI;User ID = sa; Password=acsserver;Connect Timeout=30;"; // My(Kimikgyo) PC
         public static readonly string DB3 = @"Data Source=.\SQLEXPRESS;Initial Catalog=AmkorK5_User_Data;User ID = sa; Password=acsserver;Connect Timeout=30;"; // My(Kimikgyo) PC
 
 
@@ -49,6 +49,8 @@ namespace Monitor.Data
         ACSRobotGroupRepository ACSRobotGroupConfigs { get; }
         WaitMissionConfigRepository WaitMissionConfigs { get; }
         ChargeMissionConfigRepository ChargeMissionConfigs { get; }
+
+        FleetPositionRepository FleetPositions { get; }
         FloorMapIDConfigRepository FloorMapIDConfigs { get; }
         ACSChargerCountConfigRepository ACSChargerCountConfigs { get; }
         RobotRegisterSyncRepository RobotRegisterSyncs { get; }
@@ -121,6 +123,7 @@ namespace Monitor.Data
         public ACSRobotGroupRepository ACSRobotGroupConfigs { get; private set; }
         public WaitMissionConfigRepository WaitMissionConfigs { get; private set; }
         public ChargeMissionConfigRepository ChargeMissionConfigs { get; private set; }
+        public FleetPositionRepository FleetPositions { get; private set; }
         public FloorMapIDConfigRepository FloorMapIDConfigs { get; private set; }
         public ACSChargerCountConfigRepository ACSChargerCountConfigs { get; private set; }
         public RobotRegisterSyncRepository RobotRegisterSyncs { get; private set; }
@@ -152,6 +155,7 @@ namespace Monitor.Data
             ACSRobotGroupConfigs = new ACSRobotGroupRepository(connectionString);
             WaitMissionConfigs = new WaitMissionConfigRepository(connectionString);
             ChargeMissionConfigs = new ChargeMissionConfigRepository(connectionString);
+            FleetPositions = new FleetPositionRepository(connectionString);
             FloorMapIDConfigs = new FloorMapIDConfigRepository(connectionString);
             ACSChargerCountConfigs = new ACSChargerCountConfigRepository(connectionString);
             RobotRegisterSyncs = new RobotRegisterSyncRepository(connectionString);

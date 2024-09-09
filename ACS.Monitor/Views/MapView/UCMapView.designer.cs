@@ -39,10 +39,14 @@ namespace ACS.Monitor
             this.button1 = new DevExpress.XtraEditors.SimpleButton();
             this.button2 = new DevExpress.XtraEditors.SimpleButton();
             this.textBox1 = new DevExpress.XtraEditors.TextEdit();
+            this.chkACSDbMap = new DevExpress.XtraEditors.CheckEdit();
+            this.chkFleetMap = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.cb_DisplayInfo.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkCustomMap.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textBox1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkACSDbMap.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkFleetMap.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // cb_DisplayInfo
@@ -55,7 +59,7 @@ namespace ACS.Monitor
             // 
             // chkCustomMap
             // 
-            this.chkCustomMap.Location = new System.Drawing.Point(208, 60);
+            this.chkCustomMap.Location = new System.Drawing.Point(95, 86);
             this.chkCustomMap.Name = "chkCustomMap";
             this.chkCustomMap.Properties.Caption = "custom map";
             this.chkCustomMap.Size = new System.Drawing.Size(107, 20);
@@ -63,7 +67,7 @@ namespace ACS.Monitor
             // 
             // lbl_ClickPosInfo
             // 
-            this.lbl_ClickPosInfo.Location = new System.Drawing.Point(105, 86);
+            this.lbl_ClickPosInfo.Location = new System.Drawing.Point(95, 112);
             this.lbl_ClickPosInfo.Name = "lbl_ClickPosInfo";
             this.lbl_ClickPosInfo.Size = new System.Drawing.Size(31, 14);
             this.lbl_ClickPosInfo.TabIndex = 2;
@@ -87,13 +91,13 @@ namespace ACS.Monitor
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.Location = new System.Drawing.Point(6, 53);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
-            this.pictureBox1.Size = new System.Drawing.Size(438, 523);
+            this.pictureBox1.Size = new System.Drawing.Size(508, 523);
             this.pictureBox1.TabIndex = 5;
             // 
             // Map_ID
@@ -134,11 +138,29 @@ namespace ACS.Monitor
             this.textBox1.Size = new System.Drawing.Size(133, 20);
             this.textBox1.TabIndex = 9;
             // 
+            // chkACSDbMap
+            // 
+            this.chkACSDbMap.Location = new System.Drawing.Point(208, 86);
+            this.chkACSDbMap.Name = "chkACSDbMap";
+            this.chkACSDbMap.Properties.Caption = "ACSDbMap";
+            this.chkACSDbMap.Size = new System.Drawing.Size(107, 20);
+            this.chkACSDbMap.TabIndex = 1;
+            // 
+            // chkFleetMap
+            // 
+            this.chkFleetMap.Location = new System.Drawing.Point(314, 86);
+            this.chkFleetMap.Name = "chkFleetMap";
+            this.chkFleetMap.Properties.Caption = "FleetMap";
+            this.chkFleetMap.Size = new System.Drawing.Size(107, 20);
+            this.chkFleetMap.TabIndex = 1;
+            // 
             // UCMapView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lbl_ClickPosInfo);
+            this.Controls.Add(this.chkFleetMap);
+            this.Controls.Add(this.chkACSDbMap);
             this.Controls.Add(this.chkCustomMap);
             this.Controls.Add(this.cb_DisplayInfo);
             this.Controls.Add(this.textBox1);
@@ -149,11 +171,13 @@ namespace ACS.Monitor
             this.Controls.Add(this.button3);
             this.Controls.Add(this.btnMapDownload);
             this.Name = "UCMapView";
-            this.Size = new System.Drawing.Size(446, 580);
+            this.Size = new System.Drawing.Size(516, 580);
             ((System.ComponentModel.ISupportInitialize)(this.cb_DisplayInfo.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkCustomMap.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textBox1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkACSDbMap.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkFleetMap.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -171,5 +195,7 @@ namespace ACS.Monitor
         private DevExpress.XtraEditors.SimpleButton button1;
         private DevExpress.XtraEditors.SimpleButton button2;
         private DevExpress.XtraEditors.TextEdit textBox1;
+        private DevExpress.XtraEditors.CheckEdit chkACSDbMap;
+        private DevExpress.XtraEditors.CheckEdit chkFleetMap;
     }
 }

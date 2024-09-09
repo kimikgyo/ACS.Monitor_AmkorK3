@@ -1,8 +1,5 @@
-﻿using DevExpress.Skins;
-using DevExpress.XtraBars;
-using DevExpress.XtraBars.Alerter;
+﻿using DevExpress.XtraBars;
 using DevExpress.XtraBars.FluentDesignSystem;
-using DevExpress.XtraBars.Navigation;
 using ACS.Monitor.Utilities;
 using log4net;
 using System;
@@ -14,6 +11,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using Monitor.Data;
+using Monitor.Common;
+using Newtonsoft.Json;
 
 namespace ACS.Monitor
 {
@@ -25,10 +24,11 @@ namespace ACS.Monitor
 
         private readonly UnitOfWork uow;
         private AutoScreen ChildMainForm;
-        private JobHistory JobHistory;
-        private WaitPositionTimeHistory WaitPosition;
-        private SettingsElevator elevator;
-        private SettingsCallMissions CallSystem;
+        //private JobHistory JobHistory;
+        //private WaitPositionTimeHistory WaitPosition;
+        //private SettingsElevator elevator;
+        //private SettingsCallMissions CallSystem;
+        private GetDataControl getDataControl = null;
 
         private readonly Font textFont1 = new Font("맑은 고딕", 11, FontStyle.Bold);
         private readonly Font AmkorK5Font = new Font("고딕", 12, FontStyle.Bold);
@@ -39,7 +39,7 @@ namespace ACS.Monitor
         private readonly Font textFont4 = new Font("Arial Narrow", 5, FontStyle.Bold);
         private readonly Font bartextFont1 = new Font("Arial Narrow", 15, FontStyle.Bold);
 
-        
+
         public MainForm()
         {
             //this.ClientSize = new Size(800, 600);
@@ -48,7 +48,10 @@ namespace ACS.Monitor
 
             subFunc_Public_DataInit();
 
+
             uow = new UnitOfWork();
+
+            Init();
             //DesignFunc();
 
             ////부모 Form 으로 설정한다
@@ -58,6 +61,7 @@ namespace ACS.Monitor
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            Start();
             this.BackColor = Color.White; // 원하는 색상으로 변경 가능
             //SkinManager.EnableFormSkins();
             //SkinManager.EnableMdiFormSkins();
@@ -67,7 +71,14 @@ namespace ACS.Monitor
             MapMenuLoad();
             RobotMenuLoad();
         }
-
+        private void Init()
+        {
+            getDataControl = new GetDataControl(this, uow);
+        }
+        private void Start()
+        {
+            getDataControl.Start();
+        }
         private void InitTopBarControl()
         {
             barButtonItem1.Size = new Size(100, 30);
@@ -91,36 +102,39 @@ namespace ACS.Monitor
             barStaticItem1.Appearance.Font = AmkorK5Font;
             barStaticItem1.Appearance.ForeColor = Color.Blue;
         }
-
+        /// <summary>
+        ///  UserLogin  / UserLogOut
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UserLoginButtonClick(object sender, ItemClickEventArgs e)
         {
-            if (e.Item.Caption == "UserLogin")
-            {
-                //사번 입력 Form을 불러옴
-                var UserNumberForm = new UserNumberForm();
-                DialogResult result = UserNumberForm.ShowDialog();
-                if (result == DialogResult.Yes)
-                {
-                    //사번 입력하여 검색
-                    var UserNumber = UserNumberInfo.GetUserLogin(UserNumberForm.UserNumber, UserNumberForm.UserPassword);
-                    //사번이 없는경우 설정창을 Clear한후 다시 초기설정함
-                    if (UserNumber == null) MessageBox.Show("등록되지 않은 사원번호 이거나 비밀번호가 틀립니다!");
-                    else
-                    {
-                        S_UserNumber = UserNumber;
-                        //barStaticItem1.Caption = $"사원번호 = {UserNumber.UserNumber} / 사원이름 = {UserNumber.UserName}";
-                        L_Login.Text = $"사원번호 = {UserNumber.UserNumber} / 사원이름 = {UserNumber.UserName}";
-                        barButtonItem1.Caption = "UserLogOut";
-                        MenuItem_Setting.Visible = true;
-                    }
-                }
-            }
-            else
-            {
-                barButtonItem1.Caption = "UserLogin";
-                barStaticItem1.Caption = "";
-                MenuItem_Setting.Visible = false;
-            }
+            //if (e.Item.Caption == "UserLogin")
+            //{
+            //    //사번 입력 Form을 불러옴
+            //    var UserNumberForm = new UserNumberForm();
+            //    DialogResult result = UserNumberForm.ShowDialog();
+            //    if (result == DialogResult.Yes)
+            //    {
+            //        //사번 입력하여 검색
+            //        var UserNumber = uow.UserNumbers.GetAll().FirstOrDefault(u => u.UserName == UserNumberForm.UserNumber);
+            //        //사번이 없는경우 설정창을 Clear한후 다시 초기설정함
+            //        if (UserNumber == null) MessageBox.Show("등록되지 않은 사원번호 이거나 비밀번호가 틀립니다!");
+            //        else
+            //        {
+            //            //barStaticItem1.Caption = $"사원번호 = {UserNumber.UserNumber} / 사원이름 = {UserNumber.UserName}";
+            //            L_Login.Text = $"사원번호 = {UserNumber.UserNumber} / 사원이름 = {UserNumber.UserName}";
+            //            barButtonItem1.Caption = "UserLogOut";
+            //            MenuItem_Setting.Visible = true;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    barButtonItem1.Caption = "UserLogin";
+            //    barStaticItem1.Caption = "";
+            //    MenuItem_Setting.Visible = false;
+            //}
         }
 
         /// <summary>
@@ -137,73 +151,91 @@ namespace ACS.Monitor
             ChildMainForm.Show();
 
             //한번 생성자
-            JobHistory = new JobHistory(this, uow);
-            WaitPosition = new WaitPositionTimeHistory(this, uow);
+            //JobHistory = new JobHistory(this, uow);
+            //WaitPosition = new WaitPositionTimeHistory(this, uow);
         }
 
-        public void DrawUCMapView(UCMapView view, MapNameAlias mapDBdata, MapData Data, string fleetIp, bool Flag)
+        public void DbDrawUCMApView(UCMapView view, FloorMapIdConfigModel floorMapIdConfig, string fleetIp, bool Flag)
         {
-            view.UriStr = $"http://{fleetIp}/";
-            view.MapID = mapDBdata.MapID;
-            view.Init(Data.mapScale, Data.mouseFirstLocation, Data.mouseMoveOffset, mapDBdata.FloorName, Flag);
+            if (fleetIp != null) view.UriStr = $"http://{fleetIp}/";
+            view.MapID = floorMapIdConfig.MapID;
+            view.Init(floorMapIdConfig, fleetIp, Flag);
             view.StartLoop();
         }
 
+        /// <summary>
+        /// Map 메뉴 생성 후 Config 설정되어 있는 층에 Check 표시
+        /// </summary>
         private void MapMenuLoad()
         {
             string tmp = ConfigurationManager.AppSettings["MapNames"];
-            ConfigData.DisplayMapNames = Helpers.ConvertintToDictionary(tmp) ?? new Dictionary<int, string>();
-            var Maps = MapNameAlias.GetAll();
-
-            foreach (var temp in ConfigData.DisplayMapNames)
+            ConfigData.DisplayMapNames = Helpers.ConvertStringToDictionary(tmp) ?? new Dictionary<string, string>();
+            foreach (var floorMapIndex in uow.FloorMapIDConfigs.GetAll())
             {
-                var Map = Maps.FirstOrDefault(x => x.FloorIndex == temp.Value);
-
-                if ((Map.FloorIndex + " - " + Map.FloorName) == "2F - T2F")
-                    Ch_2F.Checked = true;
-                else if ((Map.FloorIndex + " - " + Map.FloorName) == "3F - T3F")
-                    Ch_3F.Checked = true;
-                else if ((Map.FloorIndex + " - " + Map.FloorName) == "4F - T4F")
-                    Ch_4F.Checked = true;
-                else if ((Map.FloorIndex + " - " + Map.FloorName) == "6F - M3F")
-                    Ch_6F.Checked = true;
+                if (!Ch_Floor1.Enabled) { Ch_Floor1.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor1.Enabled = true; Ch_Floor1.Visible = true; }
+                else if (!Ch_Floor2.Enabled) { Ch_Floor2.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor2.Enabled = true; Ch_Floor2.Visible = true; }
+                else if (!Ch_Floor3.Enabled) { Ch_Floor3.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor3.Enabled = true; Ch_Floor3.Visible = true; }
+                else if (!Ch_Floor4.Enabled) { Ch_Floor4.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor4.Enabled = true; Ch_Floor4.Visible = true; }
+                else if (!Ch_Floor5.Enabled) { Ch_Floor5.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor5.Enabled = true; Ch_Floor5.Visible = true; }
+                else if (!Ch_Floor6.Enabled) { Ch_Floor6.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor6.Enabled = true; Ch_Floor6.Visible = true; }
+                else if (!Ch_Floor7.Enabled) { Ch_Floor7.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor7.Enabled = true; Ch_Floor7.Visible = true; }
+                var floorUserCheck = ConfigData.DisplayMapNames.FirstOrDefault(D => D.Value == floorMapIndex.FloorIndex);
+                if (floorUserCheck.Value != null)
+                {
+                    if (floorUserCheck.Value == Ch_Floor1.Text) Ch_Floor1.Checked = true;
+                    else if (floorUserCheck.Value == Ch_Floor2.Text) Ch_Floor2.Checked = true;
+                    else if (floorUserCheck.Value == Ch_Floor3.Text) Ch_Floor3.Checked = true;
+                    else if (floorUserCheck.Value == Ch_Floor4.Text) Ch_Floor4.Checked = true;
+                    else if (floorUserCheck.Value == Ch_Floor5.Text) Ch_Floor5.Checked = true;
+                    else if (floorUserCheck.Value == Ch_Floor6.Text) Ch_Floor6.Checked = true;
+                    else if (floorUserCheck.Value == Ch_Floor7.Text) Ch_Floor7.Checked = true;
+                }
             }
         }
 
+
+
+
+
+        /// <summary>
+        /// Robot 메뉴 생성 후 Config 설정되어 있는 Robot Check 표시
+        /// </summary>
         private void RobotMenuLoad()
         {
             string tmp = ConfigurationManager.AppSettings["RobotNames"];
             ConfigData.DisplayRobotNames = Helpers.ConvertStringToDictionary(tmp) ?? new Dictionary<string, string>();
-            var Robots = RobotNameAlias.GetAll();
-
-            foreach (var temp in ConfigData.DisplayRobotNames)
+            foreach (var robot in uow.Robots.GetAll())
             {
-                var Robot = Robots.FirstOrDefault(x => x.RobotAlias == temp.Value);
+                if (!CH_Robot1.Enabled) { CH_Robot1.Text = robot.RobotAlias; CH_Robot1.Enabled = true; CH_Robot1.Visible = true; }
+                else if (!CH_Robot2.Enabled) { CH_Robot2.Text = robot.RobotAlias; CH_Robot2.Enabled = true; CH_Robot2.Visible = true; }
+                else if (!CH_Robot3.Enabled) { CH_Robot3.Text = robot.RobotAlias; CH_Robot3.Enabled = true; CH_Robot3.Visible = true; }
+                else if (!CH_Robot4.Enabled) { CH_Robot4.Text = robot.RobotAlias; CH_Robot4.Enabled = true; CH_Robot4.Visible = true; }
+                else if (!CH_Robot5.Enabled) { CH_Robot5.Text = robot.RobotAlias; CH_Robot5.Enabled = true; CH_Robot5.Visible = true; }
+                else if (!CH_Robot6.Enabled) { CH_Robot6.Text = robot.RobotAlias; CH_Robot6.Enabled = true; CH_Robot6.Visible = true; }
+                else if (!CH_Robot7.Enabled) { CH_Robot7.Text = robot.RobotAlias; CH_Robot7.Enabled = true; CH_Robot7.Visible = true; }
+                else if (!CH_Robot8.Enabled) { CH_Robot8.Text = robot.RobotAlias; CH_Robot8.Enabled = true; CH_Robot8.Visible = true; }
+                else if (!CH_Robot9.Enabled) { CH_Robot9.Text = robot.RobotAlias; CH_Robot9.Enabled = true; CH_Robot9.Visible = true; }
+                else if (!CH_Robot10.Enabled) { CH_Robot10.Text = robot.RobotAlias; CH_Robot10.Enabled = true; CH_Robot10.Visible = true; }
+                else if (!CH_Robot11.Enabled) { CH_Robot11.Text = robot.RobotAlias; CH_Robot11.Enabled = true; CH_Robot11.Visible = true; }
+                else if (!CH_Robot12.Enabled) { CH_Robot12.Text = robot.RobotAlias; CH_Robot12.Enabled = true; CH_Robot12.Visible = true; }
 
-                if (Robot.RobotAlias == "SAMB#1")
-                    CH_SAMB1.Checked = true;
-                else if (Robot.RobotAlias == "SAMB#2")
-                    CH_SAMB2.Checked = true;
-                else if (Robot.RobotAlias == "SAMB#3")
-                    CH_SAMB3.Checked = true;
-                else if (Robot.RobotAlias == "SAMB#4")
-                    CH_SAMB4.Checked = true;
-                else if (Robot.RobotAlias == "SAMB#5")
-                    CH_SAMB5.Checked = true;
-                else if (Robot.RobotAlias == "SAMB#6")
-                    CH_SAMB6.Checked = true;
-                else if (Robot.RobotAlias == "SAMB#7")
-                    CH_SAMB7.Checked = true;
-                else if (Robot.RobotAlias == "SAMB#8")
-                    CH_SAMB8.Checked = true;
-                else if (Robot.RobotAlias == "SAMB#9")
-                    CH_SAMB9.Checked = true;
-                else if (Robot.RobotAlias == "SAMB#10")
-                    CH_SAMB10.Checked = true;
-                else if (Robot.RobotAlias == "SAMB#11")
-                    CH_SAMB11.Checked = true;
-                else if (Robot.RobotAlias == "TAMB#1")
-                    CH_TAMB1.Checked = true;
+                var RobotUserCheck = ConfigData.DisplayRobotNames.FirstOrDefault(D => D.Value == robot.RobotAlias);
+                if (RobotUserCheck.Value != null)
+                {
+                    if (RobotUserCheck.Value == CH_Robot1.Text) CH_Robot1.Checked = true;
+                    else if (RobotUserCheck.Value == CH_Robot2.Text) CH_Robot2.Checked = true;
+                    else if (RobotUserCheck.Value == CH_Robot3.Text) CH_Robot3.Checked = true;
+                    else if (RobotUserCheck.Value == CH_Robot4.Text) CH_Robot4.Checked = true;
+                    else if (RobotUserCheck.Value == CH_Robot5.Text) CH_Robot5.Checked = true;
+                    else if (RobotUserCheck.Value == CH_Robot6.Text) CH_Robot6.Checked = true;
+                    else if (RobotUserCheck.Value == CH_Robot7.Text) CH_Robot7.Checked = true;
+                    else if (RobotUserCheck.Value == CH_Robot8.Text) CH_Robot8.Checked = true;
+                    else if (RobotUserCheck.Value == CH_Robot9.Text) CH_Robot9.Checked = true;
+                    else if (RobotUserCheck.Value == CH_Robot10.Text) CH_Robot10.Checked = true;
+                    else if (RobotUserCheck.Value == CH_Robot11.Text) CH_Robot11.Checked = true;
+                    else if (RobotUserCheck.Value == CH_Robot12.Text) CH_Robot12.Checked = true;
+                }
+
             }
         }
 
@@ -243,72 +275,25 @@ namespace ACS.Monitor
         #endregion
 
         #region 메뉴 버튼 Event 모음
-        private void ToolStrip_JobHistory_Click(object sender, EventArgs e)
-        {
-            JobHistory.TopLevel = false;
-            JobHistory.Dock = DockStyle.Fill;
-            DesignPanelControl.Controls.Clear();
-            DesignPanelControl.BackColor = Color.White;
-            DesignPanelControl.Controls.Add(JobHistory);
-            JobHistory.Activate();
-            JobHistory.Show();
-        }
-
-        private void MenuItem_MainView_Click(object sender, EventArgs e)
-        {
-            ChildMainForm.TopLevel = false;
-            ChildMainForm.Dock = DockStyle.Fill;
-            DesignPanelControl.Controls.Clear();
-            DesignPanelControl.BackColor = Color.White;
-            DesignPanelControl.Controls.Add(ChildMainForm);
-            ChildMainForm.Activate();
-            ChildMainForm.Show();
-        }
-
-        private void ToolStrip_WaitPositionTime_Click(object sender, EventArgs e)
-        {
-            WaitPosition.TopLevel = false;
-            WaitPosition.Dock = DockStyle.Fill;
-            DesignPanelControl.Controls.Clear();
-            DesignPanelControl.BackColor = Color.White;
-            DesignPanelControl.Controls.Add(WaitPosition);
-            WaitPosition.Activate();
-            WaitPosition.Show();
-        }
-
-        private void elevatorToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            elevator = new SettingsElevator(this, uow);
-            elevator.TopLevel = false;
-            elevator.Dock = DockStyle.Fill;
-            flyoutPanelControl1.Controls.Add(elevator);
-            flyoutPanel1.OwnerControl = menuStrip1;
-            flyoutPanel1.Options.AnchorType = DevExpress.Utils.Win.PopupToolWindowAnchor.TopRight;
-            flyoutPanel1.Options.HorzIndent = 20;
-            flyoutPanel1.Options.VertIndent = 45;
-            flyoutPanel1.ShowPopup();
-            elevator.Activate();
-            elevator.Show();
-        }
-
-        private void callSystemToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CallSystem = new SettingsCallMissions(this, uow, S_UserNumber);
-            CallSystem.TopLevel = false;
-            CallSystem.Dock = DockStyle.Fill;
-            flyoutPanelControl2.Controls.Add(CallSystem);
-            flyoutPanel2.OwnerControl = menuStrip1;
-            flyoutPanel2.Options.AnchorType = DevExpress.Utils.Win.PopupToolWindowAnchor.TopRight;
-            flyoutPanel2.Options.HorzIndent = 20;
-            flyoutPanel2.Options.VertIndent = 45;
-            flyoutPanel2.ShowPopup();
-            CallSystem.Activate();
-            CallSystem.Show();
-        }
 
         private void Floor_CheckedChanged(object sender, EventArgs e)
         {
-            var Chk_Btn = (ToolStripMenuItem) sender;
+            var Chk_Btn = (ToolStripMenuItem)sender;
+
+            if (Chk_Btn.Checked)
+            {
+                Chk_Btn.Image = Properties.Resources.Checked;
+                Chk_Btn.BackgroundImageLayout = ImageLayout.Tile;
+            }
+            else
+            {
+                Chk_Btn.Image = null;
+                Chk_Btn.BackgroundImageLayout = ImageLayout.Tile;
+            }
+        }
+        private void Robot_CheckedChanged(object sender, EventArgs e)
+        {
+            var Chk_Btn = (ToolStripMenuItem)sender;
 
             if (Chk_Btn.Checked)
             {
@@ -325,22 +310,166 @@ namespace ACS.Monitor
         private void FloorCH_Click(object sender, EventArgs e)
         {
             var Chk_Btn = (ToolStripMenuItem)sender;
-            var Maps = MapNameAlias.GetAll().FirstOrDefault(x => x.FloorName == Chk_Btn.Text.Split('-')[1].Trim().ToString());
+            var Maps = uow.FloorMapIDConfigs.GetAll().FirstOrDefault(x => x.FloorIndex == Chk_Btn.Text);
 
-            if (Maps != null && Chk_Btn.Checked)
+            if (Maps != null)
             {
-                if (ConfigData.DisplayMapNames.ContainsKey(Maps.Id) == false)
-                    ConfigData.DisplayMapNames.Add(Maps.Id, Maps.FloorIndex);
+                if (!Chk_Btn.Checked)
+                {
+                    if (ConfigData.DisplayMapNames.ContainsKey(Maps.FloorIndex) == true)
+                    {
+                        ConfigData.DisplayMapNames.Remove(Maps.FloorIndex);
+                        Chk_Btn.Checked = false;
+                    }
+                    else
+                    {
+                        //Config데이터가 없을경우
+                        ConfigData.DisplayMapNames.Add(Maps.FloorIndex, Maps.FloorIndex);
+                        Chk_Btn.Checked = true;
+                    }
+                }
+                else
+                {
+                    if (ConfigData.DisplayMapNames.ContainsKey(Maps.FloorIndex) == false)
+                    {
+                        //Config 데이터에 없을경우
+                        ConfigData.DisplayMapNames.Add(Maps.FloorIndex, Maps.FloorIndex);
+                        Chk_Btn.Checked = true;
+                    }
+                    else
+                    {
+                        ConfigData.DisplayMapNames.Remove(Maps.FloorIndex);
+                        Chk_Btn.Checked = false;
+                    }
+                }
             }
-            else if (Maps != null && !Chk_Btn.Checked)
-            {
-                if (ConfigData.DisplayMapNames.ContainsKey(Maps.Id) == true)
-                    ConfigData.DisplayMapNames.Remove(Maps.Id);
-            }
-
             string saveDictText = Helpers.ConvertDictionaryToString(ConfigData.DisplayMapNames);
-            MapSaveSettings(saveDictText);
+
+            //ConfigData 수정
+            AppConfiguration.SetAppConfig("MapNames", saveDictText);
         }
+
+        private void RobotCH_Click(object sender, EventArgs e)
+        {
+            var Chk_Btn = (ToolStripMenuItem)sender;
+            var Robot = uow.Robots.DBGetAll().FirstOrDefault(x => x.RobotAlias == Chk_Btn.Text);
+
+            if (Robot != null)
+            {
+                if (!Chk_Btn.Checked)
+                {
+
+                    if (ConfigData.DisplayRobotNames.ContainsKey(Robot.RobotName) == true)
+                    {
+                        ConfigData.DisplayRobotNames.Remove(Robot.RobotName);
+                        Chk_Btn.Checked = false;
+                    }
+                    else
+                    {
+                        //Config데이터가 없을경우
+                        ConfigData.DisplayRobotNames.Add(Robot.RobotName, Robot.RobotAlias);
+                        Chk_Btn.Checked = true;
+                    }
+                }
+                else
+                {
+                    if (ConfigData.DisplayRobotNames.ContainsKey(Robot.RobotName) == false)
+                    {
+                        //Config 데이터에 없을경우
+                        ConfigData.DisplayRobotNames.Add(Robot.RobotName, Robot.RobotAlias);
+                        Chk_Btn.Checked = true;
+                    }
+                    else
+                    {
+                        ConfigData.DisplayRobotNames.Remove(Robot.RobotName);
+                        Chk_Btn.Checked = false;
+                    }
+                }
+            }
+            string saveDictText = Helpers.ConvertDictionaryToString(ConfigData.DisplayRobotNames);
+
+            //ConfigData 수정
+            AppConfiguration.SetAppConfig("RobotNames", saveDictText);
+        }
+
+
+
+
+
+        private void MenuItem_MainView_Click(object sender, EventArgs e)
+        {
+            ChildMainForm.TopLevel = false;
+            ChildMainForm.Dock = DockStyle.Fill;
+            DesignPanelControl.Controls.Clear();
+            DesignPanelControl.BackColor = Color.White;
+            DesignPanelControl.Controls.Add(ChildMainForm);
+            ChildMainForm.Activate();
+            ChildMainForm.Show();
+        }
+        /// <summary>
+        /// JobHistory Click 이벤트 JobHistory Form 을 띄운다
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ToolStrip_JobHistory_Click(object sender, EventArgs e)
+        {
+            //JobHistory.TopLevel = false;
+            //JobHistory.Dock = DockStyle.Fill;
+            //DesignPanelControl.Controls.Clear();
+            //DesignPanelControl.BackColor = Color.White;
+            //DesignPanelControl.Controls.Add(JobHistory);
+            //JobHistory.Activate();
+            //JobHistory.Show();
+        }
+        /// <summary>
+        /// WaitPositionTime Click 이벤트 WaitPositionTime Form 을 띄운다
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
+        private void ToolStrip_WaitPositionTime_Click(object sender, EventArgs e)
+        {
+            //WaitPosition.TopLevel = false;
+            //WaitPosition.Dock = DockStyle.Fill;
+            //DesignPanelControl.Controls.Clear();
+            //DesignPanelControl.BackColor = Color.White;
+            //DesignPanelControl.Controls.Add(WaitPosition);
+            //WaitPosition.Activate();
+            //WaitPosition.Show();
+        }
+
+        private void elevatorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //elevator = new SettingsElevator(this, uow);
+            //elevator.TopLevel = false;
+            //elevator.Dock = DockStyle.Fill;
+            //flyoutPanelControl1.Controls.Add(elevator);
+            //flyoutPanel1.OwnerControl = menuStrip1;
+            //flyoutPanel1.Options.AnchorType = DevExpress.Utils.Win.PopupToolWindowAnchor.TopRight;
+            //flyoutPanel1.Options.HorzIndent = 20;
+            //flyoutPanel1.Options.VertIndent = 45;
+            //flyoutPanel1.ShowPopup();
+            //elevator.Activate();
+            //elevator.Show();
+        }
+
+        private void callSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //CallSystem = new SettingsCallMissions(this, uow);
+            //CallSystem.TopLevel = false;
+            //CallSystem.Dock = DockStyle.Fill;
+            //flyoutPanelControl2.Controls.Add(CallSystem);
+            //flyoutPanel2.OwnerControl = menuStrip1;
+            //flyoutPanel2.Options.AnchorType = DevExpress.Utils.Win.PopupToolWindowAnchor.TopRight;
+            //flyoutPanel2.Options.HorzIndent = 20;
+            //flyoutPanel2.Options.VertIndent = 45;
+            //flyoutPanel2.ShowPopup();
+            //CallSystem.Activate();
+            //CallSystem.Show();
+        }
+
+
+
 
         private void MenuItem_MouseHover(object sender, EventArgs e)
         {
@@ -356,52 +485,11 @@ namespace ACS.Monitor
             Chk_Btn.ForeColor = Color.Black;
         }
 
-        private void RobotCH_Click(object sender, EventArgs e)
-        {
-            var Chk_Btn = (ToolStripMenuItem)sender;
-            var Robot = uow.Robots.GetAll().FirstOrDefault(x => x.RobotAlias == Chk_Btn.Text);
 
-            if (Robot != null && Chk_Btn.Checked)
-            {
-                if (ConfigData.DisplayRobotNames.ContainsKey(Robot.RobotName) == false)
-                    ConfigData.DisplayRobotNames.Add(Robot.RobotName, Robot.RobotAlias);
-            }
-            else if (Robot != null && !Chk_Btn.Checked)
-            {
-                if (ConfigData.DisplayRobotNames.ContainsKey(Robot.RobotName) == true)
-                    ConfigData.DisplayRobotNames.Remove(Robot.RobotName);
-            }
 
-            string saveDictText = Helpers.ConvertDictionaryToString(ConfigData.DisplayRobotNames);
-            RobotSaveSettings(saveDictText);
-        }
 
-        private void Robot_CheckedChanged(object sender, EventArgs e)
-        {
-            var Chk_Btn = (ToolStripMenuItem)sender;
-
-            if (Chk_Btn.Checked)
-            {
-                Chk_Btn.Image = Properties.Resources.Checked;
-                Chk_Btn.BackgroundImageLayout = ImageLayout.Tile;
-            }
-            else
-            {
-                Chk_Btn.Image = null;
-                Chk_Btn.BackgroundImageLayout = ImageLayout.Tile;
-            }
-        }
         #endregion
 
-        private void RobotSaveSettings(string value)
-        {
-            AppConfiguration.SetAppConfig("RobotNames", value);
-        }
-
-        private void MapSaveSettings(string value)
-        {
-            AppConfiguration.SetAppConfig("MapNames", value);
-        }
 
         private void MainForm_Resize(object sender, EventArgs e)
         {

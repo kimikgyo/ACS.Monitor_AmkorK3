@@ -141,7 +141,29 @@ namespace Monitor.Data
                 }
             }
         }
+        public List<Job> DBLoad()
+        {
+            _jobs.Clear();
+            using (var con = new SqlConnection(connectionString))
+            {
+                foreach (var job in con.Query<Job>("SELECT * FROM Jobs"))
+                {
+                    _jobs.Add(job);
+                }
+                return _jobs.ToList();
+            }
+        }
+        public List<Job> DBGetAll()
+        {
+            lock (this)
+            {
+                using (var con = new SqlConnection(connectionString))
+                {
+                    return con.Query<Job>("SELECT * FROM Jobs").ToList();
 
+                }
+            }
+        }
         public List<Job> Find(Func<Job, bool> predicate)
         {
             lock (this)
