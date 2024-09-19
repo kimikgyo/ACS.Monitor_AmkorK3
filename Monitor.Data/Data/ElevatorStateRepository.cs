@@ -19,10 +19,12 @@ namespace Monitor.Data
         private readonly string connectionString;
         private readonly List<ElevatorStateModel> _elevatorStateModule = new List<ElevatorStateModel>(); // cache data
 
+        private readonly static object lockObj = new object();
 
         public ElevatorStateRepository(string connectionString)
         {
             this.connectionString = connectionString;
+            DBLoad();
         }
 
         //DB 불러오기
@@ -38,6 +40,32 @@ namespace Monitor.Data
                     _elevatorStateModule.Add(skyNetModels);
                 }
                 return _elevatorStateModule.ToList();
+            }
+        }
+
+        public List<ElevatorStateModel> ListUpdate()
+        {
+            lock (lockObj)
+            {
+                using (var con = new SqlConnection(connectionString))
+                {
+                    foreach (var ElevatorState in con.Query<ElevatorStateModel>("SELECT * FROM ElevatorState"))
+                    {
+                        var Updata = _elevatorStateModule.FirstOrDefault(x => x.Id == ElevatorState.Id);
+                        if (Updata != null)
+                        {
+                            Updata.Id = ElevatorState.Id;
+                            Updata.RobotAlias = ElevatorState.RobotAlias;
+                            Updata.RobotName = ElevatorState.RobotName;
+                            Updata.MiRStateElevator = ElevatorState.MiRStateElevator;
+                            Updata.ElevatorState = ElevatorState.ElevatorState;
+                            Updata.ElevatorMissionName = ElevatorState.ElevatorMissionName;
+                            Updata.StartFloor = ElevatorState.StartFloor;
+                            Updata.EndFloor = ElevatorState.EndFloor;
+                        }
+                    }
+                    return _elevatorStateModule;
+                }
             }
         }
         //DB 추가하기

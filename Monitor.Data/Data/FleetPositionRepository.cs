@@ -40,7 +40,7 @@ namespace Monitor.Data
             }
         }
 
-        public List<FleetPositionModel> Update()
+        public List<FleetPositionModel> ListUpdate()
         {
             lock (lockObj)
             {

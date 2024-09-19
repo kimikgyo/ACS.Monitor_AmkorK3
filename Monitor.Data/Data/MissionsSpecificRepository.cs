@@ -15,6 +15,10 @@ namespace Monitor.Data
         private readonly static ILog logger = LogManager.GetLogger("Missions_Specific");
         private readonly string connectionString = null;
 
+        private readonly List<MissionsSpecific> _missionsSpecific = new List<MissionsSpecific>(); // cached data
+
+        private readonly static object lockObj = new object();
+
         public MissionsSpecificRepository(string connectionString)
         {
             this.connectionString = connectionString;
@@ -26,17 +30,23 @@ namespace Monitor.Data
             {
                 const string INSERT_SQL = @"
                     INSERT INTO Missions_Specific
-                               ([RobotGroup]
+                               ([RobotAlias]
                                ,[RobotName]
                                ,[CallName]
                                ,[CallState]
-                               ,[ACSState])
+                               ,[JobSection]
+                               ,[CallTime]
+                               ,[Cancel]
+                               ,[Priority])
                            VALUES
-                               (@RobotGroup
+                               (@RobotAlias
                                ,@RobotName
                                ,@CallName
                                ,@CallState
-                               ,@ACSState);
+                               ,@JobSection
+                               ,@CallTime
+                               ,@Cancel
+                               ,@Priority);
                     SELECT Cast(SCOPE_IDENTITY() As Int);";
 
                 con.ExecuteScalar<int>(INSERT_SQL, param: model);
@@ -45,11 +55,15 @@ namespace Monitor.Data
             }
         }
 
-        public IEnumerable<MissionsSpecific> GetAll()
+        public List<MissionsSpecific> DBGetAll()
         {
-            using (var con = new SqlConnection(connectionString))
+            lock (lockObj)
             {
-                return con.Query<MissionsSpecific>("SELECT * FROM Missions_Specific");
+                using (var con = new SqlConnection(connectionString))
+                {
+                    return con.Query<MissionsSpecific>("SELECT * FROM Missions_Specific").ToList();
+                }
+
             }
         }
 
@@ -60,12 +74,15 @@ namespace Monitor.Data
                 const string query = @"
                     UPDATE Missions_Specific
                     SET 
-                        RobotGroup  = @RobotGroup ,
-                        RobotName   = @RobotName  ,
-                        CallName    = @CallName   ,
-                        CallState   = @CallState  ,
-                        ACSState    = @ACSState       
-                    WHERE Id=@Id";
+                        RobotAlias = @RobotAlias ,
+                        RobotName  = @RobotName ,
+                        CallName   = @CallName  ,
+                        CallState  = @CallState   ,
+                        JobSection  = @JobSection   ,
+                        CallTime   = @CallTime  ,
+                        Cancel   = @Cancel  ,
+                        Priority   = @Priority       
+                    WHERE No=@No";
 
                 con.Execute(query, param: model);
             }
@@ -75,7 +92,7 @@ namespace Monitor.Data
         {
             using (var con = new SqlConnection(connectionString))
             {
-                con.Execute("DELETE FROM Missions_Specific WHERE ACSState=@ACSState", param: new { ACSState = model.ACSState });
+                con.Execute("DELETE FROM Missions_Specific WHERE ACSState=@ACSState", param: new { ACSState = model.CallState });
                 logger.Info($"Missions_Specific Remove: {model}");
             }
         }

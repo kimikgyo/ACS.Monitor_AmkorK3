@@ -31,19 +31,19 @@
             this.components = new System.ComponentModel.Container();
             this.AutoDisplay_Timer = new System.Windows.Forms.Timer(this.components);
             this.SP_Middle = new System.Windows.Forms.SplitContainer();
-            this.ucMapView3 = new UCMapView();
-            this.ucMapView4 = new UCMapView();
+            this.ucMapView3 = new ACS.Monitor.UCMapView();
+            this.ucMapView4 = new ACS.Monitor.UCMapView();
             this.SP_Bottom = new System.Windows.Forms.SplitContainer();
-            this.ucMapView5 = new UCMapView();
-            this.ucMapView6 = new UCMapView();
+            this.ucMapView5 = new ACS.Monitor.UCMapView();
+            this.ucMapView6 = new ACS.Monitor.UCMapView();
             this.splitContainer2 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainer3 = new DevExpress.XtraEditors.SplitContainerControl();
             this.SP_Top = new DevExpress.XtraEditors.SplitContainerControl();
-            this.ucMapView1 = new UCMapView();
-            this.ucMapView2 = new UCMapView();
-            this.dtgAuto_MiR_Status = new DevExpress.XtraGrid.GridControl();
-            this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.ucMapView1 = new ACS.Monitor.UCMapView();
+            this.ucMapView2 = new ACS.Monitor.UCMapView();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
+            this.RobotGridControl = new DevExpress.XtraGrid.GridControl();
+            this.RobotGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
             ((System.ComponentModel.ISupportInitialize)(this.SP_Middle)).BeginInit();
             this.SP_Middle.Panel1.SuspendLayout();
             this.SP_Middle.Panel2.SuspendLayout();
@@ -70,25 +70,26 @@
             ((System.ComponentModel.ISupportInitialize)(this.SP_Top.Panel2)).BeginInit();
             this.SP_Top.Panel2.SuspendLayout();
             this.SP_Top.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dtgAuto_MiR_Status)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).BeginInit();
             this.splitContainerControl1.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel2)).BeginInit();
             this.splitContainerControl1.Panel2.SuspendLayout();
             this.splitContainerControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RobotGridControl)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RobotGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // AutoDisplay_Timer
             // 
+            this.AutoDisplay_Timer.Enabled = true;
             this.AutoDisplay_Timer.Interval = 500;
             this.AutoDisplay_Timer.Tick += new System.EventHandler(this.AutoDisplay_Timer_Tick);
             // 
             // SP_Middle
             // 
-            this.SP_Middle.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.SP_Middle.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SP_Middle.Location = new System.Drawing.Point(4, 14);
             this.SP_Middle.Name = "SP_Middle";
@@ -106,8 +107,8 @@
             // 
             // ucMapView3
             // 
-            this.ucMapView3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.ucMapView3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ucMapView3.Appearance.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ucMapView3.Appearance.Options.UseFont = true;
@@ -121,8 +122,8 @@
             // 
             // ucMapView4
             // 
-            this.ucMapView4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.ucMapView4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ucMapView4.Appearance.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ucMapView4.Appearance.Options.UseFont = true;
@@ -136,8 +137,8 @@
             // 
             // SP_Bottom
             // 
-            this.SP_Bottom.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.SP_Bottom.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SP_Bottom.Location = new System.Drawing.Point(7, 13);
             this.SP_Bottom.Name = "SP_Bottom";
@@ -155,8 +156,8 @@
             // 
             // ucMapView5
             // 
-            this.ucMapView5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.ucMapView5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ucMapView5.Appearance.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ucMapView5.Appearance.Options.UseFont = true;
@@ -182,8 +183,8 @@
             // 
             // splitContainer2
             // 
-            this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer2.CollapsePanel = DevExpress.XtraEditors.SplitCollapsePanel.Panel2;
             this.splitContainer2.Horizontal = false;
@@ -205,8 +206,8 @@
             // 
             // splitContainer3
             // 
-            this.splitContainer3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.splitContainer3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer3.CollapsePanel = DevExpress.XtraEditors.SplitCollapsePanel.Panel2;
             this.splitContainer3.Horizontal = false;
@@ -228,8 +229,8 @@
             // 
             // SP_Top
             // 
-            this.SP_Top.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.SP_Top.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SP_Top.Location = new System.Drawing.Point(6, 5);
             this.SP_Top.Name = "SP_Top";
@@ -249,8 +250,8 @@
             // 
             // ucMapView1
             // 
-            this.ucMapView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.ucMapView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ucMapView1.Appearance.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ucMapView1.Appearance.Options.UseFont = true;
@@ -264,8 +265,8 @@
             // 
             // ucMapView2
             // 
-            this.ucMapView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.ucMapView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ucMapView2.Appearance.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ucMapView2.Appearance.Options.UseFont = true;
@@ -277,32 +278,10 @@
             this.ucMapView2.TabIndex = 0;
             this.ucMapView2.UriStr = null;
             // 
-            // dtgAuto_MiR_Status
-            // 
-            this.dtgAuto_MiR_Status.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtgAuto_MiR_Status.Location = new System.Drawing.Point(3, 16);
-            this.dtgAuto_MiR_Status.MainView = this.gridView1;
-            this.dtgAuto_MiR_Status.Name = "dtgAuto_MiR_Status";
-            this.dtgAuto_MiR_Status.Size = new System.Drawing.Size(1058, 176);
-            this.dtgAuto_MiR_Status.TabIndex = 8;
-            this.dtgAuto_MiR_Status.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.gridView1});
-            // 
-            // gridView1
-            // 
-            this.gridView1.GridControl = this.dtgAuto_MiR_Status;
-            this.gridView1.Name = "gridView1";
-            this.gridView1.CustomDrawCell += new DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(this.gridView1_CustomDrawCell);
-            this.gridView1.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.gridView1_RowCellStyle);
-            this.gridView1.CustomRowCellEdit += new DevExpress.XtraGrid.Views.Grid.CustomRowCellEditEventHandler(this.gridView1_CustomRowCellEdit);
-            this.gridView1.DoubleClick += new System.EventHandler(this.gridView1_DoubleClick);
-            // 
             // splitContainerControl1
             // 
-            this.splitContainerControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.splitContainerControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainerControl1.CollapsePanel = DevExpress.XtraEditors.SplitCollapsePanel.Panel2;
             this.splitContainerControl1.Horizontal = false;
@@ -316,11 +295,33 @@
             // 
             // splitContainerControl1.Panel2
             // 
-            this.splitContainerControl1.Panel2.Controls.Add(this.dtgAuto_MiR_Status);
+            this.splitContainerControl1.Panel2.Controls.Add(this.RobotGridControl);
             this.splitContainerControl1.Panel2.Text = "Panel2";
             this.splitContainerControl1.Size = new System.Drawing.Size(1086, 412);
             this.splitContainerControl1.SplitterPosition = 207;
             this.splitContainerControl1.TabIndex = 9;
+            // 
+            // RobotGridControl
+            // 
+            this.RobotGridControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.RobotGridControl.Location = new System.Drawing.Point(3, 16);
+            this.RobotGridControl.MainView = this.RobotGridView;
+            this.RobotGridControl.Name = "RobotGridControl";
+            this.RobotGridControl.Size = new System.Drawing.Size(1058, 176);
+            this.RobotGridControl.TabIndex = 8;
+            this.RobotGridControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.RobotGridView});
+            // 
+            // RobotGridView
+            // 
+            this.RobotGridView.GridControl = this.RobotGridControl;
+            this.RobotGridView.Name = "RobotGridView";
+            this.RobotGridView.CustomDrawCell += new DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(this.gridView1_CustomDrawCell);
+            this.RobotGridView.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.gridView1_RowCellStyle);
+            this.RobotGridView.CustomRowCellEdit += new DevExpress.XtraGrid.Views.Grid.CustomRowCellEditEventHandler(this.gridView1_CustomRowCellEdit);
+            this.RobotGridView.DoubleClick += new System.EventHandler(this.gridView1_DoubleClick);
             // 
             // AutoScreen
             // 
@@ -359,14 +360,14 @@
             this.SP_Top.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SP_Top)).EndInit();
             this.SP_Top.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dtgAuto_MiR_Status)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).EndInit();
             this.splitContainerControl1.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel2)).EndInit();
             this.splitContainerControl1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).EndInit();
             this.splitContainerControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.RobotGridControl)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RobotGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -384,8 +385,8 @@
         private DevExpress.XtraEditors.SplitContainerControl splitContainer2;
         private DevExpress.XtraEditors.SplitContainerControl splitContainer3;
         private DevExpress.XtraEditors.SplitContainerControl SP_Top;
-        private DevExpress.XtraGrid.GridControl dtgAuto_MiR_Status;
-        private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl1;
+        private DevExpress.XtraGrid.GridControl RobotGridControl;
+        private DevExpress.XtraGrid.Views.Grid.GridView RobotGridView;
     }
 }

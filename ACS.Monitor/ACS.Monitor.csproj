@@ -167,6 +167,24 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\TcpMonitoring.cs" />
+    <Compile Include="Views\PopUp\UserNumberForm..cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\PopUp\UserNumberForm..designer.cs">
+      <DependentUpon>UserNumberForm..cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\System\CallSystem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\System\CallSystem.designer.cs">
+      <DependentUpon>CallSystem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\System\ElevatorSystem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\System\ElevatorSystem.designer.cs">
+      <DependentUpon>ElevatorSystem.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -182,6 +200,15 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\PopUp\UserNumberForm..resx">
+      <DependentUpon>UserNumberForm..cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\System\CallSystem.resx">
+      <DependentUpon>CallSystem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\System\ElevatorSystem.resx">
+      <DependentUpon>ElevatorSystem.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Config\log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

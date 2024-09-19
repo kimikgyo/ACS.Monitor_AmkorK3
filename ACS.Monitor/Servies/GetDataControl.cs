@@ -41,14 +41,15 @@ namespace ACS.Monitor
         private void DBGetAll()
         {
             //ConfigData는 UCMap에서 사용
-            ConfigData.Robots = uow.Robots.Update();
+            ConfigData.Robots = uow.Robots.ListUpdate();
             var Jobs = uow.Jobs.DBLoad();
             var Missions = uow.Missions.DBLoad();
-            ConfigData.FloorMapIdConfigs = uow.FloorMapIDConfigs.Update();
+            ConfigData.FloorMapIdConfigs = uow.FloorMapIDConfigs.ListUpdate();
             var PositionWaitTimes = uow.PositionWaitTimes.DBLoad();
-            //var ElevatorStates = uow.ElevatorStates.DBLoad();
-            ConfigData.CustomMaps = uow.CustomMaps.Update();
-            ConfigData.FleetPositions = uow.FleetPositions.Update();
+            var ElevatorStates = uow.ElevatorStates.ListUpdate();
+            var ElevatorInfo = uow.ElevatorInfos.ListUpdate();
+            ConfigData.CustomMaps = uow.CustomMaps.ListUpdate();
+            ConfigData.FleetPositions = uow.FleetPositions.ListUpdate();
 
         }
     }

@@ -14,11 +14,54 @@ namespace Monitor.Data
     {
         private readonly IDbConnection db;
         private readonly string connectionString = null;
+        private readonly List<ElevatorInfoModel> _elevatorInfoModels = new List<ElevatorInfoModel>(); // cache data
 
+        private readonly static object lockObj = new object();
         public ElevatorInfoRepository(string connectionString)
         {
             this.connectionString = connectionString;
+            DBLoad();
         }
+        public List<ElevatorInfoModel> DBLoad()
+        {
+            lock (lockObj)
+            {
+                _elevatorInfoModels.Clear();
+                using (var con = new SqlConnection(connectionString))
+                {
+                    foreach (var skyNetModels in con.Query<ElevatorInfoModel>("SELECT * FROM ElevatorInfo"))
+                    {
+                        _elevatorInfoModels.Add(skyNetModels);
+                    }
+                    return _elevatorInfoModels.ToList();
+                }
+            }
+        }
+        public List<ElevatorInfoModel> ListUpdate()
+        {
+            lock (lockObj)
+            {
+                using (var con = new SqlConnection(connectionString))
+                {
+                    foreach (var ElevatorInfo in con.Query<ElevatorInfoModel>("SELECT * FROM ElevatorInfo "))
+                    {
+                        var Updata = _elevatorInfoModels.FirstOrDefault(x => x.Id == ElevatorInfo.Id);
+                        if (Updata != null)
+                        {
+                            Updata.Id = ElevatorInfo.Id;
+                            Updata.Location = ElevatorInfo.Location;
+                            Updata.ACSMode = ElevatorInfo.ACSMode;
+                            Updata.ElevatorMode = ElevatorInfo.ElevatorMode;
+                            Updata.FloorIndex = ElevatorInfo.FloorIndex;
+                            Updata.TransportMode = ElevatorInfo.TransportMode;
+                            Updata.UserNumber = ElevatorInfo.UserNumber;
+                        }
+                    }
+                    return _elevatorInfoModels;
+                }
+            }
+        }
+        public IList<ElevatorInfoModel> GetAll() => _elevatorInfoModels;
 
         public ElevatorInfoModel Add(ElevatorInfoModel model)
         {
@@ -130,7 +173,8 @@ namespace Monitor.Data
                     const string query = @"
                     UPDATE ElevatorInfo
                     SET 
-                        ACSMode  = @ACSMode
+                        ACSMode  = @ACSMode,
+                        UserNumber = @UserNumber
                     WHERE Location=@Location";
 
                     con.Execute(query, param: model);

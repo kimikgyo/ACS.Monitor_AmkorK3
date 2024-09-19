@@ -39,7 +39,7 @@ namespace Monitor.Data
             }
         }
 
-        public List<CustomMapModel> Update()
+        public List<CustomMapModel> ListUpdate()
         {
             lock (lockObj)
             {

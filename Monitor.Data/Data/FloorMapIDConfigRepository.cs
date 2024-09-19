@@ -97,7 +97,7 @@ namespace Monitor.Data
             }
         }
 
-        public List<FloorMapIdConfigModel> Update()
+        public List<FloorMapIdConfigModel> ListUpdate()
         {
             lock (lockObj)
             {

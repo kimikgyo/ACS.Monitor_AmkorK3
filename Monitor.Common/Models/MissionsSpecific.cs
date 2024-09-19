@@ -8,21 +8,27 @@ namespace Monitor.Common
 {
     public class MissionsSpecific
     {
-        public int Id { get; set; }
-        public string RobotGroup { get; set; }
+        public int No { get; set; }
+        public string RobotAlias { get; set; }
         public string RobotName { get; set; }
         public string CallName { get; set; }
-        public bool CallState { get; set; }
-        public bool ACSState { get; set; }
+        public string CallState { get; set; }
+        public string JobSection { get; set; }
+        public DateTime CallTime { get; set; }
+        public string Cancel { get; set; }
+        public int Priority { get; set; }
 
         public override string ToString()
         {
-            return $"Id={Id}, " +
-                   $"RobotGroup={RobotGroup}, " +
+            return $"No={No}, " +
+                   $"RobotAlias={RobotAlias}, " +
                    $"RobotName={RobotName}, " +
                    $"CallName={CallName}, " +
                    $"CallState={CallState}, " +
-                   $"ACSState={ACSState}";
+                   $"JobSection={JobSection}, " +
+                   $"CallTime={CallTime}, " +
+                   $"Cancel={Cancel}, " +
+                   $"Priority={Priority}";
         }
     }
 }

@@ -15,9 +15,9 @@ namespace Monitor.Data
         // AMKOR-K5
 #if LOCALDB
 
-        public static readonly string DB1 = @"Data Source=.\SQLEXPRESS;Initial Catalog=RobotAPI;User ID = sa; Password=acsserver;Connect Timeout=30;"; // My(Kimikgyo) PC
-        public static readonly string DB2 = @"Data Source=.\SQLEXPRESS;Initial Catalog=RobotAPI;User ID = sa; Password=acsserver;Connect Timeout=30;"; // My(Kimikgyo) PC
-        public static readonly string DB3 = @"Data Source=.\SQLEXPRESS;Initial Catalog=AmkorK5_User_Data;User ID = sa; Password=acsserver;Connect Timeout=30;"; // My(Kimikgyo) PC
+        public static readonly string DB1 = @"Data Source=.\SQLEXPRESS;Initial Catalog=AmkorK3_AMB;User ID = sa; Password=acsserver;Connect Timeout=30;"; // My(Kimikgyo) PC
+        public static readonly string DB2 = @"Data Source=.\SQLEXPRESS;Initial Catalog=AmkorK3_AMB;User ID = sa; Password=acsserver;Connect Timeout=30;"; // My(Kimikgyo) PC
+        public static readonly string DB3 = @"Data Source=.\SQLEXPRESS;Initial Catalog=AmkorK3_User_Data;User ID = sa; Password=acsserver;Connect Timeout=30;"; // My(Kimikgyo) PC
 
 
 #elif TESTDB

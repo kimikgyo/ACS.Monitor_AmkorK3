@@ -41,7 +41,7 @@ namespace Monitor.Data
             }
         }
 
-        public List<Robot> Update()
+        public List<Robot> ListUpdate()
         {
             lock (lockObj)
             {

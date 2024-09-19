@@ -26,8 +26,8 @@ namespace ACS.Monitor
         private AutoScreen ChildMainForm;
         //private JobHistory JobHistory;
         //private WaitPositionTimeHistory WaitPosition;
-        //private SettingsElevator elevator;
-        //private SettingsCallMissions CallSystem;
+        private ElevatorSystem elevator = null;
+        private CallSystem CallSystem = null;
         private GetDataControl getDataControl = null;
 
         private readonly Font textFont1 = new Font("맑은 고딕", 11, FontStyle.Bold);
@@ -74,6 +74,9 @@ namespace ACS.Monitor
         private void Init()
         {
             getDataControl = new GetDataControl(this, uow);
+            //한번 생성자
+            //JobHistory = new JobHistory(this, uow);
+            //WaitPosition = new WaitPositionTimeHistory(this, uow);
         }
         private void Start()
         {
@@ -83,7 +86,7 @@ namespace ACS.Monitor
         {
             barButtonItem1.Size = new Size(100, 30);
             barButtonItem1.ButtonStyle = BarButtonStyle.Check;
-            barButtonItem1.Caption = "UserLogin";
+            barButtonItem1.Caption = "UserLogIn";
             barButtonItem1.ImageOptions.ImageUri.Uri = "bocontact2;Colored";
             barButtonItem1.Alignment = BarItemLinkAlignment.Right;
             barButtonItem1.PaintStyle = BarItemPaintStyle.CaptionGlyph;
@@ -109,33 +112,55 @@ namespace ACS.Monitor
         /// <param name="e"></param>
         private void UserLoginButtonClick(object sender, ItemClickEventArgs e)
         {
-            //if (e.Item.Caption == "UserLogin")
-            //{
-            //    //사번 입력 Form을 불러옴
-            //    var UserNumberForm = new UserNumberForm();
-            //    DialogResult result = UserNumberForm.ShowDialog();
-            //    if (result == DialogResult.Yes)
-            //    {
-            //        //사번 입력하여 검색
-            //        var UserNumber = uow.UserNumbers.GetAll().FirstOrDefault(u => u.UserName == UserNumberForm.UserNumber);
-            //        //사번이 없는경우 설정창을 Clear한후 다시 초기설정함
-            //        if (UserNumber == null) MessageBox.Show("등록되지 않은 사원번호 이거나 비밀번호가 틀립니다!");
-            //        else
-            //        {
-            //            //barStaticItem1.Caption = $"사원번호 = {UserNumber.UserNumber} / 사원이름 = {UserNumber.UserName}";
-            //            L_Login.Text = $"사원번호 = {UserNumber.UserNumber} / 사원이름 = {UserNumber.UserName}";
-            //            barButtonItem1.Caption = "UserLogOut";
-            //            MenuItem_Setting.Visible = true;
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    barButtonItem1.Caption = "UserLogin";
-            //    barStaticItem1.Caption = "";
-            //    MenuItem_Setting.Visible = false;
-            //}
+            if (barButtonItem1.Caption == "UserLogIn")
+            {
+                //사번 입력 Form을 불러옴
+                var UserNumberForm = new UserNumberForm();
+                DialogResult result = UserNumberForm.ShowDialog();
+                if (result == DialogResult.Yes)
+                {
+                    //사번 입력하여 검색
+                    var UserNumber = uow.UserNumbers.DBGetAll().FirstOrDefault(u => u.UserName == UserNumberForm.UserNumber);
+                    //사번이 없는경우 설정창을 Clear한후 다시 초기설정함
+                    if (UserNumber == null) MessageBox.Show("등록되지 않은 사원번호 이거나 비밀번호가 틀립니다!");
+                    else
+                    {
+                        ConfigData.UserNumber = UserNumber.UserNumber;
+                        ConfigData.UserName = UserNumber.UserName;
+                        ConfigData.UserElevatorAuthority = UserNumber.ElevatorAuthority;
+                        ConfigData.UserCallAuthority = UserNumber.CallMissionAuthority;
+
+                        string LableText = $"사원번호 = {ConfigData.UserNumber} / 사원이름 = {ConfigData.UserName}";
+
+                        if (ConfigData.UserElevatorAuthority == 1)
+                        {
+                            LableText += " / ElevatorSystem 사용가능";
+                            MenuItem_System.Visible = true;
+                            elevatorToolStripMenuItem.Visible = true;
+                        }
+                        if (ConfigData.UserCallAuthority == 1)
+                        {
+                            LableText += " / CallSystem 사용가능";
+                            MenuItem_System.Visible = true;
+                            callSystemToolStripMenuItem.Visible = true;
+                        }
+                        barButtonItem1.Caption = "UserLogOut";
+                        L_Login.Text = LableText;
+                    }
+                }
+            }
+            else
+            {
+                ConfigData.UserName = null;
+                ConfigData.UserNumber = null;
+                ConfigData.UserElevatorAuthority = 0;
+                ConfigData.UserCallAuthority = 0;
+                L_Login.Text = "";
+                barButtonItem1.Caption = "UserLogIn";
+            }
         }
+
+
 
         /// <summary>
         /// AutoScreen을 MainForm으로 Dock하는 Func
@@ -150,9 +175,7 @@ namespace ACS.Monitor
             ChildMainForm.Activate();
             ChildMainForm.Show();
 
-            //한번 생성자
-            //JobHistory = new JobHistory(this, uow);
-            //WaitPosition = new WaitPositionTimeHistory(this, uow);
+
         }
 
         public void DbDrawUCMApView(UCMapView view, FloorMapIdConfigModel floorMapIdConfig, string fleetIp, bool Flag)
@@ -342,11 +365,16 @@ namespace ACS.Monitor
                         Chk_Btn.Checked = false;
                     }
                 }
-            }
-            string saveDictText = Helpers.ConvertDictionaryToString(ConfigData.DisplayMapNames);
+                string saveDictText = Helpers.ConvertDictionaryToString(ConfigData.DisplayMapNames);
 
-            //ConfigData 수정
-            AppConfiguration.SetAppConfig("MapNames", saveDictText);
+                //ConfigData 수정
+                AppConfiguration.SetAppConfig("MapNames", saveDictText);
+            }
+            else
+            {
+                MessageBox.Show("Map 정보가 없습니다.");
+            }
+
         }
 
         private void RobotCH_Click(object sender, EventArgs e)
@@ -385,11 +413,16 @@ namespace ACS.Monitor
                         Chk_Btn.Checked = false;
                     }
                 }
-            }
-            string saveDictText = Helpers.ConvertDictionaryToString(ConfigData.DisplayRobotNames);
+                string saveDictText = Helpers.ConvertDictionaryToString(ConfigData.DisplayRobotNames);
 
-            //ConfigData 수정
-            AppConfiguration.SetAppConfig("RobotNames", saveDictText);
+                //ConfigData 수정
+                AppConfiguration.SetAppConfig("RobotNames", saveDictText);
+            }
+            else
+            {
+                MessageBox.Show("Robot 정보가 없습니다.");
+            }
+
         }
 
 
@@ -440,35 +473,77 @@ namespace ACS.Monitor
 
         private void elevatorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //elevator = new SettingsElevator(this, uow);
-            //elevator.TopLevel = false;
-            //elevator.Dock = DockStyle.Fill;
-            //flyoutPanelControl1.Controls.Add(elevator);
-            //flyoutPanel1.OwnerControl = menuStrip1;
-            //flyoutPanel1.Options.AnchorType = DevExpress.Utils.Win.PopupToolWindowAnchor.TopRight;
-            //flyoutPanel1.Options.HorzIndent = 20;
-            //flyoutPanel1.Options.VertIndent = 45;
-            //flyoutPanel1.ShowPopup();
-            //elevator.Activate();
-            //elevator.Show();
+            try
+            {
+                if (flyoutPanelControl1.Controls.Count == 0)
+                {
+                    elevator = new ElevatorSystem(this, uow);
+                    elevator.TopLevel = false;
+                    elevator.Dock = DockStyle.Fill;
+                    flyoutPanelControl1.Controls.Add(elevator);
+                    flyoutPanel1.OwnerControl = menuStrip1;
+                    flyoutPanel1.Options.AnchorType = DevExpress.Utils.Win.PopupToolWindowAnchor.TopRight;
+                    if (flyoutPanelControl2.Controls.Count > 0)
+                    {
+                        //FlyoutPanel과 그 소유 컨트롤 간의 수평 간격을 설정하는 데 사용됩니다.
+                        //이 속성을 조정하면 패널이 소유 컨트롤(예: 메뉴 스트립)과 얼마나 떨어져서 표시될지를 결정할 수 있습니다.
+                        flyoutPanel1.Options.HorzIndent = 20;
+                        flyoutPanel1.Options.VertIndent = 360;
+                    }
+                    else
+                    {
+                        flyoutPanel1.Options.HorzIndent = 20;
+                        flyoutPanel1.Options.VertIndent = 45;
+                    }
+                    flyoutPanel1.ShowPopup();
+                    elevator.Activate();
+                    elevator.Show();
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
 
         private void callSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //CallSystem = new SettingsCallMissions(this, uow);
-            //CallSystem.TopLevel = false;
-            //CallSystem.Dock = DockStyle.Fill;
-            //flyoutPanelControl2.Controls.Add(CallSystem);
-            //flyoutPanel2.OwnerControl = menuStrip1;
-            //flyoutPanel2.Options.AnchorType = DevExpress.Utils.Win.PopupToolWindowAnchor.TopRight;
-            //flyoutPanel2.Options.HorzIndent = 20;
-            //flyoutPanel2.Options.VertIndent = 45;
-            //flyoutPanel2.ShowPopup();
-            //CallSystem.Activate();
-            //CallSystem.Show();
+            try
+            {
+                if (flyoutPanelControl2.Controls.Count == 0)
+                {
+                    CallSystem = new CallSystem(this, uow);
+                    CallSystem.TopLevel = false;
+                    CallSystem.Dock = DockStyle.Fill;
+                    flyoutPanelControl2.Controls.Add(CallSystem);
+                    flyoutPanel2.OwnerControl = menuStrip1;
+                    // Options.AnchorType 속성을 설정하여 패널의 앵커 위치를 지정할 수 있습니다.
+                    // 예를 들어, PopupToolWindowAnchor.TopRight를 사용하면 패널이 화면의 오른쪽 상단에 고정됩니다.
+                    flyoutPanel2.Options.AnchorType = DevExpress.Utils.Win.PopupToolWindowAnchor.TopRight;
+
+                    if (flyoutPanelControl1.Controls.Count > 0)
+                    {
+                        //FlyoutPanel과 그 소유 컨트롤 간의 수평 간격을 설정하는 데 사용됩니다.
+                        //이 속성을 조정하면 패널이 소유 컨트롤(예: 메뉴 스트립)과 얼마나 떨어져서 표시될지를 결정할 수 있습니다.
+                        flyoutPanel2.Options.HorzIndent = 20;
+                        flyoutPanel2.Options.VertIndent = 360;
+                    }
+                    else
+                    {
+                        flyoutPanel2.Options.HorzIndent = 20;
+                        flyoutPanel2.Options.VertIndent = 45;
+                    }
+
+                    flyoutPanel2.ShowPopup();
+                    CallSystem.Activate();
+                    CallSystem.Show();
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
-
-
 
 
         private void MenuItem_MouseHover(object sender, EventArgs e)
@@ -495,6 +570,30 @@ namespace ACS.Monitor
         {
             //사이즈가 변할 때 마다 지도 및 MainGrid 크기 변경
             ChildMainForm.Sub_DisplayMapNames.Clear();
+        }
+
+        private void MenuItem_Paint(object sender, PaintEventArgs e)
+        {
+            ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
+            if (menuItem != null)
+            {
+                // V 모양 그리기
+                int vX = menuItem.Width - 10; // V의 X 위치
+                int vY = (menuItem.Height - 6) / 2;  // V의 Y 위치
+                Point[] vPoints = new Point[]
+                {
+                new Point(vX, vY + 15),   // 위쪽 점
+                new Point(vX + 5, vY + 5), // 오른쪽 아래 점
+                new Point(vX, vY + 2),  // 가운데 아래 점
+                new Point(vX - 5, vY + 5), // 왼쪽 아래 점
+                };
+
+                //내부를 채워서 그린다
+                //e.Graphics.FillPolygon(Brushes.Black, vPoints);
+
+                // V 모양의 윤곽선 그리기
+                e.Graphics.DrawPolygon(Pens.Gray, vPoints);
+            }
         }
     }
 }

@@ -52,7 +52,7 @@ namespace ACS.Monitor
             this.flyoutPanel1 = new DevExpress.Utils.FlyoutPanel();
             this.flyoutPanelControl1 = new DevExpress.Utils.FlyoutPanelControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.MenuItem_Setting = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItem_System = new System.Windows.Forms.ToolStripMenuItem();
             this.elevatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.callSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItem_Robot = new System.Windows.Forms.ToolStripMenuItem();
@@ -290,7 +290,7 @@ namespace ACS.Monitor
             this.flyoutPanel2.Controls.Add(this.flyoutPanelControl2);
             this.flyoutPanel2.Location = new System.Drawing.Point(1138, 5);
             this.flyoutPanel2.Name = "flyoutPanel2";
-            this.flyoutPanel2.Size = new System.Drawing.Size(295, 320);
+            this.flyoutPanel2.Size = new System.Drawing.Size(310, 320);
             this.flyoutPanel2.TabIndex = 1;
             // 
             // flyoutPanelControl2
@@ -299,7 +299,7 @@ namespace ACS.Monitor
             this.flyoutPanelControl2.FlyoutPanel = this.flyoutPanel2;
             this.flyoutPanelControl2.Location = new System.Drawing.Point(0, 0);
             this.flyoutPanelControl2.Name = "flyoutPanelControl2";
-            this.flyoutPanelControl2.Size = new System.Drawing.Size(295, 320);
+            this.flyoutPanelControl2.Size = new System.Drawing.Size(310, 320);
             this.flyoutPanelControl2.TabIndex = 0;
             // 
             // flyoutPanel1
@@ -307,7 +307,7 @@ namespace ACS.Monitor
             this.flyoutPanel1.Controls.Add(this.flyoutPanelControl1);
             this.flyoutPanel1.Location = new System.Drawing.Point(1138, 5);
             this.flyoutPanel1.Name = "flyoutPanel1";
-            this.flyoutPanel1.Size = new System.Drawing.Size(295, 320);
+            this.flyoutPanel1.Size = new System.Drawing.Size(310, 320);
             this.flyoutPanel1.TabIndex = 0;
             // 
             // flyoutPanelControl1
@@ -316,7 +316,7 @@ namespace ACS.Monitor
             this.flyoutPanelControl1.FlyoutPanel = this.flyoutPanel1;
             this.flyoutPanelControl1.Location = new System.Drawing.Point(0, 0);
             this.flyoutPanelControl1.Name = "flyoutPanelControl1";
-            this.flyoutPanelControl1.Size = new System.Drawing.Size(295, 320);
+            this.flyoutPanelControl1.Size = new System.Drawing.Size(310, 320);
             this.flyoutPanelControl1.TabIndex = 0;
             // 
             // menuStrip1
@@ -324,7 +324,7 @@ namespace ACS.Monitor
             this.menuStrip1.BackColor = System.Drawing.Color.White;
             this.menuStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuItem_Setting,
+            this.MenuItem_System,
             this.MenuItem_Robot,
             this.MenuItem_Map,
             this.MenuItem_History,
@@ -335,19 +335,19 @@ namespace ACS.Monitor
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // MenuItem_Setting
+            // MenuItem_System
             // 
-            this.MenuItem_Setting.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.MenuItem_Setting.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItem_System.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.MenuItem_System.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.elevatorToolStripMenuItem,
             this.callSystemToolStripMenuItem});
-            this.MenuItem_Setting.Font = new System.Drawing.Font("맑은 고딕", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.MenuItem_Setting.Name = "MenuItem_Setting";
-            this.MenuItem_Setting.Size = new System.Drawing.Size(115, 43);
-            this.MenuItem_Setting.Text = "Setting";
-            this.MenuItem_Setting.Visible = false;
-            this.MenuItem_Setting.MouseLeave += new System.EventHandler(this.MenuItem_MouseLeave);
-            this.MenuItem_Setting.MouseHover += new System.EventHandler(this.MenuItem_MouseHover);
+            this.MenuItem_System.Font = new System.Drawing.Font("맑은 고딕", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.MenuItem_System.Name = "MenuItem_System";
+            this.MenuItem_System.Size = new System.Drawing.Size(116, 43);
+            this.MenuItem_System.Text = "System";
+            this.MenuItem_System.Visible = false;
+            this.MenuItem_System.MouseLeave += new System.EventHandler(this.MenuItem_MouseLeave);
+            this.MenuItem_System.MouseHover += new System.EventHandler(this.MenuItem_MouseHover);
             // 
             // elevatorToolStripMenuItem
             // 
@@ -356,6 +356,7 @@ namespace ACS.Monitor
             this.elevatorToolStripMenuItem.Name = "elevatorToolStripMenuItem";
             this.elevatorToolStripMenuItem.Size = new System.Drawing.Size(235, 42);
             this.elevatorToolStripMenuItem.Text = "Elevator";
+            this.elevatorToolStripMenuItem.Visible = false;
             this.elevatorToolStripMenuItem.Click += new System.EventHandler(this.elevatorToolStripMenuItem_Click);
             // 
             // callSystemToolStripMenuItem
@@ -365,6 +366,7 @@ namespace ACS.Monitor
             this.callSystemToolStripMenuItem.Name = "callSystemToolStripMenuItem";
             this.callSystemToolStripMenuItem.Size = new System.Drawing.Size(235, 42);
             this.callSystemToolStripMenuItem.Text = "Call System";
+            this.callSystemToolStripMenuItem.Visible = false;
             this.callSystemToolStripMenuItem.Click += new System.EventHandler(this.callSystemToolStripMenuItem_Click);
             // 
             // MenuItem_Robot
@@ -556,7 +558,7 @@ namespace ACS.Monitor
             // 
             this.Ch_Floor1.Enabled = false;
             this.Ch_Floor1.Name = "Ch_Floor1";
-            this.Ch_Floor1.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor1.Size = new System.Drawing.Size(171, 42);
             this.Ch_Floor1.Text = "Floor1";
             this.Ch_Floor1.Visible = false;
             this.Ch_Floor1.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
@@ -566,7 +568,7 @@ namespace ACS.Monitor
             // 
             this.Ch_Floor2.Enabled = false;
             this.Ch_Floor2.Name = "Ch_Floor2";
-            this.Ch_Floor2.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor2.Size = new System.Drawing.Size(171, 42);
             this.Ch_Floor2.Text = "Floor2";
             this.Ch_Floor2.Visible = false;
             this.Ch_Floor2.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
@@ -579,7 +581,7 @@ namespace ACS.Monitor
             this.Ch_Floor3.Enabled = false;
             this.Ch_Floor3.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.Ch_Floor3.Name = "Ch_Floor3";
-            this.Ch_Floor3.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor3.Size = new System.Drawing.Size(171, 42);
             this.Ch_Floor3.Text = "Floor3";
             this.Ch_Floor3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.Ch_Floor3.Visible = false;
@@ -594,7 +596,7 @@ namespace ACS.Monitor
             this.Ch_Floor4.Enabled = false;
             this.Ch_Floor4.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.Ch_Floor4.Name = "Ch_Floor4";
-            this.Ch_Floor4.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor4.Size = new System.Drawing.Size(171, 42);
             this.Ch_Floor4.Text = "Floor4";
             this.Ch_Floor4.Visible = false;
             this.Ch_Floor4.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
@@ -606,7 +608,7 @@ namespace ACS.Monitor
             this.Ch_Floor5.Enabled = false;
             this.Ch_Floor5.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.Ch_Floor5.Name = "Ch_Floor5";
-            this.Ch_Floor5.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor5.Size = new System.Drawing.Size(171, 42);
             this.Ch_Floor5.Text = "Floor5";
             this.Ch_Floor5.Visible = false;
             this.Ch_Floor5.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
@@ -616,7 +618,7 @@ namespace ACS.Monitor
             // 
             this.Ch_Floor6.Enabled = false;
             this.Ch_Floor6.Name = "Ch_Floor6";
-            this.Ch_Floor6.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor6.Size = new System.Drawing.Size(171, 42);
             this.Ch_Floor6.Text = "Floor6";
             this.Ch_Floor6.Visible = false;
             this.Ch_Floor6.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
@@ -628,7 +630,7 @@ namespace ACS.Monitor
             this.Ch_Floor7.Enabled = false;
             this.Ch_Floor7.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.Ch_Floor7.Name = "Ch_Floor7";
-            this.Ch_Floor7.Size = new System.Drawing.Size(180, 42);
+            this.Ch_Floor7.Size = new System.Drawing.Size(171, 42);
             this.Ch_Floor7.Text = "Floor7";
             this.Ch_Floor7.Visible = false;
             this.Ch_Floor7.CheckedChanged += new System.EventHandler(this.Floor_CheckedChanged);
@@ -675,6 +677,7 @@ namespace ACS.Monitor
             this.MenuItem_MainView.Click += new System.EventHandler(this.MenuItem_MainView_Click);
             this.MenuItem_MainView.MouseLeave += new System.EventHandler(this.MenuItem_MouseLeave);
             this.MenuItem_MainView.MouseHover += new System.EventHandler(this.MenuItem_MouseHover);
+            this.MenuItem_MainView.Paint += new System.Windows.Forms.PaintEventHandler(this.MenuItem_Paint);
             // 
             // pictureEdit1
             // 
@@ -798,7 +801,7 @@ namespace ACS.Monitor
         private DevExpress.XtraEditors.PanelControl DesignPanelControl;
         private System.Windows.Forms.ToolStripMenuItem Ch_Floor5;
         private System.Windows.Forms.ToolStripMenuItem Ch_Floor7;
-        private System.Windows.Forms.ToolStripMenuItem MenuItem_Setting;
+        private System.Windows.Forms.ToolStripMenuItem MenuItem_System;
         private System.Windows.Forms.ToolStripMenuItem elevatorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem callSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MenuItem_MainView;
