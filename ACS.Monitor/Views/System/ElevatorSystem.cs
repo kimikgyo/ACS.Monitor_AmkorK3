@@ -24,7 +24,6 @@ namespace ACS.Monitor
         private readonly static ILog UserLogger = LogManager.GetLogger("User"); //버튼 및 화면조작관련 Log
         private readonly MainForm mainForm;
         private readonly IUnitOfWork uow;
-        private List<ElevatorInfoModel> elevatorInfos = new List<ElevatorInfoModel>();
         private DataTable ElevatorDataTable = new DataTable();
 
         AlertControl control = new AlertControl();
@@ -34,7 +33,6 @@ namespace ACS.Monitor
 
             this.mainForm = mainForm;
             this.uow = uow;
-
             Init();
             GridViewColumnsCreate();
             DataTableColumnsCreate();
@@ -172,7 +170,7 @@ namespace ACS.Monitor
                 string FloorIndex = ElevatorGridView.GetRowCellDisplayText(e.RowHandle, "DGV_ElevatorNumber");
                 string TransportMode = ElevatorGridView.GetRowCellDisplayText(e.RowHandle, "DGV_ElevatorBtnOnOFF");
 
-                var ElevatorInfoData = elevatorInfos.FirstOrDefault(v => v.FloorIndex == FloorIndex);
+                var ElevatorInfoData = ConfigData.ElevatorInfos.FirstOrDefault(v => v.FloorIndex == FloorIndex);
                 if (ElevatorInfoData != null)
                 {
                     if (TransportMode == "ON")
@@ -248,7 +246,7 @@ namespace ACS.Monitor
         {
             int GridCount = 0;
 
-            foreach (var elevatorInfo in elevatorInfos)
+            foreach (var elevatorInfo in ConfigData.ElevatorInfos.ToList())
             {
                 DataRow row = ElevatorDataTable.NewRow();
                 row["DGV_No"] = elevatorInfo.Id;
@@ -268,7 +266,7 @@ namespace ACS.Monitor
         {
             string Message = null;
             string btnName = ((SimpleButton)sender).Name;
-            var GetElevator = elevatorInfos.FirstOrDefault(r => r.Location == "Elevator1");
+            var GetElevator = ConfigData.ElevatorInfos.FirstOrDefault(r => r.Location == "Elevator1");
             if (GetElevator != null)
             {
                 switch (btnName)
@@ -310,7 +308,7 @@ namespace ACS.Monitor
 
         private void DisplayElevatorMode()
         {
-            var elvModeInfo = elevatorInfos.FirstOrDefault(x => x.Location.StartsWith("Elevator"));
+            var elvModeInfo = ConfigData.ElevatorInfos.FirstOrDefault(x => x.Location.StartsWith("Elevator"));
             if (elvModeInfo != null)
             {
                 if (elvModeInfo.ACSMode == "MiRControlMode")
@@ -333,7 +331,6 @@ namespace ACS.Monitor
         private void DisplayTimer_Tick(object sender, EventArgs e)
         {
             DisplayTimer.Enabled = false;
-            elevatorInfos = uow.ElevatorInfos.DBGetAll();
             ElevatorSystemDisplay();
             DisplayElevatorMode();
             DisplayTimer.Interval = 1000;

@@ -64,8 +64,8 @@ namespace ACS.Monitor
             this.BackColor = Color.FromArgb(249, 219, 186);
 
             GridViewInit();
+            GridViewColumnsCreate();
             DataTableColumnsCreate();
-
 
         }
 
@@ -105,78 +105,87 @@ namespace ACS.Monitor
 
         private void GridViewInit()
         {
-            #region GridView 초기 Setting
+            try
+            {
+                #region GridView 초기 Setting
 
-            //Main GridControl 설정 값들
-            RobotGridView.RowHeight = 30;
-            //높이조절 활성화
-            RobotGridView.OptionsView.RowAutoHeight = true;
-            //인디케이터 표시: gridView1.OptionsView.ShowIndicator를 true로 설정하면 각 행의 왼쪽에 인덱스 번호가 표시됩니다.
-            RobotGridView.OptionsView.ShowIndicator = false;
-            //그룹 패널 표시: gridView1.OptionsView.ShowGroupPanel을 true로 설정하면 그룹 패널이 표시됩니다. 사용자는 이 패널을 드래그하여 열을 그룹화할 수 있습니다.
-            RobotGridView.OptionsView.ShowGroupPanel = false;
-            //편집 가능: gridView1.OptionsBehavior.Editable을 true로 설정하면 사용자가 그리드의 셀을 클릭하여 데이터를 수정할 수 있습니다.
-            RobotGridView.OptionsBehavior.Editable = false;
-            //수평선 표시: gridView1.OptionsView.ShowHorizontalLines를 DefaultBoolean.True로 설정하면 수평선이 표시됩니다.
-            RobotGridView.OptionsView.ShowHorizontalLines = DefaultBoolean.True;
-            //수직선 표시: gridView1.OptionsView.ShowVerticalLines를 DefaultBoolean.True로 설정하면 수직선이 표시됩니다.
-            RobotGridView.OptionsView.ShowVerticalLines = DefaultBoolean.True;
-            //자동 높이 조정 활성화: gridView1.OptionsView.ColumnHeaderAutoHeight를 DefaultBoolean.True로 설정합니다.
-            RobotGridView.OptionsView.ColumnHeaderAutoHeight = DefaultBoolean.True;
-            //테두리 없음 설정: gridView1.BorderStyle를 DevExpress.XtraEditors.Controls.BorderStyles.NoBorder로 설정합니다.
-            RobotGridView.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            //포커스 사각형 비활성화: gridView1.FocusRectStyle를 DrawFocusRectStyle.None으로 설정합니다.
-            RobotGridView.FocusRectStyle = DrawFocusRectStyle.RowFocus;
-            // HeaderPanel의 필터 기능 비활성화
-            RobotGridView.OptionsCustomization.AllowFilter = false;
-            //헤더 텍스트 중앙 정렬: gridView1.Appearance.HeaderPanel.TextOptions.HAlignment를 HorzAlignment.Center로 설정합니다.
-            RobotGridView.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            //헤더 패널 폰트 설정: gridView1.Appearance.HeaderPanel.Font에 새로운 Font 객체를 할당합니다.
-            RobotGridView.Appearance.HeaderPanel.Font = new Font("Arial", 30, FontStyle.Bold);
-            //행 폰트 설정: gridView1.Appearance.Row.Font에 새로운 Font 객체를 할당합니다.
-            RobotGridView.Appearance.Row.Font = new Font("Arial", 30, FontStyle.Bold);
-            //다중 선택 활성화: gridView1.OptionsSelection.MultiSelect를 true로 설정합니다.
-            RobotGridView.OptionsSelection.MultiSelect = false;
-            //다중 선택 모드 설정: gridView1.OptionsSelection.MultiSelectMode를 GridMultiSelectMode.RowSelect로 설정합니다.
-            RobotGridView.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
-            // 검색 패널 표시하기
-            //gridView1.ShowFindPanel();
-            // 검색 패널 숨기기
-            RobotGridView.HideFindPanel();
-            // 편집 가능 설정
-            RobotGridView.OptionsBehavior.Editable = false;
-            // DevExpress GridView에서 행 번호(인덱스)를 표시할지 여부를 제어하는 속성입니다. 이 속성을 사용하면 각 행의 왼쪽에 인덱스 번호를 표시할 수 있습니다.
-            RobotGridView.OptionsView.ShowIndicator = false;
-            //DevExpress GridView에서 그룹 패널의 표시 여부를 제어합니다. 그룹 패널은 사용자가 그리드에서 컬럼을 드래그하여 데이터를 그룹화할 수 있는 영역입니다.
-            RobotGridView.OptionsView.ShowGroupPanel = false;
-            //읽기전용
-            RobotGridView.OptionsBehavior.ReadOnly = true;
+                //Main GridControl 설정 값들
+                RobotGridView.RowHeight = 30;
+                //높이조절 활성화
+                RobotGridView.OptionsView.RowAutoHeight = true;
+                //인디케이터 표시: gridView1.OptionsView.ShowIndicator를 true로 설정하면 각 행의 왼쪽에 인덱스 번호가 표시됩니다.
+                RobotGridView.OptionsView.ShowIndicator = false;
+                //그룹 패널 표시: gridView1.OptionsView.ShowGroupPanel을 true로 설정하면 그룹 패널이 표시됩니다. 사용자는 이 패널을 드래그하여 열을 그룹화할 수 있습니다.
+                RobotGridView.OptionsView.ShowGroupPanel = false;
+                //편집 가능: gridView1.OptionsBehavior.Editable을 true로 설정하면 사용자가 그리드의 셀을 클릭하여 데이터를 수정할 수 있습니다.
+                RobotGridView.OptionsBehavior.Editable = false;
+                //수평선 표시: gridView1.OptionsView.ShowHorizontalLines를 DefaultBoolean.True로 설정하면 수평선이 표시됩니다.
+                RobotGridView.OptionsView.ShowHorizontalLines = DefaultBoolean.True;
+                //수직선 표시: gridView1.OptionsView.ShowVerticalLines를 DefaultBoolean.True로 설정하면 수직선이 표시됩니다.
+                RobotGridView.OptionsView.ShowVerticalLines = DefaultBoolean.True;
+                //자동 높이 조정 활성화: gridView1.OptionsView.ColumnHeaderAutoHeight를 DefaultBoolean.True로 설정합니다.
+                RobotGridView.OptionsView.ColumnHeaderAutoHeight = DefaultBoolean.True;
+                //테두리 없음 설정: gridView1.BorderStyle를 DevExpress.XtraEditors.Controls.BorderStyles.NoBorder로 설정합니다.
+                RobotGridView.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+                //포커스 사각형 비활성화: gridView1.FocusRectStyle를 DrawFocusRectStyle.None으로 설정합니다.
+                RobotGridView.FocusRectStyle = DrawFocusRectStyle.RowFocus;
+                // HeaderPanel의 필터 기능 비활성화
+                RobotGridView.OptionsCustomization.AllowFilter = false;
+                //헤더 텍스트 중앙 정렬: gridView1.Appearance.HeaderPanel.TextOptions.HAlignment를 HorzAlignment.Center로 설정합니다.
+                RobotGridView.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+                //헤더 패널 폰트 설정: gridView1.Appearance.HeaderPanel.Font에 새로운 Font 객체를 할당합니다.
+                RobotGridView.Appearance.HeaderPanel.Font = new Font("Arial", 8, FontStyle.Bold);
+                //행 폰트 설정: gridView1.Appearance.Row.Font에 새로운 Font 객체를 할당합니다.
+                RobotGridView.Appearance.Row.Font = new Font("Arial", 8, FontStyle.Bold);
+                //다중 선택 활성화: gridView1.OptionsSelection.MultiSelect를 true로 설정합니다.
+                RobotGridView.OptionsSelection.MultiSelect = false;
+                //다중 선택 모드 설정: gridView1.OptionsSelection.MultiSelectMode를 GridMultiSelectMode.RowSelect로 설정합니다.
+                RobotGridView.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
+                // 검색 패널 표시하기
+                //gridView1.ShowFindPanel();
+                // 검색 패널 숨기기
+                RobotGridView.HideFindPanel();
+                // 편집 가능 설정
+                RobotGridView.OptionsBehavior.Editable = false;
+                // DevExpress GridView에서 행 번호(인덱스)를 표시할지 여부를 제어하는 속성입니다. 이 속성을 사용하면 각 행의 왼쪽에 인덱스 번호를 표시할 수 있습니다.
+                RobotGridView.OptionsView.ShowIndicator = false;
+                //DevExpress GridView에서 그룹 패널의 표시 여부를 제어합니다. 그룹 패널은 사용자가 그리드에서 컬럼을 드래그하여 데이터를 그룹화할 수 있는 영역입니다.
+                RobotGridView.OptionsView.ShowGroupPanel = false;
+                //읽기전용
+                RobotGridView.OptionsBehavior.ReadOnly = true;
 
-            RobotGridView.BestFitColumns();
+                RobotGridView.BestFitColumns();
 
 
-            #endregion
+                #endregion
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"GridViewInit()Error = {ex.Message} / {ex.StackTrace} / {ex.InnerException}");
+            }
         }
         private void GridViewColumnsCreate()
         {
             #region GridView Columns 생성
 
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Robot_Alias", Caption = "로봇이름", Visible = false, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_ProgressBar", Caption = "진행률", Visible = false, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_Source", Caption = "출발지", Visible = false, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_Dest", Caption = "목적지", Visible = false, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Battery_Percent", Caption = "배터리", Visible = true, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_CallName", Caption = "콜이름", Visible = false, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_WaitTime", Caption = "대기시간", Visible = true, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Robot_Alias", Caption = "로봇이름", Visible = true, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_State", Caption = "로봇상태", Visible = true, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_ElevatorOrder", Caption = "elevator순서", Visible = true, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Product", Caption = "자재유무", Visible = true, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Battery_Percent", Caption = "배터리", Visible = true, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_PositionWaitTime", Caption = "포지션값", Visible = true, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_WaitTime", Caption = "대기시간", Visible = true, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Product_Detail", Caption = "자재정보", Visible = true, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Door_D", Caption = "Door", Visible = true, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Door_T", Caption = "Door1", Visible = true, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Robot_Name_orderby", Caption = "순서", Visible = true, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_PositionWaitTime", Caption = "포지션값", Visible = true, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_Source", Caption = "출발지", Visible = true, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_Dest", Caption = "목적지", Visible = true, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_ProgressBar", Caption = "진행률", Visible = true, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MissionText", Caption = "MissionText", Visible = true, UnboundType = UnboundColumnType.String });
+
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Product", Caption = "자재유무", Visible = false, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_CallName", Caption = "콜이름", Visible = false, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_ElevatorOrder", Caption = "elevator순서", Visible = false, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Door_T", Caption = "Door1", Visible = false, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Robot_Name_orderby", Caption = "순서", Visible = false, UnboundType = UnboundColumnType.String });
+
             #endregion
 
             #region GridView Columns 정렬 설정
@@ -251,7 +260,7 @@ namespace ACS.Monitor
             #region GridControl 표기하기 위한 Data // return : RobotData
 
             RobotdataTable.Rows.Clear();
-            var orderedRobots = uow.Robots.GetAll().Where(r => r.RobotID > 0 && ConfigData.DisplayRobotNames.ContainsKey(r.RobotName))
+            var orderedRobots = ConfigData.Robots.Where(r => r.RobotID > 0 && ConfigData.DisplayRobotNames.ContainsKey(r.RobotName))
                                                    .OrderBy(r => r.RobotAlias).ToList();
             foreach (var robot in orderedRobots)
             {
@@ -264,6 +273,7 @@ namespace ACS.Monitor
                 row["DGV_MiR_Status_Battery_Percent"] = robot.BatteryPercent.ToString("0.00") + "%";
 
                 row["DGV_WaitTime"] = uow.PositionWaitTimes.GetAll().FirstOrDefault(x => x.RobotName == robot.RobotName && x.RobotAlias == robot.RobotAlias)?.ElapsedTime ?? "";
+
                 //Job 상태
                 if (robot.JobId > 0)
                 {
@@ -279,6 +289,7 @@ namespace ACS.Monitor
                         row["DGV_MiR_Status_CallName"] = RunJobs.CallName;
                         row["DGV_Source"] = RunJobs.CallName.Split('_')[0];
                         row["DGV_Dest"] = RunJobs.CallName.Split('_')[1];
+                        
                     }
                     else
                     {
@@ -334,7 +345,6 @@ namespace ACS.Monitor
                 //var productNames = products.Select(x => x.ProductName).ToList();
                 //string productInfo = string.Join("\r\n", productNames);
                 //row["DGV_MiR_Status_Product_Detail"] = productInfo;
-
 
                 row["DGV_MiR_Status_Door_T"] = robot.Door ?? "";
 
@@ -445,18 +455,18 @@ namespace ACS.Monitor
             int Datacount = 1;
             foreach (var item in ConfigData.DisplayMapNames)
             {
-                var FloorMapdata = uow.FloorMapIDConfigs.Find(f => f.FloorIndex == item.Value).FirstOrDefault();
+                var FloorMapdata = ConfigData.FloorMapIdConfigs.FirstOrDefault(f => f.FloorIndex == item.Key);
                 if (FloorMapdata != null)
                 {
                     if (FloorMapdata.MapData.mapScale == 0)
                     {
-                        if (FloorMapdata.FloorName == "M3F")
+                        if (FloorMapdata.FloorIndex == "M3F")
                         {
                             FloorMapdata.MapData.mapScale = 0.13333334f;
                             FloorMapdata.MapData.mouseFirstLocation = new Point(263, 266);
                             FloorMapdata.MapData.mouseMoveOffset = new Point(-150, 64);
                         }
-                        else if (FloorMapdata.FloorName == "T3F")
+                        else if (FloorMapdata.FloorIndex == "T3F")
                         {
                             FloorMapdata.MapData.mapScale = 0.2166666f;
                             FloorMapdata.MapData.mouseFirstLocation = new Point(146, 279);

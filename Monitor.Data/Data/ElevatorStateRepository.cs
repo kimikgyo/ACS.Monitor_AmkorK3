@@ -24,9 +24,19 @@ namespace Monitor.Data
         public ElevatorStateRepository(string connectionString)
         {
             this.connectionString = connectionString;
-            DBLoad();
+            DBGetAll();
         }
-
+        public List<ElevatorStateModel> DBGetAll()
+        {
+            lock (this)
+            {
+                using (var con = new SqlConnection(connectionString))
+                {
+                    return con.Query<ElevatorStateModel>("SELECT * FROM ElevatorState").ToList();
+                    con.Close();
+                }
+            }
+        }
         //DB 불러오기
         public List<ElevatorStateModel> DBLoad()
         {
@@ -97,6 +107,7 @@ namespace Monitor.Data
                 model.Id = con.ExecuteScalar<int>(INSERT_SQL, param: model);
                 ElevatorEventlogger.Info($"ElevatorState Robot Add   : {model}");
                 return model;
+                con.Close();
             }
         }
 

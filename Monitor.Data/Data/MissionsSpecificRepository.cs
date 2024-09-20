@@ -22,6 +22,7 @@ namespace Monitor.Data
         public MissionsSpecificRepository(string connectionString)
         {
             this.connectionString = connectionString;
+            DBGetAll();
         }
 
         public MissionsSpecific Add(MissionsSpecific model)
@@ -62,6 +63,7 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<MissionsSpecific>("SELECT * FROM Missions_Specific").ToList();
+                    con.Close();
                 }
 
             }

@@ -21,9 +21,9 @@ namespace Monitor.Data
 
 
 #elif TESTDB
-        public static readonly string DB1 = @"Data Source=10.141.26.108;Initial Catalog=AmkorK5_T3F_M3F_Test; User ID = sa; Password=acsserver;Connect Timeout=30;";
-        public static readonly string DB2 = @"Data Source=10.141.26.108;Initial Catalog=AmkorK5_T3F_M3F_Test; User ID = sa; Password=acsserver;Connect Timeout=30;";
-        public static readonly string DB3 = @"Data Source=10.141.26.108;Initial Catalog=AmkorK5_User_Data_Test; User ID = sa; Password=acsserver;Connect Timeout=30;";
+        public static readonly string DB1 = @"Data Source=211.195.215.30;Initial Catalog=AmkorK3_AMB; User ID = sa; Password=acsserver;Connect Timeout=30;";
+        public static readonly string DB2 = @"Data Source=211.195.215.30;Initial Catalog=AmkorK3_AMB; User ID = sa; Password=acsserver;Connect Timeout=30;";
+        public static readonly string DB3 = @"Data Source=211.195.215.30;Initial Catalog=AmkorK3_User_Data; User ID = sa; Password=acsserver;Connect Timeout=30;";
 #else
         // ACS PC만 연결
         public static readonly string DB1 = @"Data Source=10.141.26.108;Initial Catalog=AmkorK5_T3F_M3F;User ID = sa; Password=acsserver;Connect Timeout=30;";

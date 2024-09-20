@@ -24,7 +24,7 @@ namespace Monitor.Data
         public RobotRepository(string connectionString)
         {
             this.connectionString = connectionString;
-            DBLoad();
+            DBGetAll();
         }
 
         public List<Robot> DBLoad()
@@ -41,50 +41,6 @@ namespace Monitor.Data
             }
         }
 
-        public List<Robot> ListUpdate()
-        {
-            lock (lockObj)
-            {
-                using (var con = new SqlConnection(connectionString))
-                {
-                    foreach (var robots in con.Query<Robot>("SELECT * FROM Robots"))
-                    {
-                        var _robot = _robots.FirstOrDefault(x => x.Id == robots.Id/*&& x.RobotName == robots.RobotName*/);
-                        if (_robot != null)
-                        {
-                            _robot.Id = robots.Id;
-                            _robot.JobId = robots.JobId;
-                            _robot.ACSRobotGroup = robots.ACSRobotGroup;
-                            _robot.ACSRobotActive = robots.ACSRobotActive;
-                            _robot.Fleet_State = robots.Fleet_State;
-                            _robot.Fleet_State_Text = robots.Fleet_State_Text;
-                            _robot.RobotID = robots.RobotID;
-                            _robot.RobotIp = robots.RobotIp;
-                            _robot.RobotName = robots.RobotName;
-                            _robot.StateID = robots.StateID;
-                            _robot.StateText = robots.StateText;
-                            _robot.MissionText = robots.MissionText;
-                            _robot.MissionQueueID = robots.MissionQueueID;
-                            _robot.MapID = robots.MapID;
-                            _robot.BatteryPercent = robots.BatteryPercent;
-                            _robot.DistanceToNextTarget = robots.DistanceToNextTarget;
-                            _robot.Position_Orientation = robots.Position_Orientation;
-                            _robot.Position_X = robots.Position_X;
-                            _robot.Position_Y = robots.Position_Y;
-                            _robot.Product = robots.Product;
-                            _robot.Door = robots.Door;
-                            _robot.PositionZoneName = robots.PositionZoneName;
-                            _robot.ErrorsJson = robots.ErrorsJson;
-                            _robot.RobotModel = robots.RobotModel;
-                            _robot.RobotAlias = robots.RobotAlias;
-                        }
-                    }
-                    return _robots;
-                }
-            }
-        }
-
-
         public List<Robot> DBGetAll()
         {
             lock (this)
@@ -92,7 +48,7 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<Robot>("SELECT * FROM Robots").ToList();
-
+                    con.Close();
                 }
             }
         }

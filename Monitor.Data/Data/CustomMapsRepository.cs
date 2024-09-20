@@ -22,9 +22,19 @@ namespace Monitor.Data
         public CustomMapsRepository(string connectionString)
         {
             this.connectionString = connectionString;
-            DBLoad();
+            DBGetAll();
         }
-
+        public List<CustomMapModel> DBGetAll()
+        {
+            lock (this)
+            {
+                using (var con = new SqlConnection(connectionString))
+                {
+                    return con.Query<CustomMapModel>("SELECT * FROM CustomMaps").ToList();
+                    con.Close();
+                }
+            }
+        }
         public List<CustomMapModel> DBLoad()
         {
             _customMapModel.Clear();
@@ -38,7 +48,7 @@ namespace Monitor.Data
                 return _customMapModel.ToList();
             }
         }
-
+       
         public List<CustomMapModel> ListUpdate()
         {
             lock (lockObj)

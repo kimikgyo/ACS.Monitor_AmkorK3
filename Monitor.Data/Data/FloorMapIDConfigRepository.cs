@@ -24,9 +24,19 @@ namespace Monitor.Data
         public FloorMapIDConfigRepository(string connectionString)
         {
             this.connectionString = connectionString;
-            DBLoad();
+            DBGetAll();
         }
-
+        public List<FloorMapIdConfigModel> DBGetAll()
+        {
+            lock (this)
+            {
+                using (var con = new SqlConnection(connectionString))
+                {
+                    return con.Query<FloorMapIdConfigModel>("SELECT * FROM FloorMapIDConfigs WHERE DisplayFlag=1").ToList();
+                    con.Close();
+                }
+            }
+        }
         //DB 추가하기
         public FloorMapIdConfigModel Add(FloorMapIdConfigModel model)
         {
@@ -97,39 +107,9 @@ namespace Monitor.Data
             }
         }
 
-        public List<FloorMapIdConfigModel> ListUpdate()
-        {
-            lock (lockObj)
-            {
-                using (var con = new SqlConnection(connectionString))
-                {
-                    foreach (var floorMapIDConfigs in con.Query<FloorMapIdConfigModel>("SELECT * FROM FloorMapIDConfigs WHERE DisplayFlag=1"))
-                    {
-                       var Updata = _floorMapIDConfigModel.FirstOrDefault(x=>x.Id == floorMapIDConfigs.Id);
-                        if(Updata!=null)
-                        {
-                            Updata.Id = floorMapIDConfigs.Id;
-                            Updata.FloorIndex = floorMapIDConfigs.FloorIndex;
-                            Updata.FloorName = floorMapIDConfigs.FloorName;
-                            Updata.MapID = floorMapIDConfigs.MapID;
-                            Updata.MapImageData = floorMapIDConfigs.MapImageData;
-                        }
-                    }
-                    return _floorMapIDConfigModel;
-                }
-            }
-        }
+       
 
-        public List<FloorMapIdConfigModel> DBGetAll()
-        {
-            lock (this)
-            {
-                using (var con = new SqlConnection(connectionString))
-                {
-                    return con.Query<FloorMapIdConfigModel>("SELECT * FROM FloorMapIDConfigs WHERE DisplayFlag=1").ToList();
-                }
-            }
-        }
+       
         //DB업데이트
         public void Update(FloorMapIdConfigModel model)
         {

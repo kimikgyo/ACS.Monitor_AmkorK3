@@ -85,6 +85,7 @@ namespace ACS.Monitor
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.panelControl2 = new DevExpress.XtraEditors.PanelControl();
             this.L_Login = new DevExpress.XtraEditors.LabelControl();
+            this.DisPlayTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.fluentDesignFormControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentFormDefaultManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
@@ -729,6 +730,12 @@ namespace ACS.Monitor
             this.L_Login.TabIndex = 0;
             this.L_Login.Text = "로그인이 필요합니다.";
             // 
+            // DisPlayTimer
+            // 
+            this.DisPlayTimer.Enabled = true;
+            this.DisPlayTimer.Interval = 1000;
+            this.DisPlayTimer.Tick += new System.EventHandler(this.DisPlayTimer_Tick);
+            // 
             // MainForm
             // 
             this.Appearance.BackColor = System.Drawing.Color.White;
@@ -828,5 +835,6 @@ namespace ACS.Monitor
         private System.Windows.Forms.ToolStripMenuItem Ch_Floor1;
         private System.Windows.Forms.ToolStripMenuItem Ch_Floor2;
         private System.Windows.Forms.ToolStripMenuItem Ch_Floor6;
+        private System.Windows.Forms.Timer DisPlayTimer;
     }
 }

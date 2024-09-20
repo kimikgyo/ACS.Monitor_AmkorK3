@@ -28,29 +28,46 @@ namespace ACS.Monitor
             {
                 try
                 {
+                    ConfigDataInit();
                     DBGetAll();
                     await Task.Delay(1000);
                 }
 
                 catch (Exception ex)
                 {
-
+                    Console.WriteLine($"{ex.Message} / {ex.StackTrace} / {ex.InnerException}");
                 }
             }
         }
+
+        private void ConfigDataInit()
+        {
+           //if(ConfigData.Robots != null) ConfigData.Robots.Clear();
+           //if(ConfigData.Jobs != null) ConfigData.Jobs.Clear();
+           //if(ConfigData.Missions != null) ConfigData.Missions.Clear();
+           //if(ConfigData.FloorMapIdConfigs != null) ConfigData.FloorMapIdConfigs.Clear();
+           //if(ConfigData.PositionWaitTimes != null) ConfigData.PositionWaitTimes.Clear();
+           //if(ConfigData.ElevatorStates != null) ConfigData.ElevatorStates.Clear();
+           //if(ConfigData.ElevatorInfos != null) ConfigData.ElevatorInfos.Clear();
+           //if(ConfigData.CustomMaps != null) ConfigData.CustomMaps.Clear();
+           //if(ConfigData.FleetPositions != null) ConfigData.FleetPositions.Clear();
+           //if(ConfigData.MissionsSpecifics != null) ConfigData.MissionsSpecifics.Clear();
+           //if(ConfigData.JobConfigs != null) ConfigData.JobConfigs.Clear();
+        }
         private void DBGetAll()
         {
-            //ConfigData는 UCMap에서 사용
-            ConfigData.Robots = uow.Robots.ListUpdate();
-            var Jobs = uow.Jobs.DBLoad();
-            var Missions = uow.Missions.DBLoad();
-            ConfigData.FloorMapIdConfigs = uow.FloorMapIDConfigs.ListUpdate();
-            var PositionWaitTimes = uow.PositionWaitTimes.DBLoad();
-            var ElevatorStates = uow.ElevatorStates.ListUpdate();
-            var ElevatorInfo = uow.ElevatorInfos.ListUpdate();
-            ConfigData.CustomMaps = uow.CustomMaps.ListUpdate();
-            ConfigData.FleetPositions = uow.FleetPositions.ListUpdate();
-
+            ConfigData.Robots = uow.Robots.DBGetAll();
+            ConfigData.Jobs = uow.Jobs.DBGetAll();
+            ConfigData.Missions = uow.Missions.DBGetAll();
+            ConfigData.FloorMapIdConfigs = uow.FloorMapIDConfigs.DBGetAll();
+            ConfigData.PositionWaitTimes = uow.PositionWaitTimes.DBGetAll();
+            ConfigData.ElevatorStates = uow.ElevatorStates.DBGetAll();
+            ConfigData.ElevatorInfos = uow.ElevatorInfos.DBGetAll();
+            ConfigData.CustomMaps = uow.CustomMaps.DBGetAll();
+            ConfigData.FleetPositions = uow.FleetPositions.DBGetAll();
+            ConfigData.MissionsSpecifics = uow.MissionsSpecifics.DBGetAll();
+            ConfigData.JobConfigs = uow.JobConfigs.DBGetAll();
+            ConfigData.PositionAreaConfigs = uow.PositionAreaConfigs.DBGetAll();
         }
     }
 }

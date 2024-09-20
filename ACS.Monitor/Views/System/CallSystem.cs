@@ -23,8 +23,6 @@ namespace ACS.Monitor
         private readonly IUnitOfWork uow;
 
         private DataTable CallDataTable = new DataTable();
-        private List<JobConfigModel> jobConfigs = new List<JobConfigModel>();
-        private List<MissionsSpecific> missionsSpecifics = new List<MissionsSpecific>();
 
         private readonly Font textFont2 = new Font("Arial", 10);
 
@@ -127,7 +125,6 @@ namespace ACS.Monitor
         }
 
 
-
         private void DataTableColumnsCreate()
         {
             #region DataTable Columns 생성
@@ -198,9 +195,9 @@ namespace ACS.Monitor
             #region Combobox Start Zone 생성
 
             combobox_StartZone.Properties.Items.Clear();
-            foreach (var PositionArea in uow.PositionAreaConfigs.DBGetAll())
+            foreach (var PositionArea in ConfigData.PositionAreaConfigs.ToList())
             {
-                var StartPosition = jobConfigs.FirstOrDefault(x => x.CallName.StartsWith(PositionArea.PositionAreaName));
+                var StartPosition = ConfigData.JobConfigs.FirstOrDefault(x => x.CallName.StartsWith(PositionArea.PositionAreaName));
                 if (StartPosition != null) combobox_StartZone.Properties.Items.Add(PositionArea.PositionAreaName);
             }
             //목록들을 강제로 열리게 한다.
@@ -208,6 +205,7 @@ namespace ACS.Monitor
 
             #endregion
         }
+
         private void btn_Click(object sender, EventArgs e)
         {
             string btnName = ((SimpleButton)sender).Name;
@@ -255,7 +253,7 @@ namespace ACS.Monitor
             if (ConfigData.StartZone != null)
             {
 
-                foreach (var jobConfig in jobConfigs.Where(j => j.CallName.StartsWith(ConfigData.StartZone)))
+                foreach (var jobConfig in ConfigData.JobConfigs.Where(j => j.CallName.StartsWith(ConfigData.StartZone)))
                 {
 
                     DataRow row = CallDataTable.NewRow();
@@ -265,7 +263,7 @@ namespace ACS.Monitor
 
                     row["DGV_Source"] = Source;
                     row["DGV_Dest"] = Dest;
-                    var missionsSpecific = missionsSpecifics.FirstOrDefault(m => m.CallName == jobConfig.CallName);
+                    var missionsSpecific = ConfigData.MissionsSpecifics.FirstOrDefault(m => m.CallName == jobConfig.CallName);
                     if (missionsSpecific != null)
                     {
                         row["DGV_RobotAlias"] = missionsSpecific.RobotAlias;
@@ -339,7 +337,7 @@ namespace ACS.Monitor
                 string endZone = CallGridView.GetRowCellDisplayText(e.RowHandle, "DGV_Dest");
                 string CallName = $"{startZone}_{endZone}";
 
-                var Getmission_Specific = missionsSpecifics.FirstOrDefault(x => x.CallName == CallName);
+                var Getmission_Specific = ConfigData.MissionsSpecifics.FirstOrDefault(x => x.CallName == CallName);
                 if (Getmission_Specific == null)
                 {
                     var missionAdd = new MissionsSpecific
@@ -367,7 +365,7 @@ namespace ACS.Monitor
                 string endZone = CallGridView.GetRowCellDisplayText(e.RowHandle, "DGV_Dest");
                 string CallName = $"{startZone}_{endZone}";
 
-                var Getmission_Specific = missionsSpecifics.FirstOrDefault(x => x.CallName == CallName);
+                var Getmission_Specific = ConfigData.MissionsSpecifics.FirstOrDefault(x => x.CallName == CallName);
                 if(Getmission_Specific !=null)
                 {
                     Getmission_Specific.Cancel = "cancel";
@@ -381,6 +379,7 @@ namespace ACS.Monitor
             #endregion
 
         }
+
         private void CallGridView_RowCellStyle(object sender, RowCellStyleEventArgs e)
         {
             #region 상태에 따라 색상변경
@@ -389,7 +388,7 @@ namespace ACS.Monitor
             string endZone = CallGridView.GetRowCellDisplayText(e.RowHandle, "DGV_Dest");
             string CallName = $"{startZone}_{endZone}";
 
-            var Getmission_Specific = missionsSpecifics.FirstOrDefault(x => x.CallName == CallName);
+            var Getmission_Specific = ConfigData.MissionsSpecifics.FirstOrDefault(x => x.CallName == CallName);
             if (Getmission_Specific == null)
             {
                 //기본 상태 색상
@@ -409,8 +408,6 @@ namespace ACS.Monitor
         private void DisplayTimer_Tick(object sender, EventArgs e)
         {
             DisplayTimer.Enabled = false;
-            jobConfigs = uow.JobConfigs.DBGetAll();
-            missionsSpecifics = uow.MissionsSpecifics.DBGetAll();
             ChangedStartZoneAlram();
             CallSystemDisplay();
             DisplayTimer.Interval = 1000;

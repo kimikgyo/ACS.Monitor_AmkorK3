@@ -24,7 +24,7 @@ namespace Monitor.Data
         public JobRepository(string connectionString, MissionRepository missions)
         {
             this.connectionString = connectionString;
-            Load(missions);
+            DBGetAll();
         }
 
         // DB에서 모든 항목을 로드하여 _jobs 에 캐싱해 둔다
@@ -160,7 +160,7 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<Job>("SELECT * FROM Jobs").ToList();
-
+                    con.Close();
                 }
             }
         }

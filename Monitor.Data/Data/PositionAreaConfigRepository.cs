@@ -24,6 +24,7 @@ namespace Monitor.Data
         public PositionAreaConfigRepository(string connectionString)
         {
             this.connectionString = connectionString;
+            DBGetAll();
         }
       
         private void Load()
@@ -46,7 +47,7 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<PositionAreaConfig>("SELECT * FROM PositionAreaConfig WHERE DisplayFlag=1").ToList();
-
+                    con.Close();
                 }
             }
         }

@@ -20,8 +20,21 @@ namespace Monitor.Data
         public ElevatorInfoRepository(string connectionString)
         {
             this.connectionString = connectionString;
-            DBLoad();
+            DBGetAll();
         }
+
+        public List<ElevatorInfoModel> DBGetAll()
+        {
+            lock (this)
+            {
+                using (var con = new SqlConnection(connectionString))
+                {
+                    return con.Query<ElevatorInfoModel>("SELECT * FROM ElevatorInfo").ToList();
+                    con.Close();
+                }
+            }
+        }
+
         public List<ElevatorInfoModel> DBLoad()
         {
             lock (lockObj)
@@ -56,6 +69,7 @@ namespace Monitor.Data
                             Updata.TransportMode = ElevatorInfo.TransportMode;
                             Updata.UserNumber = ElevatorInfo.UserNumber;
                         }
+                      
                     }
                     return _elevatorInfoModels;
                 }
@@ -94,16 +108,7 @@ namespace Monitor.Data
             }
         }
 
-        public List<ElevatorInfoModel> DBGetAll()
-        {
-            lock (this)
-            {
-                using (var con = new SqlConnection(connectionString))
-                {
-                    return con.Query<ElevatorInfoModel>("SELECT * FROM ElevatorInfo").ToList();
-                }
-            }
-        }
+     
         //DB찾기
         public IEnumerable<ElevatorInfoModel> Find(Func<ElevatorInfoModel, bool> predicate)
         {

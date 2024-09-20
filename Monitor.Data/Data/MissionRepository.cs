@@ -24,6 +24,7 @@ namespace Monitor.Data
         public MissionRepository(string connectionString, RobotRepository robots)
         {
             this.connectionString = connectionString;
+            DBGetAll();
         }
 
         // DB에서 모든 항목을 로드하여 _missions 에 캐싱해 둔다
@@ -114,6 +115,7 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<Mission>("SELECT * FROM Missions").ToList();
+                    con.Close();
                 }
             }
         }

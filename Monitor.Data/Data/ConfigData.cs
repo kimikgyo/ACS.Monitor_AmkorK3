@@ -7,13 +7,18 @@ namespace Monitor.Data
 {
     public  class ConfigData
     {
-        // UCMapView 모니터링에서 사용
         public static IList<Robot> Robots = null;
         public static IList<Job> Jobs = null;
+        public static IList<Mission> Missions = null;
+        public static IList<PositionWaitTimeModel> PositionWaitTimes = null;
         public static IList<FloorMapIdConfigModel> FloorMapIdConfigs = null;
+        public static IList<PositionAreaConfig> PositionAreaConfigs = null;
         public static IList<CustomMapModel> CustomMaps = null;
         public static IList<FleetPositionModel> FleetPositions = null;
-
+        public static IList<ElevatorStateModel> ElevatorStates = null;
+        public static IList<ElevatorInfoModel> ElevatorInfos = null;
+        public static IList<MissionsSpecific> MissionsSpecifics = null;
+        public static IList<JobConfigModel> JobConfigs = null;
         public static Dictionary<string, string> DisplayRobotNames;
         public static Dictionary<string, string> DisplayMapNames;
 

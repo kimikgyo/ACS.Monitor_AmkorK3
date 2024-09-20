@@ -21,9 +21,19 @@ namespace Monitor.Data
         public FleetPositionRepository(string connectionString)
         {
             this.connectionString = connectionString;
-            DBLoad();
+            DBGetAll();
         }
-
+        public List<FleetPositionModel> DBGetAll()
+        {
+            lock (this)
+            {
+                using (var con = new SqlConnection(connectionString))
+                {
+                    return con.Query<FleetPositionModel>("SELECT * FROM FleetPosition").ToList();
+                    con.Close();
+                }
+            }
+        }
         private void DBLoad()
         {
             lock (lockObj)
@@ -36,32 +46,6 @@ namespace Monitor.Data
 
                         _fleetPositionModels.Add(fleetPosition);
                     }
-                }
-            }
-        }
-
-        public List<FleetPositionModel> ListUpdate()
-        {
-            lock (lockObj)
-            {
-                using (var con = new SqlConnection(connectionString))
-                {
-                    foreach (var fleetPosition in con.Query<FleetPositionModel>("SELECT * FROM FleetPosition"))
-                    {
-                        var Updata = _fleetPositionModels.FirstOrDefault(x => x.Id == fleetPosition.Id);
-                        if (Updata != null)
-                        {
-                            Updata.Id = fleetPosition.Id;
-                            Updata.Name = fleetPosition.Name;
-                            Updata.MapID = fleetPosition.MapID;
-                            Updata.Guid = fleetPosition.Guid;
-                            Updata.TypeID = fleetPosition.TypeID;
-                            Updata.PosX = fleetPosition.PosX;
-                            Updata.PosY = fleetPosition.PosY;
-                            Updata.Orientation = fleetPosition.Orientation;
-                        }
-                    }
-                    return _fleetPositionModels;
                 }
             }
         }
@@ -105,19 +89,6 @@ namespace Monitor.Data
             }
         }
         public IList<FleetPositionModel> GetAll() => _fleetPositionModels;
-
-
-        public List<FleetPositionModel> DBGetAll()
-        {
-            lock (this)
-            {
-                using (var con = new SqlConnection(connectionString))
-                {
-                    return con.Query<FleetPositionModel>("SELECT * FROM FleetPosition").ToList();
-
-                }
-            }
-        }
 
 
         //DB업데이트

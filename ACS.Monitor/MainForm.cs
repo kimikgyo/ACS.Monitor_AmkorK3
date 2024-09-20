@@ -105,11 +105,7 @@ namespace ACS.Monitor
             barStaticItem1.Appearance.Font = AmkorK5Font;
             barStaticItem1.Appearance.ForeColor = Color.Blue;
         }
-        /// <summary>
-        ///  UserLogin  / UserLogOut
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void UserLoginButtonClick(object sender, ItemClickEventArgs e)
         {
             if (barButtonItem1.Caption == "UserLogIn")
@@ -120,7 +116,7 @@ namespace ACS.Monitor
                 if (result == DialogResult.Yes)
                 {
                     //사번 입력하여 검색
-                    var UserNumber = uow.UserNumbers.DBGetAll().FirstOrDefault(u => u.UserName == UserNumberForm.UserNumber);
+                    var UserNumber = uow.UserNumbers.DBGetAll().FirstOrDefault(u => u.UserNumber == UserNumberForm.UserNumber);
                     //사번이 없는경우 설정창을 Clear한후 다시 초기설정함
                     if (UserNumber == null) MessageBox.Show("등록되지 않은 사원번호 이거나 비밀번호가 틀립니다!");
                     else
@@ -193,16 +189,18 @@ namespace ACS.Monitor
         {
             string tmp = ConfigurationManager.AppSettings["MapNames"];
             ConfigData.DisplayMapNames = Helpers.ConvertStringToDictionary(tmp) ?? new Dictionary<string, string>();
-            foreach (var floorMapIndex in uow.FloorMapIDConfigs.GetAll())
+
+
+            foreach (var floorMapIndex in ConfigData.FloorMapIdConfigs.ToList())
             {
-                if (!Ch_Floor1.Enabled) { Ch_Floor1.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor1.Enabled = true; Ch_Floor1.Visible = true; }
-                else if (!Ch_Floor2.Enabled) { Ch_Floor2.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor2.Enabled = true; Ch_Floor2.Visible = true; }
-                else if (!Ch_Floor3.Enabled) { Ch_Floor3.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor3.Enabled = true; Ch_Floor3.Visible = true; }
-                else if (!Ch_Floor4.Enabled) { Ch_Floor4.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor4.Enabled = true; Ch_Floor4.Visible = true; }
-                else if (!Ch_Floor5.Enabled) { Ch_Floor5.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor5.Enabled = true; Ch_Floor5.Visible = true; }
-                else if (!Ch_Floor6.Enabled) { Ch_Floor6.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor6.Enabled = true; Ch_Floor6.Visible = true; }
-                else if (!Ch_Floor7.Enabled) { Ch_Floor7.Text = $"{floorMapIndex.FloorIndex}"; Ch_Floor7.Enabled = true; Ch_Floor7.Visible = true; }
-                var floorUserCheck = ConfigData.DisplayMapNames.FirstOrDefault(D => D.Value == floorMapIndex.FloorIndex);
+                if (!Ch_Floor1.Enabled || (Ch_Floor1.Enabled && Ch_Floor1.Text == floorMapIndex.FloorName)) { Ch_Floor1.Text = $"{floorMapIndex.FloorName}"; Ch_Floor1.Enabled = true; Ch_Floor1.Visible = true; }
+                else if (!Ch_Floor2.Enabled || (Ch_Floor2.Enabled && Ch_Floor2.Text == floorMapIndex.FloorName)) { Ch_Floor2.Text = $"{floorMapIndex.FloorName}"; Ch_Floor2.Enabled = true; Ch_Floor2.Visible = true; }
+                else if (!Ch_Floor3.Enabled || (Ch_Floor3.Enabled && Ch_Floor3.Text == floorMapIndex.FloorName)) { Ch_Floor3.Text = $"{floorMapIndex.FloorName}"; Ch_Floor3.Enabled = true; Ch_Floor3.Visible = true; }
+                else if (!Ch_Floor4.Enabled || (Ch_Floor4.Enabled && Ch_Floor4.Text == floorMapIndex.FloorName)) { Ch_Floor4.Text = $"{floorMapIndex.FloorName}"; Ch_Floor4.Enabled = true; Ch_Floor4.Visible = true; }
+                else if (!Ch_Floor5.Enabled || (Ch_Floor5.Enabled && Ch_Floor5.Text == floorMapIndex.FloorName)) { Ch_Floor5.Text = $"{floorMapIndex.FloorName}"; Ch_Floor5.Enabled = true; Ch_Floor5.Visible = true; }
+                else if (!Ch_Floor6.Enabled || (Ch_Floor6.Enabled && Ch_Floor6.Text == floorMapIndex.FloorName)) { Ch_Floor6.Text = $"{floorMapIndex.FloorName}"; Ch_Floor6.Enabled = true; Ch_Floor6.Visible = true; }
+                else if (!Ch_Floor7.Enabled || (Ch_Floor7.Enabled && Ch_Floor7.Text == floorMapIndex.FloorName)) { Ch_Floor7.Text = $"{floorMapIndex.FloorName}"; Ch_Floor7.Enabled = true; Ch_Floor7.Visible = true; }
+                var floorUserCheck = ConfigData.DisplayMapNames.FirstOrDefault(D => D.Key == floorMapIndex.FloorIndex);
                 if (floorUserCheck.Value != null)
                 {
                     if (floorUserCheck.Value == Ch_Floor1.Text) Ch_Floor1.Checked = true;
@@ -215,11 +213,6 @@ namespace ACS.Monitor
                 }
             }
         }
-
-
-
-
-
         /// <summary>
         /// Robot 메뉴 생성 후 Config 설정되어 있는 Robot Check 표시
         /// </summary>
@@ -227,22 +220,22 @@ namespace ACS.Monitor
         {
             string tmp = ConfigurationManager.AppSettings["RobotNames"];
             ConfigData.DisplayRobotNames = Helpers.ConvertStringToDictionary(tmp) ?? new Dictionary<string, string>();
-            foreach (var robot in uow.Robots.GetAll())
+            foreach (var robot in ConfigData.Robots.ToList())
             {
-                if (!CH_Robot1.Enabled) { CH_Robot1.Text = robot.RobotAlias; CH_Robot1.Enabled = true; CH_Robot1.Visible = true; }
-                else if (!CH_Robot2.Enabled) { CH_Robot2.Text = robot.RobotAlias; CH_Robot2.Enabled = true; CH_Robot2.Visible = true; }
-                else if (!CH_Robot3.Enabled) { CH_Robot3.Text = robot.RobotAlias; CH_Robot3.Enabled = true; CH_Robot3.Visible = true; }
-                else if (!CH_Robot4.Enabled) { CH_Robot4.Text = robot.RobotAlias; CH_Robot4.Enabled = true; CH_Robot4.Visible = true; }
-                else if (!CH_Robot5.Enabled) { CH_Robot5.Text = robot.RobotAlias; CH_Robot5.Enabled = true; CH_Robot5.Visible = true; }
-                else if (!CH_Robot6.Enabled) { CH_Robot6.Text = robot.RobotAlias; CH_Robot6.Enabled = true; CH_Robot6.Visible = true; }
-                else if (!CH_Robot7.Enabled) { CH_Robot7.Text = robot.RobotAlias; CH_Robot7.Enabled = true; CH_Robot7.Visible = true; }
-                else if (!CH_Robot8.Enabled) { CH_Robot8.Text = robot.RobotAlias; CH_Robot8.Enabled = true; CH_Robot8.Visible = true; }
-                else if (!CH_Robot9.Enabled) { CH_Robot9.Text = robot.RobotAlias; CH_Robot9.Enabled = true; CH_Robot9.Visible = true; }
-                else if (!CH_Robot10.Enabled) { CH_Robot10.Text = robot.RobotAlias; CH_Robot10.Enabled = true; CH_Robot10.Visible = true; }
-                else if (!CH_Robot11.Enabled) { CH_Robot11.Text = robot.RobotAlias; CH_Robot11.Enabled = true; CH_Robot11.Visible = true; }
-                else if (!CH_Robot12.Enabled) { CH_Robot12.Text = robot.RobotAlias; CH_Robot12.Enabled = true; CH_Robot12.Visible = true; }
+                if (!CH_Robot1.Enabled || (CH_Robot1.Enabled && CH_Robot1.Text == robot.RobotName)) { CH_Robot1.Text = robot.RobotName; CH_Robot1.Enabled = true; CH_Robot1.Visible = true; }
+                else if (!CH_Robot2.Enabled || (CH_Robot2.Enabled && CH_Robot2.Text == robot.RobotName)) { CH_Robot2.Text = robot.RobotName; CH_Robot2.Enabled = true; CH_Robot2.Visible = true; }
+                else if (!CH_Robot3.Enabled || (CH_Robot3.Enabled && CH_Robot3.Text == robot.RobotName)) { CH_Robot3.Text = robot.RobotName; CH_Robot3.Enabled = true; CH_Robot3.Visible = true; }
+                else if (!CH_Robot4.Enabled || (CH_Robot4.Enabled && CH_Robot4.Text == robot.RobotName)) { CH_Robot4.Text = robot.RobotName; CH_Robot4.Enabled = true; CH_Robot4.Visible = true; }
+                else if (!CH_Robot5.Enabled || (CH_Robot5.Enabled && CH_Robot5.Text == robot.RobotName)) { CH_Robot5.Text = robot.RobotName; CH_Robot5.Enabled = true; CH_Robot5.Visible = true; }
+                else if (!CH_Robot6.Enabled || (CH_Robot6.Enabled && CH_Robot6.Text == robot.RobotName)) { CH_Robot6.Text = robot.RobotName; CH_Robot6.Enabled = true; CH_Robot6.Visible = true; }
+                else if (!CH_Robot7.Enabled || (CH_Robot7.Enabled && CH_Robot7.Text == robot.RobotName)) { CH_Robot7.Text = robot.RobotName; CH_Robot7.Enabled = true; CH_Robot7.Visible = true; }
+                else if (!CH_Robot8.Enabled || (CH_Robot8.Enabled && CH_Robot8.Text == robot.RobotName)) { CH_Robot8.Text = robot.RobotName; CH_Robot8.Enabled = true; CH_Robot8.Visible = true; }
+                else if (!CH_Robot9.Enabled || (CH_Robot9.Enabled && CH_Robot9.Text == robot.RobotName)) { CH_Robot9.Text = robot.RobotName; CH_Robot9.Enabled = true; CH_Robot9.Visible = true; }
+                else if (!CH_Robot10.Enabled || (CH_Robot10.Enabled && CH_Robot10.Text == robot.RobotName)) { CH_Robot10.Text = robot.RobotName; CH_Robot10.Enabled = true; CH_Robot10.Visible = true; }
+                else if (!CH_Robot11.Enabled || (CH_Robot11.Enabled && CH_Robot11.Text == robot.RobotName)) { CH_Robot11.Text = robot.RobotName; CH_Robot11.Enabled = true; CH_Robot11.Visible = true; }
+                else if (!CH_Robot12.Enabled || (CH_Robot12.Enabled && CH_Robot12.Text == robot.RobotName)) { CH_Robot12.Text = robot.RobotName; CH_Robot12.Enabled = true; CH_Robot12.Visible = true; }
 
-                var RobotUserCheck = ConfigData.DisplayRobotNames.FirstOrDefault(D => D.Value == robot.RobotAlias);
+                var RobotUserCheck = ConfigData.DisplayRobotNames.FirstOrDefault(D => D.Key == robot.RobotName);
                 if (RobotUserCheck.Value != null)
                 {
                     if (RobotUserCheck.Value == CH_Robot1.Text) CH_Robot1.Checked = true;
@@ -333,7 +326,7 @@ namespace ACS.Monitor
         private void FloorCH_Click(object sender, EventArgs e)
         {
             var Chk_Btn = (ToolStripMenuItem)sender;
-            var Maps = uow.FloorMapIDConfigs.GetAll().FirstOrDefault(x => x.FloorIndex == Chk_Btn.Text);
+            var Maps = ConfigData.FloorMapIdConfigs.FirstOrDefault(x => x.FloorName == Chk_Btn.Text);
 
             if (Maps != null)
             {
@@ -347,7 +340,7 @@ namespace ACS.Monitor
                     else
                     {
                         //Config데이터가 없을경우
-                        ConfigData.DisplayMapNames.Add(Maps.FloorIndex, Maps.FloorIndex);
+                        ConfigData.DisplayMapNames.Add(Maps.FloorIndex, Maps.FloorName);
                         Chk_Btn.Checked = true;
                     }
                 }
@@ -356,7 +349,7 @@ namespace ACS.Monitor
                     if (ConfigData.DisplayMapNames.ContainsKey(Maps.FloorIndex) == false)
                     {
                         //Config 데이터에 없을경우
-                        ConfigData.DisplayMapNames.Add(Maps.FloorIndex, Maps.FloorIndex);
+                        ConfigData.DisplayMapNames.Add(Maps.FloorIndex, Maps.FloorName);
                         Chk_Btn.Checked = true;
                     }
                     else
@@ -380,7 +373,7 @@ namespace ACS.Monitor
         private void RobotCH_Click(object sender, EventArgs e)
         {
             var Chk_Btn = (ToolStripMenuItem)sender;
-            var Robot = uow.Robots.DBGetAll().FirstOrDefault(x => x.RobotAlias == Chk_Btn.Text);
+            var Robot =ConfigData.Robots.FirstOrDefault(x => x.RobotName == Chk_Btn.Text);
 
             if (Robot != null)
             {
@@ -500,7 +493,7 @@ namespace ACS.Monitor
                     elevator.Show();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -539,7 +532,7 @@ namespace ACS.Monitor
                     CallSystem.Show();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -594,6 +587,16 @@ namespace ACS.Monitor
                 // V 모양의 윤곽선 그리기
                 e.Graphics.DrawPolygon(Pens.Gray, vPoints);
             }
+        }
+
+        private void DisPlayTimer_Tick(object sender, EventArgs e)
+        {
+            DisPlayTimer.Enabled = false;
+            RobotMenuLoad();
+            MapMenuLoad();
+            DisPlayTimer.Interval = 1000;
+            DisPlayTimer.Enabled = true;
+
         }
     }
 }
