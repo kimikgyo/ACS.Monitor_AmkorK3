@@ -17,7 +17,7 @@ namespace Monitor.Common
         public string MapImageData { get; set; }    //Map Image Data
         public int DisplayFlag { get; set; }        //그리드 표시 관련 신호
 
-        public MapData MapData = new MapData(); // 레지스터.  데이터 갱신은 MiR_Get_Register()함수 이용한다.
+        public MapData MapData = new MapData(); 
         public override string ToString()
         {
 

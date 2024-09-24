@@ -43,7 +43,7 @@ namespace Monitor.Map
                 JObject array = JObject.Parse(json);
 
                 // parse map
-                var mapEncodedString = array["map"].Value<string>();
+                var mapEncodedString = array["base_map"].Value<string>();
 
                 // create map image
                 System.Drawing.Image mapImage = null;

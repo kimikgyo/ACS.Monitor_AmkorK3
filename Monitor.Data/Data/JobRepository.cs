@@ -160,7 +160,6 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<Job>("SELECT * FROM Jobs").ToList();
-                    con.Close();
                 }
             }
         }

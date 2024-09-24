@@ -12,6 +12,7 @@ namespace ACS.Monitor
     {
         private readonly MainForm main;
         private readonly IUnitOfWork uow;
+        bool Init = false;
         public GetDataControl(MainForm main, IUnitOfWork uow)
         {
             this.main = main;
@@ -59,7 +60,6 @@ namespace ACS.Monitor
             ConfigData.Robots = uow.Robots.DBGetAll();
             ConfigData.Jobs = uow.Jobs.DBGetAll();
             ConfigData.Missions = uow.Missions.DBGetAll();
-            ConfigData.FloorMapIdConfigs = uow.FloorMapIDConfigs.DBGetAll();
             ConfigData.PositionWaitTimes = uow.PositionWaitTimes.DBGetAll();
             ConfigData.ElevatorStates = uow.ElevatorStates.DBGetAll();
             ConfigData.ElevatorInfos = uow.ElevatorInfos.DBGetAll();
@@ -68,6 +68,8 @@ namespace ACS.Monitor
             ConfigData.MissionsSpecifics = uow.MissionsSpecifics.DBGetAll();
             ConfigData.JobConfigs = uow.JobConfigs.DBGetAll();
             ConfigData.PositionAreaConfigs = uow.PositionAreaConfigs.DBGetAll();
+            if (!Init)
+            { ConfigData.FloorMapIdConfigs = uow.FloorMapIDConfigs.DBGetAll(); Init = true; }
         }
     }
 }

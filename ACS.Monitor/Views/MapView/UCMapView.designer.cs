@@ -29,6 +29,7 @@ namespace ACS.Monitor
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.cb_DisplayInfo = new DevExpress.XtraEditors.CheckEdit();
             this.chkCustomMap = new DevExpress.XtraEditors.CheckEdit();
             this.lbl_ClickPosInfo = new DevExpress.XtraEditors.LabelControl();
@@ -41,6 +42,7 @@ namespace ACS.Monitor
             this.textBox1 = new DevExpress.XtraEditors.TextEdit();
             this.chkACSDbMap = new DevExpress.XtraEditors.CheckEdit();
             this.chkFleetMap = new DevExpress.XtraEditors.CheckEdit();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.cb_DisplayInfo.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkCustomMap.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1.Properties)).BeginInit();
@@ -75,11 +77,12 @@ namespace ACS.Monitor
             // 
             // btnMapDownload
             // 
-            this.btnMapDownload.Location = new System.Drawing.Point(266, 3);
+            this.btnMapDownload.Location = new System.Drawing.Point(395, 29);
             this.btnMapDownload.Name = "btnMapDownload";
             this.btnMapDownload.Size = new System.Drawing.Size(95, 23);
             this.btnMapDownload.TabIndex = 3;
             this.btnMapDownload.Text = "download map";
+            this.btnMapDownload.Click += new System.EventHandler(this.btnMapDownload_Click);
             // 
             // button3
             // 
@@ -197,5 +200,6 @@ namespace ACS.Monitor
         private DevExpress.XtraEditors.TextEdit textBox1;
         private DevExpress.XtraEditors.CheckEdit chkACSDbMap;
         private DevExpress.XtraEditors.CheckEdit chkFleetMap;
+        private System.Windows.Forms.Timer timer1;
     }
 }

@@ -48,7 +48,6 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<Robot>("SELECT * FROM Robots").ToList();
-                    con.Close();
                 }
             }
         }

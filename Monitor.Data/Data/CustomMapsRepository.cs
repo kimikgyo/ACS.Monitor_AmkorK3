@@ -31,7 +31,6 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<CustomMapModel>("SELECT * FROM CustomMaps").ToList();
-                    con.Close();
                 }
             }
         }

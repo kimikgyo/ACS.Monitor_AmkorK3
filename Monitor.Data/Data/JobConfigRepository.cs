@@ -104,7 +104,6 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<JobConfigModel>("SELECT * FROM JobConfigs WHERE DisplayFlag=1").ToList();
-                    con.Close();
                 }
             }
         }

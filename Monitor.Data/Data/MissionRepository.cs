@@ -115,7 +115,6 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<Mission>("SELECT * FROM Missions").ToList();
-                    con.Close();
                 }
             }
         }

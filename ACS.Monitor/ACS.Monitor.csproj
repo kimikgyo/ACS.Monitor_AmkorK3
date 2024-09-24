@@ -139,17 +139,17 @@
     <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Servies\GetDataControl.cs" />
     <Compile Include="Views\MapView\UCMapView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Views\MapView\UCMapView.designer.cs">
       <DependentUpon>UCMapView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Utilities\SortableBindingList.cs" />
     <Compile Include="Views\AutoScreen.cs">
@@ -297,20 +297,13 @@
     <Content Include="Image\Door_Open.png" />
     <Content Include="Image\Setting _icon.gif" />
     <Content Include="Monitoring_Icon.ico" />
+    <Content Include="Resources\POS.png" />
     <None Include="Resources\Setting _icon.png" />
     <None Include="Resources\Door_Close.png" />
     <None Include="Resources\Door_Open.png" />
     <None Include="Resources\Amkor Technology.jpg" />
     <None Include="Resources\제목표시줄.png" />
     <None Include="Resources\Checked.png" />
-    <Content Include="_DB\all-ykk.sql" />
-    <Content Include="_DB\transys-all.sql" />
-    <Content Include="_DB\transys-create.sql" />
-    <Content Include="_DB\transys-data.sql" />
-    <Content Include="_DB\transys-pop-select-2.sql" />
-    <Content Include="_DB\transys-pop-select.sql" />
-    <Content Include="_DB\ykk-create.sql" />
-    <Content Include="_DB\ykk-data.sql" />
     <None Include="Image\60_connect.png" />
     <None Include="Image\60_disconnect.png" />
     <None Include="Image\map.png" />
@@ -328,7 +321,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="_DB\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

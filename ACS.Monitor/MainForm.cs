@@ -178,6 +178,9 @@ namespace ACS.Monitor
         {
             if (fleetIp != null) view.UriStr = $"http://{fleetIp}/";
             view.MapID = floorMapIdConfig.MapID;
+
+            //view.UriStr = $"http://192.168.8.50/";
+            //view.MapID = "26d15903-6e46-11ef-9051-000e8eacad4f";
             view.Init(floorMapIdConfig, fleetIp, Flag);
             view.StartLoop();
         }
@@ -190,26 +193,36 @@ namespace ACS.Monitor
             string tmp = ConfigurationManager.AppSettings["MapNames"];
             ConfigData.DisplayMapNames = Helpers.ConvertStringToDictionary(tmp) ?? new Dictionary<string, string>();
 
-
-            foreach (var floorMapIndex in ConfigData.FloorMapIdConfigs.ToList())
+            if (ConfigData.FloorMapIdConfigs != null)
             {
-                if (!Ch_Floor1.Enabled || (Ch_Floor1.Enabled && Ch_Floor1.Text == floorMapIndex.FloorName)) { Ch_Floor1.Text = $"{floorMapIndex.FloorName}"; Ch_Floor1.Enabled = true; Ch_Floor1.Visible = true; }
-                else if (!Ch_Floor2.Enabled || (Ch_Floor2.Enabled && Ch_Floor2.Text == floorMapIndex.FloorName)) { Ch_Floor2.Text = $"{floorMapIndex.FloorName}"; Ch_Floor2.Enabled = true; Ch_Floor2.Visible = true; }
-                else if (!Ch_Floor3.Enabled || (Ch_Floor3.Enabled && Ch_Floor3.Text == floorMapIndex.FloorName)) { Ch_Floor3.Text = $"{floorMapIndex.FloorName}"; Ch_Floor3.Enabled = true; Ch_Floor3.Visible = true; }
-                else if (!Ch_Floor4.Enabled || (Ch_Floor4.Enabled && Ch_Floor4.Text == floorMapIndex.FloorName)) { Ch_Floor4.Text = $"{floorMapIndex.FloorName}"; Ch_Floor4.Enabled = true; Ch_Floor4.Visible = true; }
-                else if (!Ch_Floor5.Enabled || (Ch_Floor5.Enabled && Ch_Floor5.Text == floorMapIndex.FloorName)) { Ch_Floor5.Text = $"{floorMapIndex.FloorName}"; Ch_Floor5.Enabled = true; Ch_Floor5.Visible = true; }
-                else if (!Ch_Floor6.Enabled || (Ch_Floor6.Enabled && Ch_Floor6.Text == floorMapIndex.FloorName)) { Ch_Floor6.Text = $"{floorMapIndex.FloorName}"; Ch_Floor6.Enabled = true; Ch_Floor6.Visible = true; }
-                else if (!Ch_Floor7.Enabled || (Ch_Floor7.Enabled && Ch_Floor7.Text == floorMapIndex.FloorName)) { Ch_Floor7.Text = $"{floorMapIndex.FloorName}"; Ch_Floor7.Enabled = true; Ch_Floor7.Visible = true; }
-                var floorUserCheck = ConfigData.DisplayMapNames.FirstOrDefault(D => D.Key == floorMapIndex.FloorIndex);
-                if (floorUserCheck.Value != null)
+                foreach (var floorMapIndex in ConfigData.FloorMapIdConfigs.ToList())
                 {
-                    if (floorUserCheck.Value == Ch_Floor1.Text) Ch_Floor1.Checked = true;
-                    else if (floorUserCheck.Value == Ch_Floor2.Text) Ch_Floor2.Checked = true;
-                    else if (floorUserCheck.Value == Ch_Floor3.Text) Ch_Floor3.Checked = true;
-                    else if (floorUserCheck.Value == Ch_Floor4.Text) Ch_Floor4.Checked = true;
-                    else if (floorUserCheck.Value == Ch_Floor5.Text) Ch_Floor5.Checked = true;
-                    else if (floorUserCheck.Value == Ch_Floor6.Text) Ch_Floor6.Checked = true;
-                    else if (floorUserCheck.Value == Ch_Floor7.Text) Ch_Floor7.Checked = true;
+                    if (!Ch_Floor1.Enabled || (Ch_Floor1.Enabled && Ch_Floor1.Text == floorMapIndex.FloorName))
+                    { Ch_Floor1.Text = $"{floorMapIndex.FloorName}"; Ch_Floor1.Enabled = true; Ch_Floor1.Visible = true; }
+                    else if (!Ch_Floor2.Enabled || (Ch_Floor2.Enabled && Ch_Floor2.Text == floorMapIndex.FloorName))
+                    { Ch_Floor2.Text = $"{floorMapIndex.FloorName}"; Ch_Floor2.Enabled = true; Ch_Floor2.Visible = true; }
+                    else if (!Ch_Floor3.Enabled || (Ch_Floor3.Enabled && Ch_Floor3.Text == floorMapIndex.FloorName))
+                    { Ch_Floor3.Text = $"{floorMapIndex.FloorName}"; Ch_Floor3.Enabled = true; Ch_Floor3.Visible = true; }
+                    else if (!Ch_Floor4.Enabled || (Ch_Floor4.Enabled && Ch_Floor4.Text == floorMapIndex.FloorName))
+                    { Ch_Floor4.Text = $"{floorMapIndex.FloorName}"; Ch_Floor4.Enabled = true; Ch_Floor4.Visible = true; }
+                    else if (!Ch_Floor5.Enabled || (Ch_Floor5.Enabled && Ch_Floor5.Text == floorMapIndex.FloorName))
+                    { Ch_Floor5.Text = $"{floorMapIndex.FloorName}"; Ch_Floor5.Enabled = true; Ch_Floor5.Visible = true; }
+                    else if (!Ch_Floor6.Enabled || (Ch_Floor6.Enabled && Ch_Floor6.Text == floorMapIndex.FloorName))
+                    { Ch_Floor6.Text = $"{floorMapIndex.FloorName}"; Ch_Floor6.Enabled = true; Ch_Floor6.Visible = true; }
+                    else if (!Ch_Floor7.Enabled || (Ch_Floor7.Enabled && Ch_Floor7.Text == floorMapIndex.FloorName))
+                    { Ch_Floor7.Text = $"{floorMapIndex.FloorName}"; Ch_Floor7.Enabled = true; Ch_Floor7.Visible = true; }
+
+                    var floorUserCheck = ConfigData.DisplayMapNames.FirstOrDefault(D => D.Key == floorMapIndex.FloorIndex);
+                    if (floorUserCheck.Value != null)
+                    {
+                        if (floorUserCheck.Value == Ch_Floor1.Text) Ch_Floor1.Checked = true;
+                        else if (floorUserCheck.Value == Ch_Floor2.Text) Ch_Floor2.Checked = true;
+                        else if (floorUserCheck.Value == Ch_Floor3.Text) Ch_Floor3.Checked = true;
+                        else if (floorUserCheck.Value == Ch_Floor4.Text) Ch_Floor4.Checked = true;
+                        else if (floorUserCheck.Value == Ch_Floor5.Text) Ch_Floor5.Checked = true;
+                        else if (floorUserCheck.Value == Ch_Floor6.Text) Ch_Floor6.Checked = true;
+                        else if (floorUserCheck.Value == Ch_Floor7.Text) Ch_Floor7.Checked = true;
+                    }
                 }
             }
         }
@@ -218,40 +231,43 @@ namespace ACS.Monitor
         /// </summary>
         private void RobotMenuLoad()
         {
-            string tmp = ConfigurationManager.AppSettings["RobotNames"];
-            ConfigData.DisplayRobotNames = Helpers.ConvertStringToDictionary(tmp) ?? new Dictionary<string, string>();
-            foreach (var robot in ConfigData.Robots.ToList())
+            if (ConfigData.Robots != null)
             {
-                if (!CH_Robot1.Enabled || (CH_Robot1.Enabled && CH_Robot1.Text == robot.RobotName)) { CH_Robot1.Text = robot.RobotName; CH_Robot1.Enabled = true; CH_Robot1.Visible = true; }
-                else if (!CH_Robot2.Enabled || (CH_Robot2.Enabled && CH_Robot2.Text == robot.RobotName)) { CH_Robot2.Text = robot.RobotName; CH_Robot2.Enabled = true; CH_Robot2.Visible = true; }
-                else if (!CH_Robot3.Enabled || (CH_Robot3.Enabled && CH_Robot3.Text == robot.RobotName)) { CH_Robot3.Text = robot.RobotName; CH_Robot3.Enabled = true; CH_Robot3.Visible = true; }
-                else if (!CH_Robot4.Enabled || (CH_Robot4.Enabled && CH_Robot4.Text == robot.RobotName)) { CH_Robot4.Text = robot.RobotName; CH_Robot4.Enabled = true; CH_Robot4.Visible = true; }
-                else if (!CH_Robot5.Enabled || (CH_Robot5.Enabled && CH_Robot5.Text == robot.RobotName)) { CH_Robot5.Text = robot.RobotName; CH_Robot5.Enabled = true; CH_Robot5.Visible = true; }
-                else if (!CH_Robot6.Enabled || (CH_Robot6.Enabled && CH_Robot6.Text == robot.RobotName)) { CH_Robot6.Text = robot.RobotName; CH_Robot6.Enabled = true; CH_Robot6.Visible = true; }
-                else if (!CH_Robot7.Enabled || (CH_Robot7.Enabled && CH_Robot7.Text == robot.RobotName)) { CH_Robot7.Text = robot.RobotName; CH_Robot7.Enabled = true; CH_Robot7.Visible = true; }
-                else if (!CH_Robot8.Enabled || (CH_Robot8.Enabled && CH_Robot8.Text == robot.RobotName)) { CH_Robot8.Text = robot.RobotName; CH_Robot8.Enabled = true; CH_Robot8.Visible = true; }
-                else if (!CH_Robot9.Enabled || (CH_Robot9.Enabled && CH_Robot9.Text == robot.RobotName)) { CH_Robot9.Text = robot.RobotName; CH_Robot9.Enabled = true; CH_Robot9.Visible = true; }
-                else if (!CH_Robot10.Enabled || (CH_Robot10.Enabled && CH_Robot10.Text == robot.RobotName)) { CH_Robot10.Text = robot.RobotName; CH_Robot10.Enabled = true; CH_Robot10.Visible = true; }
-                else if (!CH_Robot11.Enabled || (CH_Robot11.Enabled && CH_Robot11.Text == robot.RobotName)) { CH_Robot11.Text = robot.RobotName; CH_Robot11.Enabled = true; CH_Robot11.Visible = true; }
-                else if (!CH_Robot12.Enabled || (CH_Robot12.Enabled && CH_Robot12.Text == robot.RobotName)) { CH_Robot12.Text = robot.RobotName; CH_Robot12.Enabled = true; CH_Robot12.Visible = true; }
-
-                var RobotUserCheck = ConfigData.DisplayRobotNames.FirstOrDefault(D => D.Key == robot.RobotName);
-                if (RobotUserCheck.Value != null)
+                string tmp = ConfigurationManager.AppSettings["RobotNames"];
+                ConfigData.DisplayRobotNames = Helpers.ConvertStringToDictionary(tmp) ?? new Dictionary<string, string>();
+                foreach (var robot in ConfigData.Robots.Where(r=>r.ACSRobotGroup == "AMB"))
                 {
-                    if (RobotUserCheck.Value == CH_Robot1.Text) CH_Robot1.Checked = true;
-                    else if (RobotUserCheck.Value == CH_Robot2.Text) CH_Robot2.Checked = true;
-                    else if (RobotUserCheck.Value == CH_Robot3.Text) CH_Robot3.Checked = true;
-                    else if (RobotUserCheck.Value == CH_Robot4.Text) CH_Robot4.Checked = true;
-                    else if (RobotUserCheck.Value == CH_Robot5.Text) CH_Robot5.Checked = true;
-                    else if (RobotUserCheck.Value == CH_Robot6.Text) CH_Robot6.Checked = true;
-                    else if (RobotUserCheck.Value == CH_Robot7.Text) CH_Robot7.Checked = true;
-                    else if (RobotUserCheck.Value == CH_Robot8.Text) CH_Robot8.Checked = true;
-                    else if (RobotUserCheck.Value == CH_Robot9.Text) CH_Robot9.Checked = true;
-                    else if (RobotUserCheck.Value == CH_Robot10.Text) CH_Robot10.Checked = true;
-                    else if (RobotUserCheck.Value == CH_Robot11.Text) CH_Robot11.Checked = true;
-                    else if (RobotUserCheck.Value == CH_Robot12.Text) CH_Robot12.Checked = true;
-                }
+                    if (!CH_Robot1.Enabled || (CH_Robot1.Enabled && CH_Robot1.Text == robot.RobotName)) { CH_Robot1.Text = robot.RobotName; CH_Robot1.Enabled = true; CH_Robot1.Visible = true; }
+                    else if (!CH_Robot2.Enabled || (CH_Robot2.Enabled && CH_Robot2.Text == robot.RobotName)) { CH_Robot2.Text = robot.RobotName; CH_Robot2.Enabled = true; CH_Robot2.Visible = true; }
+                    else if (!CH_Robot3.Enabled || (CH_Robot3.Enabled && CH_Robot3.Text == robot.RobotName)) { CH_Robot3.Text = robot.RobotName; CH_Robot3.Enabled = true; CH_Robot3.Visible = true; }
+                    else if (!CH_Robot4.Enabled || (CH_Robot4.Enabled && CH_Robot4.Text == robot.RobotName)) { CH_Robot4.Text = robot.RobotName; CH_Robot4.Enabled = true; CH_Robot4.Visible = true; }
+                    else if (!CH_Robot5.Enabled || (CH_Robot5.Enabled && CH_Robot5.Text == robot.RobotName)) { CH_Robot5.Text = robot.RobotName; CH_Robot5.Enabled = true; CH_Robot5.Visible = true; }
+                    else if (!CH_Robot6.Enabled || (CH_Robot6.Enabled && CH_Robot6.Text == robot.RobotName)) { CH_Robot6.Text = robot.RobotName; CH_Robot6.Enabled = true; CH_Robot6.Visible = true; }
+                    else if (!CH_Robot7.Enabled || (CH_Robot7.Enabled && CH_Robot7.Text == robot.RobotName)) { CH_Robot7.Text = robot.RobotName; CH_Robot7.Enabled = true; CH_Robot7.Visible = true; }
+                    else if (!CH_Robot8.Enabled || (CH_Robot8.Enabled && CH_Robot8.Text == robot.RobotName)) { CH_Robot8.Text = robot.RobotName; CH_Robot8.Enabled = true; CH_Robot8.Visible = true; }
+                    else if (!CH_Robot9.Enabled || (CH_Robot9.Enabled && CH_Robot9.Text == robot.RobotName)) { CH_Robot9.Text = robot.RobotName; CH_Robot9.Enabled = true; CH_Robot9.Visible = true; }
+                    else if (!CH_Robot10.Enabled || (CH_Robot10.Enabled && CH_Robot10.Text == robot.RobotName)) { CH_Robot10.Text = robot.RobotName; CH_Robot10.Enabled = true; CH_Robot10.Visible = true; }
+                    else if (!CH_Robot11.Enabled || (CH_Robot11.Enabled && CH_Robot11.Text == robot.RobotName)) { CH_Robot11.Text = robot.RobotName; CH_Robot11.Enabled = true; CH_Robot11.Visible = true; }
+                    else if (!CH_Robot12.Enabled || (CH_Robot12.Enabled && CH_Robot12.Text == robot.RobotName)) { CH_Robot12.Text = robot.RobotName; CH_Robot12.Enabled = true; CH_Robot12.Visible = true; }
 
+                    var RobotUserCheck = ConfigData.DisplayRobotNames.FirstOrDefault(D => D.Key == robot.RobotName);
+                    if (RobotUserCheck.Value != null)
+                    {
+                        if (RobotUserCheck.Key == CH_Robot1.Text) CH_Robot1.Checked = true;
+                        else if (RobotUserCheck.Key == CH_Robot2.Text) CH_Robot2.Checked = true;
+                        else if (RobotUserCheck.Key == CH_Robot3.Text) CH_Robot3.Checked = true;
+                        else if (RobotUserCheck.Key == CH_Robot4.Text) CH_Robot4.Checked = true;
+                        else if (RobotUserCheck.Key == CH_Robot5.Text) CH_Robot5.Checked = true;
+                        else if (RobotUserCheck.Key == CH_Robot6.Text) CH_Robot6.Checked = true;
+                        else if (RobotUserCheck.Key == CH_Robot7.Text) CH_Robot7.Checked = true;
+                        else if (RobotUserCheck.Key == CH_Robot8.Text) CH_Robot8.Checked = true;
+                        else if (RobotUserCheck.Key == CH_Robot9.Text) CH_Robot9.Checked = true;
+                        else if (RobotUserCheck.Key == CH_Robot10.Text) CH_Robot10.Checked = true;
+                        else if (RobotUserCheck.Key == CH_Robot11.Text) CH_Robot11.Checked = true;
+                        else if (RobotUserCheck.Key == CH_Robot12.Text) CH_Robot12.Checked = true;
+                    }
+
+                }
             }
         }
 
@@ -373,7 +389,7 @@ namespace ACS.Monitor
         private void RobotCH_Click(object sender, EventArgs e)
         {
             var Chk_Btn = (ToolStripMenuItem)sender;
-            var Robot =ConfigData.Robots.FirstOrDefault(x => x.RobotName == Chk_Btn.Text);
+            var Robot = ConfigData.Robots.FirstOrDefault(x => x.RobotName == Chk_Btn.Text);
 
             if (Robot != null)
             {

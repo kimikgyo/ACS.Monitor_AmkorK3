@@ -38,7 +38,7 @@ namespace ACS.Monitor
         private Image backgroundImage = null;
         private float mapScale = 1.0f;
         private string mapName = null;
-
+        private string mapGuid = null;
         // mouse 관련 변수
         private Point mouseFirstLocation = Point.Empty;
         private Point mouseMoveOffset = Point.Empty;
@@ -81,7 +81,7 @@ namespace ACS.Monitor
         {
             // init map handler
             var logger = LogManager.GetLogger("Event");
-           
+
             try
             {
                 if (Flag)
@@ -94,7 +94,7 @@ namespace ACS.Monitor
             }
             catch
             {
-               
+
             }
 
             this.Map_ID.Text = floorMapIdConfig.FloorName;
@@ -102,7 +102,7 @@ namespace ACS.Monitor
             this.mapScale = floorMapIdConfig.MapData.mapScale;
             this.mouseFirstLocation = floorMapIdConfig.MapData.mouseFirstLocation;
             this.mouseMoveOffset = floorMapIdConfig.MapData.mouseMoveOffset;
-
+            this.mapGuid = floorMapIdConfig.MapID;
 
             mapProcessor = new FleetMapProcessor(logger, UriStr, mapName);
 
@@ -145,6 +145,7 @@ namespace ACS.Monitor
 
             // display info 체크박스 설정
             cb_DisplayInfo.Click += (s, e) => btnMapDownload.Visible = cb_DisplayInfo.Checked;
+
         }
 
 
@@ -328,7 +329,7 @@ namespace ACS.Monitor
 
 
             //DB ================ get robots info (로봇 전체[DataBase])
-            robotsInfo = ConfigData.Robots.Select(r => new FleetRobot()
+            robotsInfo = ConfigData.Robots.Where(r=>r.ACSRobotGroup == "AMB").Select(r => new FleetRobot()
             {
                 RobotID = r.RobotID,
                 RobotName = r.RobotName,
@@ -555,12 +556,23 @@ namespace ACS.Monitor
             // DB 이미지가 있을때 렌더링 이미지 생성
             if (image != null)
             {
-                if (FleetMapMode) renderImage = mapProcessor.GetRenderImage(pictureBox1.ClientSize, mouseMoveOffset, map, null, null, robotsInfo, mapScale, mapScale);
+                if (FleetMapMode) renderImage = mapProcessor.FleetGetRenderImage(pictureBox1.ClientSize, mouseMoveOffset, map, robotsInfo, mapScale, mapScale);
                 else
                 {
-
-
-                    renderImage = mapProcessor.GetRenderImage(pictureBox1.ClientSize, mouseMoveOffset, null, image, ConfigData.FleetPositions, robotsInfo, mapScale, mapScale);
+                    var FoorData = ConfigData.FloorMapIdConfigs.FirstOrDefault(f => f.MapID == MapID);
+                    if (FoorData != null)
+                        renderImage = mapProcessor.DBGetRenderImage(pictureBox1.ClientSize, mouseMoveOffset, image, ConfigData.FleetPositions, robotsInfo, FoorData, mapScale, mapScale);
+                    else
+                    {
+                        renderImage = blankBitmap;
+                        using (Graphics g = Graphics.FromImage(renderImage))
+                        using (Font textFont = new Font("Courier New", 20))
+                        {
+                            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+                            g.Clear(Color.Gray);
+                            g.DrawString("NO IMAGE", textFont, Brushes.Red, 50, 50);
+                        }
+                    }
                 }
             }
             // DB 이미지가 없을때는 빈 이미지 생성

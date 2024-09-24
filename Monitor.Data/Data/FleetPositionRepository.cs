@@ -30,7 +30,6 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<FleetPositionModel>("SELECT * FROM FleetPosition").ToList();
-                    con.Close();
                 }
             }
         }

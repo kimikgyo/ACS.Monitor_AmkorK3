@@ -43,7 +43,6 @@ namespace Monitor.Data
                 using (var con = new SqlConnection(connectionString))
                 {
                     return con.Query<PositionWaitTimeModel>("SELECT * FROM PositionWaitTime").ToList();
-                    con.Close();
                 }
             }
         }
