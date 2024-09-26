@@ -25,6 +25,11 @@ namespace ACS.Monitor
         private DataTable CallDataTable = new DataTable();
 
         private readonly Font textFont2 = new Font("Arial", 10);
+        private Color skinColor = Color.FromArgb(43, 52, 59);
+        private Color backColor = Color.FromArgb(30, 39, 46);
+        private Color mouseOverColor = Color.FromArgb(45, 65, 77);
+        private Color mouseOverTextColor = Color.FromArgb(57, 173, 233);
+        private Color nomalTextColor = Color.FromArgb(167, 168, 169);
 
         public CallSystem(MainForm mainForm, IUnitOfWork uow)
         {
@@ -32,18 +37,18 @@ namespace ACS.Monitor
 
             this.mainForm = mainForm;
             this.uow = uow;
-
             Init();
             DataTableColumnsCreate();
             GridViewColumnsCreate();
             GridViewInit();
-        }
 
+
+        }
         private void Init()
         {
-            #region CallSystemForm
 
-            this.BackColor = Color.White;
+            #region CallSystemForm
+            this.BackColor = backColor;
             this.FormBorderStyle = FormBorderStyle.None; // 테두리 제거
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -52,18 +57,10 @@ namespace ACS.Monitor
 
             #endregion
 
-            #region GroupBox
 
-            groupBox1.Text = "CallSystem";
-            groupBox1.Font = textFont2;
-
-            #endregion
 
             #region Button
-
             btn_StartZoneSetting.Text = "StartZoneSetting";
-            btn_Close.Text = "Close";
-            btn_Close.Visible = true;
             #endregion
 
             #region ComboBox
@@ -71,8 +68,9 @@ namespace ACS.Monitor
             // ComboBox Text입력 못하도록 설정
             combobox_StartZone.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             if (ConfigData.StartZone != null) combobox_StartZone.Text = ConfigData.StartZone.ToString();
-            
+
             #endregion
+
         }
 
         private void GridViewColumnsCreate()
@@ -122,6 +120,7 @@ namespace ACS.Monitor
             CallGridView.RowCellStyle += CallGridView_RowCellStyle; //CellStyle 변경 이벤트
 
             #endregion
+
         }
 
 
@@ -218,13 +217,6 @@ namespace ACS.Monitor
 
                     #endregion
                     break;
-                case "btn_Close":
-                    // DevExpress의 GridView에서 팝업을 숨기는 데 사용되는 메서드입니다.
-                    // 이 메서드는 일반적으로 특정 이벤트가 발생했을 때 팝업 메뉴나 편집기 등을 숨기기 위해 사용됩니다.
-                    mainForm.flyoutPanel2.HidePopup();
-                    mainForm.flyoutPanelControl2.Controls.Clear();
-                    Close();
-                    break;
             }
         }
 
@@ -300,7 +292,7 @@ namespace ACS.Monitor
             CallDataTable.Clear();
 
             #endregion
-    
+
             #region GridView Data Binding
             CallGridControl.DataSource = CallSystemData();
 
@@ -366,7 +358,7 @@ namespace ACS.Monitor
                 string CallName = $"{startZone}_{endZone}";
 
                 var Getmission_Specific = ConfigData.MissionsSpecifics.FirstOrDefault(x => x.CallName == CallName);
-                if(Getmission_Specific !=null)
+                if (Getmission_Specific != null)
                 {
                     Getmission_Specific.Cancel = "cancel";
                     uow.MissionsSpecifics.Update(Getmission_Specific);
@@ -403,17 +395,31 @@ namespace ACS.Monitor
             #endregion
         }
 
-     
+
 
         private void DisplayTimer_Tick(object sender, EventArgs e)
         {
-            DisplayTimer.Enabled = false;
-            ChangedStartZoneAlram();
-            CallSystemDisplay();
-            DisplayTimer.Interval = 1000;
-            DisplayTimer.Enabled = true;
+            Console.WriteLine($"{ConfigData.CallScreenActive}");
+
+            if (ConfigData.CallScreenActive)
+            {
+                DisplayTimer.Enabled = false;
+                ChangedStartZoneAlram();
+                CallSystemDisplay();
+                DisplayTimer.Interval = 1000;
+                DisplayTimer.Enabled = true;
+            }
+            else
+            {
+                DisplayTimer.Stop();
+                DisplayTimer.Enabled = false;
+                DisplayTimer.Dispose();
+                this.Close();
+                this.Dispose();
+            }
+
+
         }
 
-      
     }
 }

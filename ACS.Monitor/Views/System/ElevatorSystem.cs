@@ -281,11 +281,11 @@ namespace ACS.Monitor
                         GetElevator.UserNumber = ConfigData.UserNumber;
                         Message = $"사번 : {ConfigData.UserNumber} , 사원 : {ConfigData.UserName}이(가) 전체 엘레베이터를 OFF 요청 하였습니다.";
                         break;
-                    case "btn_Close":
-                        mainForm.flyoutPanel1.HidePopup();
-                        mainForm.flyoutPanelControl1.Controls.Clear();
-                        Close();
-                        break;
+                    //case "btn_Close":
+                    //    mainForm.flyoutPanel1.HidePopup();
+                    //    mainForm.flyoutPanelControl1.Controls.Clear();
+                    //    Close();
+                    //    break;
                 }
                 if (Message != null)
                 {

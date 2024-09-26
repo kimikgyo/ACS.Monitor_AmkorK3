@@ -37,7 +37,7 @@ namespace ACS.Monitor
 
         public Dictionary<string, string> Sub_DisplayMapNames = new Dictionary<string, string>();
         private DataTable RobotdataTable = new DataTable();
-
+        private Color backColor = Color.FromArgb(30, 39, 46);
 
 
         #region RepositroyItem 종류 정리
@@ -72,7 +72,7 @@ namespace ACS.Monitor
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            this.BackColor = Color.White;
+            this.BackColor = backColor;
             Form parentForm = Helpers.GetParentForm(this);
             if (parentForm != null) parentForm.FormClosed += ParentForm_FormClosed;
 
@@ -98,6 +98,10 @@ namespace ACS.Monitor
 
         }
 
+
+        private void FormInit()
+        {
+        }
         private void ParentForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             base.OnFormClosed(e);

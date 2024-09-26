@@ -63,7 +63,7 @@
             // AutoDisplay_Timer
             // 
             this.AutoDisplay_Timer.Enabled = true;
-            this.AutoDisplay_Timer.Interval = 500;
+            this.AutoDisplay_Timer.Interval = 1000;
             this.AutoDisplay_Timer.Tick += new System.EventHandler(this.AutoDisplay_Timer_Tick);
             // 
             // splitContainerControl1
@@ -73,7 +73,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainerControl1.CollapsePanel = DevExpress.XtraEditors.SplitCollapsePanel.Panel2;
             this.splitContainerControl1.Horizontal = false;
-            this.splitContainerControl1.Location = new System.Drawing.Point(12, 12);
+            this.splitContainerControl1.Location = new System.Drawing.Point(12, 50);
             this.splitContainerControl1.Name = "splitContainerControl1";
             // 
             // splitContainerControl1.Panel1
@@ -85,7 +85,7 @@
             // 
             this.splitContainerControl1.Panel2.Controls.Add(this.RobotGridControl);
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(1086, 412);
+            this.splitContainerControl1.Size = new System.Drawing.Size(1086, 482);
             this.splitContainerControl1.SplitterPosition = 207;
             this.splitContainerControl1.TabIndex = 9;
             // 
@@ -121,7 +121,7 @@
             this.ucMapView1.MapID = null;
             this.ucMapView1.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.ucMapView1.Name = "ucMapView1";
-            this.ucMapView1.Size = new System.Drawing.Size(387, 215);
+            this.ucMapView1.Size = new System.Drawing.Size(397, 215);
             this.ucMapView1.TabIndex = 11;
             this.ucMapView1.UriStr = null;
             // 
@@ -184,7 +184,7 @@
             this.RobotGridControl.Location = new System.Drawing.Point(3, 16);
             this.RobotGridControl.MainView = this.RobotGridView;
             this.RobotGridControl.Name = "RobotGridControl";
-            this.RobotGridControl.Size = new System.Drawing.Size(1080, 176);
+            this.RobotGridControl.Size = new System.Drawing.Size(1080, 246);
             this.RobotGridControl.TabIndex = 8;
             this.RobotGridControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.RobotGridView});
@@ -199,7 +199,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1110, 436);
+            this.ClientSize = new System.Drawing.Size(1110, 544);
             this.Controls.Add(this.splitContainerControl1);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

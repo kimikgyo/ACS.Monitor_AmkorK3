@@ -4,8 +4,8 @@
 		<OutputType>Library</OutputType>
 		<TargetFramework>net472</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
-		<!--<DefineConstants>LOCALDB</DefineConstants>-->
-		<DefineConstants>TESTDB</DefineConstants>
+		<DefineConstants>LOCALDB</DefineConstants>
+		<!--<DefineConstants>TESTDB</DefineConstants>-->
 	</PropertyGroup>
 
 	<ItemGroup>

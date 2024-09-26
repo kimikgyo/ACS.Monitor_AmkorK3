@@ -51,13 +51,17 @@ namespace ACS.Monitor
         private bool FleetMapMode = false;      // map mode (0=fleet / 1=FloorMapId DateBase)
         private bool FleetMapUpdate = true;     // db map image를 다시 로드해야 할때 true. (기동시에는 무조건 로드해야하므로 true)
         private Image DbMapImage = null;        // db map image
-
         private DateTime oldDbUpdatedTime = default; // keep map UpdateDime
         private readonly Bitmap blankBitmap = new Bitmap(2000, 2000);
-
+        private Color skinColor = Color.FromArgb(43, 52, 59);
+        private Color backColor = Color.FromArgb(30, 39, 46);
+        private Color mouseOverColor = Color.FromArgb(45, 65, 77);
+        private Color mouseOverTextColor = Color.FromArgb(57, 173, 233);
+        private Color nomalTextColor = Color.FromArgb(167, 168, 169);
         public UCMapView()
         {
             InitializeComponent();
+            this.BackColor = backColor;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -115,7 +119,13 @@ namespace ACS.Monitor
             if (backgroundImage == null) PictureBox1_Resize(this, null);
             this.pictureBox1.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Stretch; // 또는 다른 모드;// 변경 금지!!
             this.pictureBox1.Dock = DockStyle.Fill;
+            this.pictureBox1.BackColor = backColor;
             this.pictureBox1.Visible = true;
+
+
+            this.Map_ID.BackColor = backColor;
+            this.Map_ID.ForeColor = Color.White;
+            this.Map_ID.Anchor = AnchorStyles.Left | AnchorStyles.Top;
 
             // FleetMap
             chkFleetMap.CheckState = FleetMapMode ? CheckState.Checked : CheckState.Unchecked;
@@ -400,16 +410,16 @@ namespace ACS.Monitor
                 {
                     this.BeginInvoke(new Action(() =>
                     {
-                        button1.Visible = true;
-                        button2.Visible = true;
-                        button3.Visible = true;
-                        btnMapDownload.Visible = true;
+                        button1.Visible = false;
+                        button2.Visible = false;
+                        button3.Visible = false;
+                        btnMapDownload.Visible = false;
                         cb_DisplayInfo.Visible = true;
-                        chkCustomMap.Visible = true;
-                        chkACSDbMap.Visible = true;
-                        chkFleetMap.Visible = true;
-                        textBox1.Visible = true;
-                        lbl_ClickPosInfo.Visible = true;
+                        chkCustomMap.Visible = false;
+                        chkACSDbMap.Visible = false;
+                        chkFleetMap.Visible = false;
+                        textBox1.Visible = false;
+                        lbl_ClickPosInfo.Visible = false;
                     }));
                 }
 
@@ -823,16 +833,16 @@ namespace ACS.Monitor
             else if (customMapMode) customMapUpdate = true;
             this.BeginInvoke(new Action(() =>
             {
-                button1.Visible = true;
-                button2.Visible = true;
-                button3.Visible = true;
-                btnMapDownload.Visible = true;
-                cb_DisplayInfo.Visible = true;
-                chkCustomMap.Visible = true;
-                chkACSDbMap.Visible = true;
-                chkFleetMap.Visible = true;
-                textBox1.Visible = true;
-                lbl_ClickPosInfo.Visible = true;
+                button1.Visible = false;
+                button2.Visible = false;
+                button3.Visible = false;
+                btnMapDownload.Visible = false;
+                cb_DisplayInfo.Visible = false;
+                chkCustomMap.Visible = false;
+                chkACSDbMap.Visible = false;
+                chkFleetMap.Visible = false;
+                textBox1.Visible = false;
+                lbl_ClickPosInfo.Visible = false;
             }));
         }
 

@@ -53,7 +53,7 @@ namespace ACS.Monitor
             // 
             // cb_DisplayInfo
             // 
-            this.cb_DisplayInfo.Location = new System.Drawing.Point(95, 60);
+            this.cb_DisplayInfo.Location = new System.Drawing.Point(105, 13);
             this.cb_DisplayInfo.Name = "cb_DisplayInfo";
             this.cb_DisplayInfo.Properties.Caption = "display info.";
             this.cb_DisplayInfo.Size = new System.Drawing.Size(107, 20);
@@ -61,7 +61,7 @@ namespace ACS.Monitor
             // 
             // chkCustomMap
             // 
-            this.chkCustomMap.Location = new System.Drawing.Point(95, 86);
+            this.chkCustomMap.Location = new System.Drawing.Point(188, 497);
             this.chkCustomMap.Name = "chkCustomMap";
             this.chkCustomMap.Properties.Caption = "custom map";
             this.chkCustomMap.Size = new System.Drawing.Size(107, 20);
@@ -69,7 +69,7 @@ namespace ACS.Monitor
             // 
             // lbl_ClickPosInfo
             // 
-            this.lbl_ClickPosInfo.Location = new System.Drawing.Point(95, 112);
+            this.lbl_ClickPosInfo.Location = new System.Drawing.Point(188, 523);
             this.lbl_ClickPosInfo.Name = "lbl_ClickPosInfo";
             this.lbl_ClickPosInfo.Size = new System.Drawing.Size(31, 14);
             this.lbl_ClickPosInfo.TabIndex = 2;
@@ -77,7 +77,7 @@ namespace ACS.Monitor
             // 
             // btnMapDownload
             // 
-            this.btnMapDownload.Location = new System.Drawing.Point(395, 29);
+            this.btnMapDownload.Location = new System.Drawing.Point(174, 421);
             this.btnMapDownload.Name = "btnMapDownload";
             this.btnMapDownload.Size = new System.Drawing.Size(95, 23);
             this.btnMapDownload.TabIndex = 3;
@@ -86,7 +86,7 @@ namespace ACS.Monitor
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(367, 2);
+            this.button3.Location = new System.Drawing.Point(275, 418);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 4;
@@ -97,10 +97,10 @@ namespace ACS.Monitor
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.Location = new System.Drawing.Point(6, 53);
+            this.pictureBox1.Location = new System.Drawing.Point(6, 3);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
-            this.pictureBox1.Size = new System.Drawing.Size(508, 523);
+            this.pictureBox1.Size = new System.Drawing.Size(508, 548);
             this.pictureBox1.TabIndex = 5;
             // 
             // Map_ID
@@ -110,7 +110,7 @@ namespace ACS.Monitor
             this.Map_ID.Appearance.Options.UseBackColor = true;
             this.Map_ID.Appearance.Options.UseFont = true;
             this.Map_ID.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
-            this.Map_ID.Location = new System.Drawing.Point(6, 14);
+            this.Map_ID.Location = new System.Drawing.Point(6, 3);
             this.Map_ID.Name = "Map_ID";
             this.Map_ID.Size = new System.Drawing.Size(93, 126);
             this.Map_ID.TabIndex = 6;
@@ -118,7 +118,7 @@ namespace ACS.Monitor
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(220, 29);
+            this.button1.Location = new System.Drawing.Point(313, 440);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 7;
@@ -127,7 +127,7 @@ namespace ACS.Monitor
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(314, 29);
+            this.button2.Location = new System.Drawing.Point(407, 440);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 8;
@@ -136,14 +136,14 @@ namespace ACS.Monitor
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(81, 34);
+            this.textBox1.Location = new System.Drawing.Point(174, 445);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(133, 20);
             this.textBox1.TabIndex = 9;
             // 
             // chkACSDbMap
             // 
-            this.chkACSDbMap.Location = new System.Drawing.Point(208, 86);
+            this.chkACSDbMap.Location = new System.Drawing.Point(301, 497);
             this.chkACSDbMap.Name = "chkACSDbMap";
             this.chkACSDbMap.Properties.Caption = "ACSDbMap";
             this.chkACSDbMap.Size = new System.Drawing.Size(107, 20);
@@ -151,7 +151,7 @@ namespace ACS.Monitor
             // 
             // chkFleetMap
             // 
-            this.chkFleetMap.Location = new System.Drawing.Point(314, 86);
+            this.chkFleetMap.Location = new System.Drawing.Point(407, 497);
             this.chkFleetMap.Name = "chkFleetMap";
             this.chkFleetMap.Properties.Caption = "FleetMap";
             this.chkFleetMap.Size = new System.Drawing.Size(107, 20);
@@ -174,7 +174,7 @@ namespace ACS.Monitor
             this.Controls.Add(this.button3);
             this.Controls.Add(this.btnMapDownload);
             this.Name = "UCMapView";
-            this.Size = new System.Drawing.Size(516, 580);
+            this.Size = new System.Drawing.Size(516, 555);
             ((System.ComponentModel.ISupportInitialize)(this.cb_DisplayInfo.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkCustomMap.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1.Properties)).EndInit();
