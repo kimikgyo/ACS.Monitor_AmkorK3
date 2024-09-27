@@ -2,22 +2,23 @@
 using DevExpress.Utils;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Repository;
-using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Columns;
-using DevExpress.XtraGrid.Views.Base;
 using DevExpress.XtraGrid.Views.Grid;
 using Monitor.Common;
 using Monitor.Data;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ACS.Monitor
 {
-    public partial class CallSystem : Form
+    public partial class CallSystem : DevExpress.XtraEditors.XtraForm
     {
         private readonly MainForm mainForm;
         private readonly IUnitOfWork uow;
@@ -30,7 +31,9 @@ namespace ACS.Monitor
         private Color mouseOverColor = Color.FromArgb(45, 65, 77);
         private Color mouseOverTextColor = Color.FromArgb(57, 173, 233);
         private Color nomalTextColor = Color.FromArgb(167, 168, 169);
-
+        private Color buttonClickFlagColor = Color.FromArgb(57, 174, 234);
+        private Color Test1 = Color.FromArgb(58, 63, 67);
+        private Color Test = Color.FromArgb(27, 37, 45);
         public CallSystem(MainForm mainForm, IUnitOfWork uow)
         {
             InitializeComponent();
@@ -48,7 +51,13 @@ namespace ACS.Monitor
         {
 
             #region CallSystemForm
+            this.LookAndFeel.UseDefaultLookAndFeel = false;
+            this.LookAndFeel.SkinName = "DevExpress Dark Style";
+            this.LookAndFeel.SkinMaskColor = skinColor;
+            this.LookAndFeel.SkinMaskColor2 = skinColor;
             this.BackColor = backColor;
+            this.ForeColor = Color.White;
+
             this.FormBorderStyle = FormBorderStyle.None; // 테두리 제거
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -57,20 +66,36 @@ namespace ACS.Monitor
 
             #endregion
 
-
-
-            #region Button
-            btn_StartZoneSetting.Text = "StartZoneSetting";
+            #region
+            lbl_StartZone.AutoSizeMode = LabelAutoSizeMode.None;
+            lbl_StartZone.Size = new Size(101, 23);
+            lbl_StartZone.Text = "StartZone";
+            lbl_StartZone.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            lbl_StartZone.BackColor = buttonClickFlagColor;
+            lbl_StartZone.Appearance.BackColor = buttonClickFlagColor;
+            lbl_StartZone.Appearance.Options.UseBackColor = true;
+            lbl_StartZone.Cursor = Cursors.Hand;
+            lbl_StartZone.Click += Lbl_StartZone_Click;
             #endregion
+
 
             #region ComboBox
 
             // ComboBox Text입력 못하도록 설정
-            combobox_StartZone.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            if (ConfigData.StartZone != null) combobox_StartZone.Text = ConfigData.StartZone.ToString();
+            combobox_StartZone.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;                             
+            combobox_StartZone.Cursor = Cursors.Hand;
+            combobox_StartZone.Properties.Appearance.TextOptions.HAlignment = HorzAlignment.Center;
+            combobox_StartZone.Properties.Appearance.TextOptions.VAlignment = VertAlignment.Center;
 
+            if (ConfigData.StartZone != null) combobox_StartZone.Text = ConfigData.StartZone.ToString();
+            combobox_StartZone.Click += combobox_StartZone_Click;
             #endregion
 
+        }
+
+        private void Lbl_StartZone_Click(object sender, EventArgs e)
+        {
+            ConfigData.StartZone = combobox_StartZone.Text;
         }
 
         private void GridViewColumnsCreate()
@@ -205,20 +230,6 @@ namespace ACS.Monitor
             #endregion
         }
 
-        private void btn_Click(object sender, EventArgs e)
-        {
-            string btnName = ((SimpleButton)sender).Name;
-            switch (btnName)
-            {
-                case "btn_StartZoneSetting":
-                    #region Combobox 내용을 전역변수 저장
-
-                    ConfigData.StartZone = combobox_StartZone.Text;
-
-                    #endregion
-                    break;
-            }
-        }
 
         private void ChangedStartZoneAlram()
         {
@@ -226,13 +237,13 @@ namespace ACS.Monitor
             if (combobox_StartZone.Text != ConfigData.StartZone)
             {
                 //Button 배경색상변경
-                btn_StartZoneSetting.Appearance.BackColor = Color.Red;
-                btn_StartZoneSetting.Appearance.Options.UseBackColor = true;
+                lbl_StartZone.Appearance.BackColor = buttonClickFlagColor;
+                lbl_StartZone.Appearance.Options.UseBackColor = true;
             }
             else
             {
-                btn_StartZoneSetting.Appearance.BackColor = Color.White;
-                btn_StartZoneSetting.Appearance.Options.UseBackColor = true;
+                lbl_StartZone.Appearance.BackColor = backColor;
+                lbl_StartZone.Appearance.Options.UseBackColor = true;
 
             }
             #endregion
@@ -384,13 +395,34 @@ namespace ACS.Monitor
             if (Getmission_Specific == null)
             {
                 //기본 상태 색상
-                if (e.Column.FieldName == "DGV_CallFlag") e.Appearance.BackColor = Color.LightBlue; // 배경색 설정
-                else e.Appearance.BackColor = Color.White;
+                if (e.Column.FieldName == "DGV_CallFlag") e.Appearance.BackColor = buttonClickFlagColor; // 배경색 설정
+                else
+                {
+                    if (e.RowHandle % 2 == 0)
+                    {
+                        e.Appearance.BackColor = Test;
+                    }
+                    else
+                    {
+                        e.Appearance.BackColor = Test1;
+                    }
+                }
             }
             else
             {
                 //미션이 있을경우
-                e.Appearance.BackColor = Color.Red;
+                if(e.Column.FieldName == "DGV_CancelFlag") e.Appearance.BackColor = buttonClickFlagColor; // 배경색 설정
+                else
+                {
+                    if (e.RowHandle % 2 == 0)
+                    {
+                        e.Appearance.BackColor = Test;
+                    }
+                    else
+                    {
+                        e.Appearance.BackColor = Test1;
+                    }
+                }
             }
             #endregion
         }
@@ -420,6 +452,7 @@ namespace ACS.Monitor
 
 
         }
+
 
     }
 }

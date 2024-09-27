@@ -144,6 +144,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\RobotScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\RobotScreen.Designer.cs">
+      <DependentUpon>RobotScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Servies\GetDataControl.cs" />
     <Compile Include="Views\MapView\UCMapView.cs">
       <SubType>UserControl</SubType>
@@ -152,11 +158,11 @@
       <DependentUpon>UCMapView.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\SortableBindingList.cs" />
-    <Compile Include="Views\AutoScreen.cs">
+    <Compile Include="Views\MapView\MapView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\AutoScreen.designer.cs">
-      <DependentUpon>AutoScreen.cs</DependentUpon>
+    <Compile Include="Views\MapView\MapView.designer.cs">
+      <DependentUpon>MapView.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\ImageTransparency.cs" />
     <Compile Include="Utilities\Extensions.cs" />
@@ -173,27 +179,30 @@
     <Compile Include="Views\PopUp\UserNumberForm..designer.cs">
       <DependentUpon>UserNumberForm..cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\System\CallSystem.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\System\CallSystem.designer.cs">
-      <DependentUpon>CallSystem.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\System\ElevatorSystem.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\System\ElevatorSystem.designer.cs">
       <DependentUpon>ElevatorSystem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\System\CallSystem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\System\CallSystem.Designer.cs">
+      <DependentUpon>CallSystem.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\RobotScreen.resx">
+      <DependentUpon>RobotScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\MapView\UCMapView.resx">
       <DependentUpon>UCMapView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
-    <EmbeddedResource Include="Views\AutoScreen.resx">
-      <DependentUpon>AutoScreen.cs</DependentUpon>
+    <EmbeddedResource Include="Views\MapView\MapView.resx">
+      <DependentUpon>MapView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -203,11 +212,11 @@
     <EmbeddedResource Include="Views\PopUp\UserNumberForm..resx">
       <DependentUpon>UserNumberForm..cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\System\CallSystem.resx">
-      <DependentUpon>CallSystem.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\System\ElevatorSystem.resx">
       <DependentUpon>ElevatorSystem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\System\CallSystem.resx">
+      <DependentUpon>CallSystem.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Config\log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

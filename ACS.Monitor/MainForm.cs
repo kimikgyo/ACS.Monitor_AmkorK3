@@ -1,4 +1,5 @@
 ﻿using DevExpress.XtraBars;
+using DevExpress.XtraBars.Docking;
 using DevExpress.XtraBars.Navigation;
 using log4net;
 using Monitor.Common;
@@ -35,7 +36,7 @@ namespace ACS.Monitor
         private Color nomalTextColor = Color.FromArgb(167, 168, 169);
 
         private readonly UnitOfWork uow;
-        private AutoScreen ChildMainForm;
+        private MapView ChildMainForm;
         private ElevatorSystem elevator = null;
         private CallSystem CallSystem = null;
         private GetDataControl getDataControl = null;
@@ -153,7 +154,8 @@ namespace ACS.Monitor
             accordionControlSetting.Appearance.Hovered.ForeColor = mouseOverTextColor; // 마우스 오버 글자 색상
 
             #endregion
-            accordionControlMainView.Click += AccordionControl_Item_Click;
+            accordionControlMapView.Click += AccordionControl_Item_Click;
+            accordionControlRobot.Click += AccordionControl_Item_Click;
             accordionControlErrorLog.Click += AccordionControl_Item_Click;
             accordionControlJobLog.Click += AccordionControl_Item_Click;
             accordionControlCall.Click += AccordionControl_Item_Click;
@@ -166,17 +168,37 @@ namespace ACS.Monitor
 
             switch (itemName)
             {
-                case "accordionControlMainView":
-
+                case "accordionControlMapView":
+                    break;
+                case "accordionControlRobot":
+                    if (dockPanelRobot.Visibility == DockVisibility.Hidden)
+                    {
+                        //창이 생성이 되지 않았을경우
+                        dockPanelRobot.Visibility = DockVisibility.Visible;
+                        ConfigData.RobotScreenActive = true;
+                        var robotScreen = new RobotScreen();
+                        robotScreen.TopLevel = false;
+                        robotScreen.Dock = DockStyle.Fill;
+                        dockPanelRobot.BackColor = backColor;
+                        dockPanelRobot.Controls.Add(robotScreen);
+                        robotScreen.Activate();
+                        robotScreen.Show();
+                    }
+                    else if (dockPanelRobot.Visibility == DockVisibility.AutoHide)
+                    {
+                        //창이 숨겨져 있을경우
+                        dockPanelRobot.Visibility = DockVisibility.Visible;
+                    }
                     break;
                 case "accordionControlErrorLog":
                     break;
                 case "accordionControlJobLog":
                     break;
                 case "accordionControlCall":
-                    if (dockPanelCall.Visibility != DevExpress.XtraBars.Docking.DockVisibility.Visible)
+                    if (dockPanelCall.Visibility == DockVisibility.Hidden)
                     {
-                        dockPanelCall.Visibility = DevExpress.XtraBars.Docking.DockVisibility.Visible;
+                        //창이 생성이 되지 않았을경우
+                        dockPanelCall.Visibility = DockVisibility.Visible;
                         ConfigData.CallScreenActive = true;
                         var CallSystem = new CallSystem(this, uow);
                         CallSystem.TopLevel = false;
@@ -186,6 +208,12 @@ namespace ACS.Monitor
                         CallSystem.Activate();
                         CallSystem.Show();
                     }
+                    else if(dockPanelCall.Visibility == DockVisibility.AutoHide)
+                    {
+                        //창이 숨겨져 있을경우
+                        dockPanelCall.Visibility = DockVisibility.Visible;
+                    }
+
                     break;
                 case "accordionControlElevator":
                     break;
@@ -197,13 +225,27 @@ namespace ACS.Monitor
 
         private void InitDockPanel()
         {
-            //dockManager1 = true;
-            //dockPanel 사이즈 조절 안됨!!
+            #region Call DockPanel 
+            dockPanelCall.BackColor = backColor;
             dockPanelCall.Text = "Call";
             dockPanelCall.Options.AllowDockAsTabbedDocument = false;  // 문서 탭 형태가 아닌 도킹
             dockPanelCall.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
             dockPanelCall.Visibility = DevExpress.XtraBars.Docking.DockVisibility.Hidden;
+            #endregion
+
+            #region Robot DockPanel
+            dockPanelRobot.BackColor = backColor;
+            dockPanelRobot.Text = "Robot";
+            dockPanelRobot.Options.AllowDockAsTabbedDocument = false;  // 문서 탭 형태가 아닌 도킹
+            dockPanelRobot.Dock = DevExpress.XtraBars.Docking.DockingStyle.Bottom;
+            dockPanelRobot.Visibility = DevExpress.XtraBars.Docking.DockVisibility.Hidden;
+            #endregion
+
+
+            #region DockPanel Event
             dockPanelCall.ClosingPanel += DockPanelCall_ClosingPanel;
+
+            #endregion
         }
 
         private void DockPanelCall_ClosingPanel(object sender, DevExpress.XtraBars.Docking.DockPanelCancelEventArgs e)
@@ -218,7 +260,7 @@ namespace ACS.Monitor
         /// </summary>
         private void ChildMainFormFunc()
         {
-            ChildMainForm = new AutoScreen(this, uow);
+            ChildMainForm = new MapView(this, uow);
             ChildMainForm.TopLevel = false;
             ChildMainForm.Dock = DockStyle.Fill;
             fluentDesignFormContainer1.BackColor = Color.White;

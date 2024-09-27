@@ -1,44 +1,29 @@
-﻿using Dapper;
+﻿using ACS.Monitor.Utilities;
+using DevExpress.Data;
 using DevExpress.Utils;
+using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Repository;
+using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
-using ACS.Monitor.Utilities;
+using Monitor.Common;
 using Monitor.Data;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using Monitor.Common;
-using Newtonsoft.Json;
-using DevExpress.XtraGrid.Columns;
-using DevExpress.Data;
 
 namespace ACS.Monitor
 {
-    public partial class AutoScreen : Form
+    public partial class RobotScreen : DevExpress.XtraEditors.XtraForm
     {
-        public string S_UserNumber = "";
-        public string S_UserName = "";
-
-        private readonly MainForm mainForm;
-        private readonly IUnitOfWork uow;
-        private readonly Font textFont1 = new Font("고딕", 12);
-        private readonly Font textFont2 = new Font("Arial", 10);
-        private readonly Font textFont3 = new Font("Arial", 9);
-        private readonly Font gridFont1 = new Font("Arial", 10, FontStyle.Bold);
-        private readonly Font gridFont2 = new Font("Arial", 9, FontStyle.Bold);
-
-        public Dictionary<string, string> Sub_DisplayMapNames = new Dictionary<string, string>();
         private DataTable RobotdataTable = new DataTable();
-        private Color backColor = Color.FromArgb(30, 39, 46);
-
 
         #region RepositroyItem 종류 정리
         //RepositoryItemTextEdit: 텍스트 입력을 위한 편집기입니다.
@@ -53,59 +38,50 @@ namespace ACS.Monitor
         //RepositoryItemMemoExEdit: 다중 행 텍스트 입력을 위한 편집기입니다.
         #endregion
 
-        public AutoScreen(MainForm mainForm, IUnitOfWork uow)
+        private Color skinColor = Color.FromArgb(43, 52, 59);
+        private Color backColor = Color.FromArgb(30, 39, 46);
+        private Color mouseOverColor = Color.FromArgb(45, 65, 77);
+        private Color mouseOverTextColor = Color.FromArgb(57, 173, 233);
+        private Color nomalTextColor = Color.FromArgb(167, 168, 169);
+        private Color buttonClickFlagColor = Color.FromArgb(57, 174, 234);
+        private Color Test1 = Color.FromArgb(58, 63, 67);
+        private Color Test = Color.FromArgb(27, 37, 45);
+
+        public RobotScreen()
         {
             InitializeComponent();
-
-            this.mainForm = mainForm;
-            this.uow = uow;
-
-            //배경색 지정
-            this.BackColor = Color.FromArgb(249, 219, 186);
-
             GridViewInit();
             GridViewColumnsCreate();
             DataTableColumnsCreate();
-
+            Init();
         }
-
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad(e);
-            this.BackColor = backColor;
-            Form parentForm = Helpers.GetParentForm(this);
-            if (parentForm != null) parentForm.FormClosed += ParentForm_FormClosed;
-
-
-#if MIRDEMO
-            string fleetIp = "localhost:5000";
-#else
-            string fleetIp = ConfigurationManager.AppSettings["sFleet_IP_Address_SV"];
-#endif
-            #region Config Map Name 가져오기
-
-            string MapName = ConfigurationManager.AppSettings["MapNames"];
-            ConfigData.DisplayMapNames = Helpers.ConvertStringToDictionary(MapName) ?? new Dictionary<string, string>();
-
-            #endregion
-
             #region Config Robot Name 가져오기
 
             string RobotName = ConfigurationManager.AppSettings["RobotNames"];
             ConfigData.DisplayRobotNames = Helpers.ConvertStringToDictionary(RobotName) ?? new Dictionary<string, string>();
 
             #endregion
-
         }
-
-
-        private void FormInit()
+        private void Init()
         {
+            #region Form
+            this.LookAndFeel.UseDefaultLookAndFeel = false;
+            this.LookAndFeel.SkinName = "DevExpress Dark Style";
+            this.LookAndFeel.SkinMaskColor = skinColor;
+            this.LookAndFeel.SkinMaskColor2 = skinColor;
+            this.BackColor = backColor;
+            this.ForeColor = Color.White;
+
+            this.FormBorderStyle = FormBorderStyle.None; // 테두리 제거
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.WindowState = FormWindowState.Normal; // 전체 화면 설정
+            this.Text = "Robot";
+            #endregion
         }
-        private void ParentForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            base.OnFormClosed(e);
-        }
+
 
         private void GridViewInit()
         {
@@ -230,11 +206,60 @@ namespace ACS.Monitor
             #endregion
 
             #region GridView Event 설정
-
-            RobotGridView.RowCellStyle += RobotGridView_RowCellStyle; ; //CellStyle 변경 이벤트
+            RobotGridView.RowCellStyle += RobotGridView_RowCellStyle; //CellStyle 변경 이벤트
             RobotGridView.DoubleClick += RobotGridView_DoubleClick;     //Double Click 이벤트
             RobotGridView.CustomRowCellEdit += RobotGridView_CustomRowCellEdit; //편집컨트롤 사용하기
             #endregion
+        }
+
+        private void RobotGridView_RowCellStyle(object sender, RowCellStyleEventArgs e)
+        {
+            //UI 요소에서 텍스트의 수평 정렬을 중앙으로 설정하는 코드입니다. 주로 그리드의 셀, 레이아웃, 또는 기타 컨트롤의 표시 스타일을 조정할 때 사용됩니다.
+            e.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            //UI 요소에서 텍스트의 수직 정렬을 중앙으로 설정하는 코드입니다. 주로 그리드의 셀 또는 다른 컨트롤의 표시 스타일을 조정할 때 사용됩니다.
+            e.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center;
+            //UI 요소에서 셀의 배경색을 사용자 정의할 때 사용하는 속성입니다. 이 속성을 true로 설정하면 지정한 배경색이 적용되며, 기본 배경색 대신 사용자 정의 색상이 사용됩니다.
+            e.Appearance.Options.UseBackColor = true;
+
+
+
+            if (e.Column == RobotGridView.Columns["DGV_MiR_State"])
+            {
+                string category = RobotGridView.GetRowCellDisplayText(e.RowHandle, RobotGridView.Columns["DGV_MiR_State"]);
+
+                if (category == "Ready")
+                    e.Appearance.BackColor = Color.LightBlue;
+                else if (category == "Pause" || category == "ManualControl")
+                    e.Appearance.BackColor = Color.Yellow;
+                else if (category == "Executing")
+                    e.Appearance.BackColor = Color.Chartreuse;
+                else if (category == "Error" || category == "EmergencyStop")
+                    e.Appearance.BackColor = Color.OrangeRed;
+                else if (category == "unavailable")
+                    e.Appearance.BackColor = Color.DimGray;
+                else
+                {
+                    if (e.RowHandle % 2 == 0)
+                    {
+                        e.Appearance.BackColor = Test;
+                    }
+                    else
+                    {
+                        e.Appearance.BackColor = Test1;
+                    }
+                }
+            }
+            else
+            {
+                if (e.RowHandle % 2 == 0)
+                {
+                    e.Appearance.BackColor = Test;
+                }
+                else
+                {
+                    e.Appearance.BackColor = Test1;
+                }
+            }
         }
 
         private void RobotGridView_CustomRowCellEdit(object sender, CustomRowCellEditEventArgs e)
@@ -305,121 +330,83 @@ namespace ACS.Monitor
                     var RobotZoomMapDate = ConfigData.FloorMapIdConfigs.FirstOrDefault(x => x.MapID == RobotData.MapID);
                     if (RobotZoomMapDate != null)
                     {
-                        UCMapView uCMapView = null;
-                        if (RobotZoomMapDate.MapData.MapViewName == "ucMapView1") uCMapView = ucMapView1;
-                        else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView2") uCMapView = ucMapView2;
-                        else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView3") uCMapView = ucMapView3;
-                        //else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView4") uCMapView = ucMapView4;
-                        //else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView5") uCMapView = ucMapView5;
-                        //else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView6") uCMapView = ucMapView6;
+                        //UCMapView uCMapView = null;
+                        //if (RobotZoomMapDate.MapData.MapViewName == "ucMapView1") uCMapView = ucMapView1;
+                        //else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView2") uCMapView = ucMapView2;
+                        //else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView3") uCMapView = ucMapView3;
+                        ////else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView4") uCMapView = ucMapView4;
+                        ////else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView5") uCMapView = ucMapView5;
+                        ////else if (RobotZoomMapDate.MapData.MapViewName == "ucMapView6") uCMapView = ucMapView6;
 
-                        if (uCMapView != null)
-                        {
-                            uCMapView.StopLoop();
-                            //T3F
-                            //Test 수정진행중 [김익교]
-                            //value.Data.mouseMoveOffset = new Point(-1375, -106);
-                            //value.Data.mouseFirstLocation = new Point(346, 176);
-                            if (RobotZoomMapDate.MapID == RobotData.MapID && RobotZoomMapDate.FloorIndex == "B1F")
-                            {
-                                //OFFSet =0 , =0 
-                                //robot좌표 31.4 /148.8
-                                //X는 31.4보다 작으면 +
-                                //X는 31.4보다 크면 -
-                                //Y는 148.8보다 작으면 -
-                                //Y는 148.8보다 크면 +
-                                int MapSizeWidth = (820 - uCMapView.ClientSize.Width) / 2;
-                                int MapSizeHeight = (311 - uCMapView.ClientSize.Height) / 2;
+                        //if (uCMapView != null)
+                        //{
+                        //    uCMapView.StopLoop();
+                        //    //T3F
+                        //    //Test 수정진행중 [김익교]
+                        //    //value.Data.mouseMoveOffset = new Point(-1375, -106);
+                        //    //value.Data.mouseFirstLocation = new Point(346, 176);
+                        //    if (RobotZoomMapDate.MapID == RobotData.MapID && RobotZoomMapDate.FloorIndex == "B1F")
+                        //    {
+                        //        //OFFSet =0 , =0 
+                        //        //robot좌표 31.4 /148.8
+                        //        //X는 31.4보다 작으면 +
+                        //        //X는 31.4보다 크면 -
+                        //        //Y는 148.8보다 작으면 -
+                        //        //Y는 148.8보다 크면 +
+                        //        int MapSizeWidth = (820 - uCMapView.ClientSize.Width) / 2;
+                        //        int MapSizeHeight = (311 - uCMapView.ClientSize.Height) / 2;
 
-                                double OffSetRobotPOSX = (RobotData.Position_X - 31.4) * -1;
-                                double OffsetRobotPOSY = (148.8 - RobotData.Position_Y) * -1;
-                                int OffSetx = (int)Math.Round(OffSetRobotPOSX * 9.2) - MapSizeWidth;
-                                int Offsety = (int)Math.Round(OffsetRobotPOSY * 10.2) - MapSizeHeight;
-                                RobotZoomMapDate.MapData.mapScale = (float)0.5;
-                                RobotZoomMapDate.MapData.mouseMoveOffset = new Point(OffSetx, Offsety);
-                            }
+                        //        double OffSetRobotPOSX = (RobotData.Position_X - 31.4) * -1;
+                        //        double OffsetRobotPOSY = (148.8 - RobotData.Position_Y) * -1;
+                        //        int OffSetx = (int)Math.Round(OffSetRobotPOSX * 9.2) - MapSizeWidth;
+                        //        int Offsety = (int)Math.Round(OffsetRobotPOSY * 10.2) - MapSizeHeight;
+                        //        RobotZoomMapDate.MapData.mapScale = (float)0.5;
+                        //        RobotZoomMapDate.MapData.mouseMoveOffset = new Point(OffSetx, Offsety);
+                        //    }
 
-                            else if (RobotZoomMapDate.MapID == RobotData.MapID && RobotZoomMapDate.FloorIndex == "1F") // M3F
-                            {
-                                //OFFSet =0 , =0 
-                                //robot좌표 29.650 /124.600
-                                //X는 29.6보다 작으면 +
-                                //X는 29.6보다 크면 -
-                                //Y는 124.6보다 작으면 -
-                                //Y는 124.6보다 크면 +
-                                int MapSizeWidth = (820 - uCMapView.ClientSize.Width) / 2;
-                                int MapSizeHeight = (311 - uCMapView.ClientSize.Height) / 2;
+                        //    else if (RobotZoomMapDate.MapID == RobotData.MapID && RobotZoomMapDate.FloorIndex == "1F") // M3F
+                        //    {
+                        //        //OFFSet =0 , =0 
+                        //        //robot좌표 29.650 /124.600
+                        //        //X는 29.6보다 작으면 +
+                        //        //X는 29.6보다 크면 -
+                        //        //Y는 124.6보다 작으면 -
+                        //        //Y는 124.6보다 크면 +
+                        //        int MapSizeWidth = (820 - uCMapView.ClientSize.Width) / 2;
+                        //        int MapSizeHeight = (311 - uCMapView.ClientSize.Height) / 2;
 
-                                double OffSetRobotPOSX = (RobotData.Position_X - 30) * -1;
-                                double OffsetRobotPOSY = (124.6 - RobotData.Position_Y) * -1;
-                                int OffSetx = (int)Math.Round(OffSetRobotPOSX * 9.2) - MapSizeWidth;
-                                int Offsety = (int)Math.Round(OffsetRobotPOSY * 10.2) - MapSizeHeight;
-                                RobotZoomMapDate.MapData.mapScale = (float)0.5;
-                                RobotZoomMapDate.MapData.mouseMoveOffset = new Point(OffSetx, Offsety);
-                            }
+                        //        double OffSetRobotPOSX = (RobotData.Position_X - 30) * -1;
+                        //        double OffsetRobotPOSY = (124.6 - RobotData.Position_Y) * -1;
+                        //        int OffSetx = (int)Math.Round(OffSetRobotPOSX * 9.2) - MapSizeWidth;
+                        //        int Offsety = (int)Math.Round(OffsetRobotPOSY * 10.2) - MapSizeHeight;
+                        //        RobotZoomMapDate.MapData.mapScale = (float)0.5;
+                        //        RobotZoomMapDate.MapData.mouseMoveOffset = new Point(OffSetx, Offsety);
+                        //    }
 
-                            else if (RobotZoomMapDate.MapID == RobotData.MapID && RobotZoomMapDate.FloorIndex == "2F") // T4F
-                            {
-                                //OFFSet =0 , =0 
-                                //robot좌표 29.800 /50.300
-                                //X는 29.8보다 작으면 +
-                                //X는 29.8보다 크면 -
-                                //Y는 60.3보다 작으면 -
-                                //Y는 60.3보다 크면 +
-                                int MapSizeWidth = (820 - uCMapView.ClientSize.Width) / 2;
-                                int MapSizeHeight = (311 - uCMapView.ClientSize.Height) / 2;
-                                double OffSetRobotPOSX = (RobotData.Position_X - 29.8) * -1;
-                                double OffsetRobotPOSY = (60.3 - RobotData.Position_Y) * -1;
-                                int OffSetx = (int)Math.Round(OffSetRobotPOSX * 9.2) - MapSizeWidth;
-                                int Offsety = (int)Math.Round(OffsetRobotPOSY * 10.2) - MapSizeHeight;
-                                RobotZoomMapDate.MapData.mapScale = (float)0.8;
-                                RobotZoomMapDate.MapData.mouseMoveOffset = new Point(OffSetx, Offsety);
-                            }
+                        //    else if (RobotZoomMapDate.MapID == RobotData.MapID && RobotZoomMapDate.FloorIndex == "2F") // T4F
+                        //    {
+                        //        //OFFSet =0 , =0 
+                        //        //robot좌표 29.800 /50.300
+                        //        //X는 29.8보다 작으면 +
+                        //        //X는 29.8보다 크면 -
+                        //        //Y는 60.3보다 작으면 -
+                        //        //Y는 60.3보다 크면 +
+                        //        int MapSizeWidth = (820 - uCMapView.ClientSize.Width) / 2;
+                        //        int MapSizeHeight = (311 - uCMapView.ClientSize.Height) / 2;
+                        //        double OffSetRobotPOSX = (RobotData.Position_X - 29.8) * -1;
+                        //        double OffsetRobotPOSY = (60.3 - RobotData.Position_Y) * -1;
+                        //        int OffSetx = (int)Math.Round(OffSetRobotPOSX * 9.2) - MapSizeWidth;
+                        //        int Offsety = (int)Math.Round(OffsetRobotPOSY * 10.2) - MapSizeHeight;
+                        //        RobotZoomMapDate.MapData.mapScale = (float)0.8;
+                        //        RobotZoomMapDate.MapData.mouseMoveOffset = new Point(OffSetx, Offsety);
+                        //    }
 
-                            mainForm.DbDrawUCMApView(uCMapView, RobotZoomMapDate, null, false);
+                        //    mainForm.DbDrawUCMApView(uCMapView, RobotZoomMapDate, null, false);
 
-                        }
                     }
-                    else
-                        MessageBox.Show("로봇을 찾을 수 없습니다.");
                 }
-            }
-        }
-
-        private void RobotGridView_RowCellStyle(object sender, RowCellStyleEventArgs e)
-        {
-            //UI 요소에서 텍스트의 수평 정렬을 중앙으로 설정하는 코드입니다. 주로 그리드의 셀, 레이아웃, 또는 기타 컨트롤의 표시 스타일을 조정할 때 사용됩니다.
-            e.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            //UI 요소에서 텍스트의 수직 정렬을 중앙으로 설정하는 코드입니다. 주로 그리드의 셀 또는 다른 컨트롤의 표시 스타일을 조정할 때 사용됩니다.
-            e.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center;
-            //UI 요소에서 셀의 배경색을 사용자 정의할 때 사용하는 속성입니다. 이 속성을 true로 설정하면 지정한 배경색이 적용되며, 기본 배경색 대신 사용자 정의 색상이 사용됩니다.
-            e.Appearance.Options.UseBackColor = true;
-
-            //DevExpress의 GridControl에서 특정 행과 셀의 표시 텍스트를 가져오는 데 사용됩니다. 이 메서드는 주로 데이터의 시각적 표현을 사용자 정의할 때 유용합니다.
-            string strPosition = RobotGridView.GetRowCellDisplayText(e.RowHandle, "DGV_PositionWaitTime");
-            string strRobotName = RobotGridView.GetRowCellDisplayText(e.RowHandle, "DGV_MiR_Status_Robot_Alias");
-
-            if (strPosition == "Area")
-            {
-
-            }
-            else
-                e.Appearance.BackColor = Color.Transparent;
-
-            if (e.Column == RobotGridView.Columns["DGV_MiR_State"])
-            {
-                string category = RobotGridView.GetRowCellDisplayText(e.RowHandle, RobotGridView.Columns["DGV_MiR_State"]);
-
-                if (category == "Ready")
-                    e.Appearance.BackColor = Color.LightBlue;
-                else if (category == "Pause" || category == "ManualControl")
-                    e.Appearance.BackColor = Color.Yellow;
-                else if (category == "Executing")
-                    e.Appearance.BackColor = Color.Chartreuse;
-                else if (category == "Error" || category == "EmergencyStop")
-                    e.Appearance.BackColor = Color.OrangeRed;
-                else if (category == "unavailable")
-                    e.Appearance.BackColor = Color.DimGray;
+                else
+                    MessageBox.Show("로봇을 찾을 수 없습니다.");
             }
         }
 
@@ -599,205 +586,31 @@ namespace ACS.Monitor
             }
             catch (Exception ex)
             {
-                mainForm.EventLog("AutoScreen", "subFunc_MiR_Status_Display() Fail = " + ex);
-                mainForm.ACS_UI_Log("AutoScreen" + "/" + "subFunc_MiR_Status_Display() Fail = " + ex);
+                //mainForm.EventLog("AutoScreen", "subFunc_MiR_Status_Display() Fail = " + ex);
+                //mainForm.ACS_UI_Log("AutoScreen" + "/" + "subFunc_MiR_Status_Display() Fail = " + ex);
             }
         }
 
-        #region Map 관련
-
-        private void Map_Load()
+        private void DisplayTimer_Tick(object sender, EventArgs e)
         {
-            //선택한 모니터가 있는지 확인
-            if (ConfigData.DisplayMapNames is Dictionary<string, string>)
+
+            if (ConfigData.RobotScreenActive)
             {
-                //선택한 모니터랑 이전 선택한 모니터 비교
-                if (ConfigData.DisplayMapNames.Except(Sub_DisplayMapNames).Any() || ConfigData.DisplayMapNames.Count != Sub_DisplayMapNames.Count)
-                {
-                    //값 복사
-                    Sub_DisplayMapNames.Clear();
-
-                    foreach (KeyValuePair<string, string> pair in ConfigData.DisplayMapNames)
-                        Sub_DisplayMapNames.Add(pair.Key, pair.Value);
-
-                    //TableLayoutPanel 행 열 정하기
-                    TableLayoutPanelRowColumn();
-
-                    //TableLayoutPanel안에 지도 띄우기
-                    DrawMap();
-                }
-                else if (ConfigData.DisplayMapNames.Count == 0)//선택한 화면이 없을 경우
-                {
-                    //TableLayoutPanel 행 열 정하기
-                    TableLayoutPanelRowColumn();
-                }
+                DisplayTimer.Enabled = false;
+                RobotStatusDisplay();
+                DisplayTimer.Interval = 1000; // 타이머 인터벌 1초로 설정!
+                DisplayTimer.Enabled = true;
             }
+            else
+            {
+                DisplayTimer.Stop();
+                DisplayTimer.Enabled = false;
+                DisplayTimer.Dispose();
+                this.Close();
+                this.Dispose();
+            }
+
+           
         }
-        private void DrawMap()
-        {
-            //Map Task 끄기
-            MapInit();
-            //Map 그리기
-            int Datacount = 1;
-            foreach (var item in ConfigData.DisplayMapNames)
-            {
-                var FloorMapdata = ConfigData.FloorMapIdConfigs.FirstOrDefault(f => f.FloorIndex == item.Key);
-                if (FloorMapdata != null)
-                {
-                    if (FloorMapdata.MapData.mapScale == 0)
-                    {
-                        FloorMapdata.MapData.mapScale = 0.600f;
-                        FloorMapdata.MapData.mouseFirstLocation = new Point(559, 420);
-                        FloorMapdata.MapData.mouseMoveOffset = new Point(-0, 250);
-                    }
-                    if (Datacount == 1)
-                    {
-                        FloorMapdata.MapData.MapViewName = "ucMapView1";
-                        mainForm.DbDrawUCMApView(ucMapView1, FloorMapdata, null, true);
-                    }
-                    else if (Datacount == 2)
-                    {
-                        FloorMapdata.MapData.MapViewName = "ucMapView2";
-                        mainForm.DbDrawUCMApView(ucMapView2, FloorMapdata, null, true);
-                    }
-                    else if (Datacount == 3)
-                    {
-                        FloorMapdata.MapData.MapViewName = "ucMapView3";
-                        mainForm.DbDrawUCMApView(ucMapView3, FloorMapdata, null, true);
-                    }
-                }
-                Datacount++;
-            }
-        }
-
-        private void MapInit()
-        {
-            #region UCMAPView 전체 초기화
-
-            ucMapView1.ReStartResetData();
-            ucMapView2.ReStartResetData();
-            ucMapView3.ReStartResetData();
-            #endregion
-        }
-        private void TableLayoutPanelRowColumn()
-        {
-            //GridControl 크기 조절
-            splitContainerControl1.SplitterPosition = ((this.Height / 3) * 2);
-
-            if (ConfigData.DisplayMapNames.Count == 0)
-            {
-                #region User Map Select Count == 0  MapViewPanel 크기조절
-                splitContainerControl2.Horizontal = true;
-                //splitContainer2.IsSplitterFixed 을 true로 설정하면 사용자가 분할 바를 이동할 수 없게 되어, 두 패널의 크기가 고정됩니다.
-                splitContainerControl2.IsSplitterFixed = false;
-                //splitContainer2.SplitterPosition 속성은 SplitContainer의 분할 바 위치를 설정합니다
-                splitContainerControl2.SplitterPosition = splitContainerControl2.Height;
-                //splitContainer2.PanelVisibility 속성을 사용하여 하나의 패널만 표시하거나 두 패널 모두 표시할 수 있습니다.
-                splitContainerControl2.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Panel1;
-
-                splitContainerControl3.Horizontal = true;
-                splitContainerControl3.IsSplitterFixed = false;
-                splitContainerControl3.SplitterPosition = splitContainerControl3.Height;
-                splitContainerControl3.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Panel1;
-                //Horizontal 속성은 해당 패널이나 요소가 수평으로 배치되도록 설정하는 것일 수 있습니다.
-                splitContainerControl2.Horizontal = false;
-                //SP_Top.IsSplitterFixed 을 false로 설정하면 사용자가 분할 바를 드래그하여 두 패널의 크기를 조정할 수 있습니다.
-                splitContainerControl2.IsSplitterFixed = false;
-                splitContainerControl2.SplitterPosition = splitContainerControl2.Height;
-                splitContainerControl2.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Panel1;
-
-                splitContainerControl2.Visible = false;
-                splitContainerControl2.Enabled = false;
-                splitContainerControl3.Visible = false;
-                splitContainerControl3.Enabled = false;
-
-
-                #endregion
-            }
-            else if (ConfigData.DisplayMapNames.Count == 1)
-            {
-                #region User Map Select Count == 1  MapViewPanel 크기조절
-                splitContainerControl2.Horizontal = true;
-                splitContainerControl2.IsSplitterFixed = false;
-                splitContainerControl2.SplitterPosition = splitContainerControl2.Height;
-                splitContainerControl2.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Panel1;
-
-                splitContainerControl3.Horizontal = true;
-                splitContainerControl3.IsSplitterFixed = false;
-                splitContainerControl3.SplitterPosition = splitContainerControl3.Height;
-                splitContainerControl3.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Panel1;
-
-                //splitContainerControl2.Horizontal = true;
-                //splitContainerControl2.IsSplitterFixed = false;
-                //splitContainerControl2.SplitterPosition = splitContainerControl2.Height;
-                //splitContainerControl2.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Panel1;
-
-                splitContainerControl2.Visible = true;
-                splitContainerControl2.Enabled = true;
-                splitContainerControl3.Visible = false;
-                splitContainerControl3.Enabled = false;
-
-
-                #endregion
-            }
-            else if (ConfigData.DisplayMapNames.Count == 2)
-            {
-                #region User Map Select Count == 2  MapViewPanel 크기조절
-
-                splitContainerControl3.Horizontal = true;
-                splitContainerControl3.IsSplitterFixed = false;
-                splitContainerControl3.SplitterPosition = splitContainerControl3.Height;
-                splitContainerControl3.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Panel1;
-
-                splitContainerControl2.Horizontal = true;
-                splitContainerControl2.IsSplitterFixed = false;
-                splitContainerControl2.SplitterPosition = splitContainerControl2.Height;
-                splitContainerControl2.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Both;
-
-                splitContainerControl3.Visible = true;
-                splitContainerControl3.Enabled = true;
-                splitContainerControl2.Visible = true;
-                splitContainerControl2.Enabled = true;
-
-                #endregion
-            }
-            else if (ConfigData.DisplayMapNames.Count == 3)
-            {
-                #region User Map Select Count == 3  MapViewPanel 크기조절
-                splitContainerControl3.Horizontal = true;
-                splitContainerControl3.IsSplitterFixed = false;
-                splitContainerControl3.SplitterPosition = splitContainerControl3.Height;
-                splitContainerControl3.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Panel1;
-
-                splitContainerControl2.IsSplitterFixed = false;
-                splitContainerControl2.SplitterPosition = splitContainerControl2.Height;
-                splitContainerControl2.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Both;
-
-                //splitContainerControl3.Horizontal = true;
-                //splitContainerControl3.IsSplitterFixed = false;
-                splitContainerControl3.SplitterPosition = splitContainerControl3.Width / 2;
-                splitContainerControl3.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Both;
-
-                splitContainerControl3.Visible = true;
-                splitContainerControl3.Enabled = true;
-                splitContainerControl2.Visible = true;
-                splitContainerControl2.Enabled = true;
-
-                #endregion
-            }
-        }
-
-        #endregion
-
-        private void AutoDisplay_Timer_Tick(object sender, EventArgs e)
-        {
-            AutoDisplay_Timer.Enabled = false;
-            RobotStatusDisplay();
-            Map_Load();
-            AutoDisplay_Timer.Interval = 1000; // 타이머 인터벌 1초로 설정!
-            AutoDisplay_Timer.Enabled = true;
-        }
-
     }
-
 }

@@ -23,6 +23,7 @@ namespace Monitor.Data
         public static Dictionary<string, string> DisplayMapNames;
 
         public static bool CallScreenActive = false;
+        public static bool RobotScreenActive = false;
         public static bool ElevatorScreenTimerStart= false;
 
         public static string UserNumber = null;   //LogIn 정보 {사번}
