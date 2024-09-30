@@ -73,6 +73,7 @@
     <Reference Include="DevExpress.DataAccess.v24.1, Version=24.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Drawing.v24.1, Version=24.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Office.v24.1.Core, Version=24.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.PivotGrid.v24.1.Core, Version=24.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Printing.v24.1.Core, Version=24.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.RichEdit.v24.1.Core, Version=24.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Utils.v24.1, Version=24.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
@@ -82,6 +83,7 @@
     <Reference Include="DevExpress.XtraGrid.v24.1, Version=24.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraLayout.v24.1, Version=24.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraNavBar.v24.1, Version=24.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPivotGrid.v24.1, Version=24.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraPrinting.v24.1, Version=24.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="Iesi.Collections">
       <HintPath>assembly\Iesi.Collections.dll</HintPath>
@@ -144,6 +146,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Queue\AlarmMessageQueue.cs" />
+    <Compile Include="Views\PopUp\UserLoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\PopUp\UserLoginForm.Designer.cs">
+      <DependentUpon>UserLoginForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\System\ElevatorSystem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\System\ElevatorSystem.Designer.cs">
+      <DependentUpon>ElevatorSystem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\RobotScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -173,18 +188,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\TcpMonitoring.cs" />
-    <Compile Include="Views\PopUp\UserNumberForm..cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\PopUp\UserNumberForm..designer.cs">
-      <DependentUpon>UserNumberForm..cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\System\ElevatorSystem.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\System\ElevatorSystem.designer.cs">
-      <DependentUpon>ElevatorSystem.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\System\CallSystem.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,6 +196,12 @@
     </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\PopUp\UserLoginForm.resx">
+      <DependentUpon>UserLoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\System\ElevatorSystem.resx">
+      <DependentUpon>ElevatorSystem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\RobotScreen.resx">
       <DependentUpon>RobotScreen.cs</DependentUpon>
@@ -208,12 +217,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\PopUp\UserNumberForm..resx">
-      <DependentUpon>UserNumberForm..cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\System\ElevatorSystem.resx">
-      <DependentUpon>ElevatorSystem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\System\CallSystem.resx">
       <DependentUpon>CallSystem.cs</DependentUpon>

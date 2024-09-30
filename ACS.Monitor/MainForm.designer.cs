@@ -32,11 +32,17 @@ namespace ACS.Monitor
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.fluentDesignFormContainer1 = new DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormContainer();
-            this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            this.lbl_UserNumberImage = new DevExpress.XtraEditors.LabelControl();
             this.lbl_Login = new DevExpress.XtraEditors.LabelControl();
-            this.pictureEdit1 = new DevExpress.XtraEditors.PictureEdit();
             this.fluentFormDefaultManager1 = new DevExpress.XtraBars.FluentDesignSystem.FluentFormDefaultManager(this.components);
-            this.barSubItem1 = new DevExpress.XtraBars.BarSubItem();
+            this.barStaticItem1 = new DevExpress.XtraBars.BarStaticItem();
+            this.repositoryItemPictureEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
+            this.repositoryItemTextEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
+            this.repositoryItemHypertextLabel1 = new DevExpress.XtraEditors.Repository.RepositoryItemHypertextLabel();
+            this.repositoryItemTextEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
+            this.repositoryItemPictureEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
+            this.repositoryItemPictureEdit3 = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
+            this.repositoryItemHypertextLabel2 = new DevExpress.XtraEditors.Repository.RepositoryItemHypertextLabel();
             this.accordionControl1 = new DevExpress.XtraBars.Navigation.AccordionControl();
             this.accordionControlMainView = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.accordionControlMapView = new DevExpress.XtraBars.Navigation.AccordionControlElement();
@@ -49,77 +55,126 @@ namespace ACS.Monitor
             this.accordionControlElevator = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.accordionControlSetting = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.fluentDesignFormControl1 = new DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormControl();
+            this.lbl_FormSizeChange = new DevExpress.XtraEditors.LabelControl();
+            this.lbl_FormClose = new DevExpress.XtraEditors.LabelControl();
             this.dockManager1 = new DevExpress.XtraBars.Docking.DockManager(this.components);
             this.dockPanelCall = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel1_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.dockPanelRobot = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel2_Container = new DevExpress.XtraBars.Docking.ControlContainer();
-            this.dockPanel1 = new DevExpress.XtraBars.Docking.DockPanel();
+            this.dockPanelElevator = new DevExpress.XtraBars.Docking.DockPanel();
             this.controlContainer1 = new DevExpress.XtraBars.Docking.ControlContainer();
-            this.fluentDesignFormContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
-            this.panelControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).BeginInit();
+            this.AlarmMsgTimer = new System.Windows.Forms.Timer(this.components);
+            this.bar1 = new DevExpress.XtraBars.Bar();
+            this.lbl_UserNumberText = new DevExpress.XtraEditors.LabelControl();
+            this.lbl_CallSystemImage = new DevExpress.XtraEditors.LabelControl();
+            this.lbl_CallSystemText = new DevExpress.XtraEditors.LabelControl();
+            this.lbl_ElevatorSystemImage = new DevExpress.XtraEditors.LabelControl();
+            this.lbl_ElevatorSystemText = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.fluentFormDefaultManager1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHypertextLabel1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHypertextLabel2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.accordionControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentDesignFormControl1)).BeginInit();
+            this.fluentDesignFormControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).BeginInit();
             this.dockPanelCall.SuspendLayout();
             this.dockPanelRobot.SuspendLayout();
-            this.dockPanel1.SuspendLayout();
+            this.dockPanelElevator.SuspendLayout();
             this.SuspendLayout();
             // 
             // fluentDesignFormContainer1
             // 
             this.fluentDesignFormContainer1.Appearance.BackColor = System.Drawing.Color.White;
             this.fluentDesignFormContainer1.Appearance.Options.UseBackColor = true;
-            this.fluentDesignFormContainer1.Controls.Add(this.panelControl1);
             this.fluentDesignFormContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fluentDesignFormContainer1.Location = new System.Drawing.Point(260, 27);
+            this.fluentDesignFormContainer1.Location = new System.Drawing.Point(260, 45);
             this.fluentDesignFormContainer1.Name = "fluentDesignFormContainer1";
-            this.fluentDesignFormContainer1.Size = new System.Drawing.Size(1085, 457);
+            this.fluentDesignFormContainer1.Size = new System.Drawing.Size(973, 383);
             this.fluentDesignFormContainer1.TabIndex = 0;
             // 
-            // panelControl1
+            // lbl_UserNumberImage
             // 
-            this.panelControl1.Controls.Add(this.lbl_Login);
-            this.panelControl1.Controls.Add(this.pictureEdit1);
-            this.panelControl1.Location = new System.Drawing.Point(0, 0);
-            this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(1165, 42);
-            this.panelControl1.TabIndex = 3;
+            this.lbl_UserNumberImage.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(39)))), ((int)(((byte)(46)))));
+            this.lbl_UserNumberImage.Appearance.ForeColor = System.Drawing.Color.White;
+            this.lbl_UserNumberImage.Appearance.Options.UseBackColor = true;
+            this.lbl_UserNumberImage.Appearance.Options.UseForeColor = true;
+            this.lbl_UserNumberImage.Appearance.Options.UseTextOptions = true;
+            this.lbl_UserNumberImage.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.lbl_UserNumberImage.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this.lbl_UserNumberImage.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("lbl_UserNumberDisPlay.ImageOptions.Image")));
+            this.lbl_UserNumberImage.Location = new System.Drawing.Point(99, 6);
+            this.lbl_UserNumberImage.Name = "lbl_UserNumberImage";
+            this.lbl_UserNumberImage.Size = new System.Drawing.Size(37, 36);
+            this.lbl_UserNumberImage.TabIndex = 2;
             // 
             // lbl_Login
             // 
+            this.lbl_Login.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(125)))), ((int)(((byte)(132)))));
+            this.lbl_Login.Appearance.Options.UseBackColor = true;
             this.lbl_Login.ImageAlignToText = DevExpress.XtraEditors.ImageAlignToText.RightCenter;
             this.lbl_Login.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("lbl_Login.ImageOptions.SvgImage")));
-            this.lbl_Login.Location = new System.Drawing.Point(1036, 3);
+            this.lbl_Login.Location = new System.Drawing.Point(1109, 9);
             this.lbl_Login.Name = "lbl_Login";
             this.lbl_Login.Size = new System.Drawing.Size(37, 36);
             this.lbl_Login.TabIndex = 1;
-            // 
-            // pictureEdit1
-            // 
-            this.pictureEdit1.Location = new System.Drawing.Point(0, 0);
-            this.pictureEdit1.MenuManager = this.fluentFormDefaultManager1;
-            this.pictureEdit1.Name = "pictureEdit1";
-            this.pictureEdit1.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
-            this.pictureEdit1.Size = new System.Drawing.Size(100, 42);
-            this.pictureEdit1.TabIndex = 0;
             // 
             // fluentFormDefaultManager1
             // 
             this.fluentFormDefaultManager1.Form = this;
             this.fluentFormDefaultManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
-            this.barSubItem1});
-            this.fluentFormDefaultManager1.MaxItemId = 1;
+            this.barStaticItem1});
+            this.fluentFormDefaultManager1.MaxItemId = 23;
+            this.fluentFormDefaultManager1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.repositoryItemPictureEdit1,
+            this.repositoryItemTextEdit1,
+            this.repositoryItemHypertextLabel1,
+            this.repositoryItemTextEdit2,
+            this.repositoryItemPictureEdit2,
+            this.repositoryItemPictureEdit3,
+            this.repositoryItemHypertextLabel2});
             // 
-            // barSubItem1
+            // barStaticItem1
             // 
-            this.barSubItem1.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
-            this.barSubItem1.Caption = "barSubItem1";
-            this.barSubItem1.Id = 0;
-            this.barSubItem1.Name = "barSubItem1";
+            this.barStaticItem1.Id = 17;
+            this.barStaticItem1.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barStaticItem1.ImageOptions.Image")));
+            this.barStaticItem1.Name = "barStaticItem1";
+            this.barStaticItem1.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            // 
+            // repositoryItemPictureEdit1
+            // 
+            this.repositoryItemPictureEdit1.Name = "repositoryItemPictureEdit1";
+            // 
+            // repositoryItemTextEdit1
+            // 
+            this.repositoryItemTextEdit1.AutoHeight = false;
+            this.repositoryItemTextEdit1.Name = "repositoryItemTextEdit1";
+            // 
+            // repositoryItemHypertextLabel1
+            // 
+            this.repositoryItemHypertextLabel1.Name = "repositoryItemHypertextLabel1";
+            // 
+            // repositoryItemTextEdit2
+            // 
+            this.repositoryItemTextEdit2.AutoHeight = false;
+            this.repositoryItemTextEdit2.Name = "repositoryItemTextEdit2";
+            // 
+            // repositoryItemPictureEdit2
+            // 
+            this.repositoryItemPictureEdit2.Name = "repositoryItemPictureEdit2";
+            // 
+            // repositoryItemPictureEdit3
+            // 
+            this.repositoryItemPictureEdit3.Name = "repositoryItemPictureEdit3";
+            // 
+            // repositoryItemHypertextLabel2
+            // 
+            this.repositoryItemHypertextLabel2.Name = "repositoryItemHypertextLabel2";
             // 
             // accordionControl1
             // 
@@ -131,10 +186,10 @@ namespace ACS.Monitor
             this.accordionControlHistory,
             this.accordionControlSystem,
             this.accordionControlSetting});
-            this.accordionControl1.Location = new System.Drawing.Point(0, 27);
+            this.accordionControl1.Location = new System.Drawing.Point(0, 45);
             this.accordionControl1.Name = "accordionControl1";
             this.accordionControl1.ScrollBarMode = DevExpress.XtraBars.Navigation.ScrollBarMode.Touch;
-            this.accordionControl1.Size = new System.Drawing.Size(260, 457);
+            this.accordionControl1.Size = new System.Drawing.Size(260, 383);
             this.accordionControl1.TabIndex = 1;
             this.accordionControl1.ViewType = DevExpress.XtraBars.Navigation.AccordionControlViewType.HamburgerMenu;
             // 
@@ -212,15 +267,57 @@ namespace ACS.Monitor
             // 
             // fluentDesignFormControl1
             // 
+            this.fluentDesignFormControl1.Controls.Add(this.lbl_ElevatorSystemText);
+            this.fluentDesignFormControl1.Controls.Add(this.lbl_ElevatorSystemImage);
+            this.fluentDesignFormControl1.Controls.Add(this.lbl_CallSystemText);
+            this.fluentDesignFormControl1.Controls.Add(this.lbl_CallSystemImage);
+            this.fluentDesignFormControl1.Controls.Add(this.lbl_UserNumberText);
+            this.fluentDesignFormControl1.Controls.Add(this.lbl_UserNumberImage);
+            this.fluentDesignFormControl1.Controls.Add(this.lbl_FormSizeChange);
+            this.fluentDesignFormControl1.Controls.Add(this.lbl_FormClose);
+            this.fluentDesignFormControl1.Controls.Add(this.lbl_Login);
             this.fluentDesignFormControl1.FluentDesignForm = this;
             this.fluentDesignFormControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
-            this.barSubItem1});
+            this.barStaticItem1});
             this.fluentDesignFormControl1.Location = new System.Drawing.Point(0, 0);
             this.fluentDesignFormControl1.Manager = this.fluentFormDefaultManager1;
             this.fluentDesignFormControl1.Name = "fluentDesignFormControl1";
-            this.fluentDesignFormControl1.Size = new System.Drawing.Size(1345, 27);
+            this.fluentDesignFormControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.repositoryItemPictureEdit1,
+            this.repositoryItemTextEdit1,
+            this.repositoryItemHypertextLabel1,
+            this.repositoryItemTextEdit2,
+            this.repositoryItemPictureEdit2,
+            this.repositoryItemPictureEdit3,
+            this.repositoryItemHypertextLabel2});
+            this.fluentDesignFormControl1.Size = new System.Drawing.Size(1233, 45);
             this.fluentDesignFormControl1.TabIndex = 2;
             this.fluentDesignFormControl1.TabStop = false;
+            this.fluentDesignFormControl1.TitleItemLinks.Add(this.barStaticItem1);
+            // 
+            // lbl_FormSizeChange
+            // 
+            this.lbl_FormSizeChange.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(52)))), ((int)(((byte)(59)))));
+            this.lbl_FormSizeChange.Appearance.Options.UseBackColor = true;
+            this.lbl_FormSizeChange.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lbl_FormSizeChange.ImageAlignToText = DevExpress.XtraEditors.ImageAlignToText.RightCenter;
+            this.lbl_FormSizeChange.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("lbl_FormSizeChange.ImageOptions.SvgImage")));
+            this.lbl_FormSizeChange.Location = new System.Drawing.Point(1152, 9);
+            this.lbl_FormSizeChange.Name = "lbl_FormSizeChange";
+            this.lbl_FormSizeChange.Size = new System.Drawing.Size(37, 36);
+            this.lbl_FormSizeChange.TabIndex = 1;
+            // 
+            // lbl_FormClose
+            // 
+            this.lbl_FormClose.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(52)))), ((int)(((byte)(59)))));
+            this.lbl_FormClose.Appearance.Options.UseBackColor = true;
+            this.lbl_FormClose.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lbl_FormClose.ImageAlignToText = DevExpress.XtraEditors.ImageAlignToText.RightCenter;
+            this.lbl_FormClose.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("lbl_FormClose.ImageOptions.SvgImage")));
+            this.lbl_FormClose.Location = new System.Drawing.Point(1195, 9);
+            this.lbl_FormClose.Name = "lbl_FormClose";
+            this.lbl_FormClose.Size = new System.Drawing.Size(37, 36);
+            this.lbl_FormClose.TabIndex = 1;
             // 
             // dockManager1
             // 
@@ -228,7 +325,7 @@ namespace ACS.Monitor
             this.dockManager1.HiddenPanels.AddRange(new DevExpress.XtraBars.Docking.DockPanel[] {
             this.dockPanelCall,
             this.dockPanelRobot,
-            this.dockPanel1});
+            this.dockPanelElevator});
             this.dockManager1.TopZIndexControls.AddRange(new string[] {
             "DevExpress.XtraBars.BarDockControl",
             "DevExpress.XtraBars.StandaloneBarDockControl",
@@ -289,22 +386,22 @@ namespace ACS.Monitor
             this.dockPanel2_Container.Size = new System.Drawing.Size(191, 454);
             this.dockPanel2_Container.TabIndex = 0;
             // 
-            // dockPanel1
+            // dockPanelElevator
             // 
-            this.dockPanel1.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.dockPanel1.Appearance.Options.UseBackColor = true;
-            this.dockPanel1.Controls.Add(this.controlContainer1);
-            this.dockPanel1.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
-            this.dockPanel1.ForeColor = System.Drawing.Color.Aquamarine;
-            this.dockPanel1.ID = new System.Guid("94d4852b-3e65-4f5e-b182-810df2805d82");
-            this.dockPanel1.Location = new System.Drawing.Point(1169, 27);
-            this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.OriginalSize = new System.Drawing.Size(200, 200);
-            this.dockPanel1.SavedDock = DevExpress.XtraBars.Docking.DockingStyle.Right;
-            this.dockPanel1.SavedIndex = 0;
-            this.dockPanel1.Size = new System.Drawing.Size(200, 469);
-            this.dockPanel1.Text = "dockPanel1";
-            this.dockPanel1.Visibility = DevExpress.XtraBars.Docking.DockVisibility.Hidden;
+            this.dockPanelElevator.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.dockPanelElevator.Appearance.Options.UseBackColor = true;
+            this.dockPanelElevator.Controls.Add(this.controlContainer1);
+            this.dockPanelElevator.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
+            this.dockPanelElevator.ForeColor = System.Drawing.Color.Aquamarine;
+            this.dockPanelElevator.ID = new System.Guid("94d4852b-3e65-4f5e-b182-810df2805d82");
+            this.dockPanelElevator.Location = new System.Drawing.Point(1169, 27);
+            this.dockPanelElevator.Name = "dockPanelElevator";
+            this.dockPanelElevator.OriginalSize = new System.Drawing.Size(300, 200);
+            this.dockPanelElevator.SavedDock = DevExpress.XtraBars.Docking.DockingStyle.Right;
+            this.dockPanelElevator.SavedIndex = 0;
+            this.dockPanelElevator.Size = new System.Drawing.Size(200, 469);
+            this.dockPanelElevator.Text = "Elevator";
+            this.dockPanelElevator.Visibility = DevExpress.XtraBars.Docking.DockVisibility.Hidden;
             // 
             // controlContainer1
             // 
@@ -312,6 +409,73 @@ namespace ACS.Monitor
             this.controlContainer1.Name = "controlContainer1";
             this.controlContainer1.Size = new System.Drawing.Size(191, 442);
             this.controlContainer1.TabIndex = 0;
+            // 
+            // AlarmMsgTimer
+            // 
+            this.AlarmMsgTimer.Enabled = true;
+            this.AlarmMsgTimer.Interval = 1000;
+            this.AlarmMsgTimer.Tick += new System.EventHandler(this.AlarmMsgTimer_Tick);
+            // 
+            // bar1
+            // 
+            this.bar1.BarName = "Custom 2";
+            this.bar1.DockCol = 0;
+            this.bar1.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
+            this.bar1.Text = "Custom 2";
+            // 
+            // lbl_UserNumberText
+            // 
+            this.lbl_UserNumberText.Location = new System.Drawing.Point(142, 11);
+            this.lbl_UserNumberText.Name = "lbl_UserNumberText";
+            this.lbl_UserNumberText.Size = new System.Drawing.Size(70, 14);
+            this.lbl_UserNumberText.TabIndex = 3;
+            this.lbl_UserNumberText.Text = "labelControl1";
+            // 
+            // lbl_CallSystemImage
+            // 
+            this.lbl_CallSystemImage.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(39)))), ((int)(((byte)(46)))));
+            this.lbl_CallSystemImage.Appearance.ForeColor = System.Drawing.Color.White;
+            this.lbl_CallSystemImage.Appearance.Options.UseBackColor = true;
+            this.lbl_CallSystemImage.Appearance.Options.UseForeColor = true;
+            this.lbl_CallSystemImage.Appearance.Options.UseTextOptions = true;
+            this.lbl_CallSystemImage.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.lbl_CallSystemImage.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this.lbl_CallSystemImage.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("labelControl1.ImageOptions.Image")));
+            this.lbl_CallSystemImage.Location = new System.Drawing.Point(248, 6);
+            this.lbl_CallSystemImage.Name = "lbl_CallSystemImage";
+            this.lbl_CallSystemImage.Size = new System.Drawing.Size(37, 36);
+            this.lbl_CallSystemImage.TabIndex = 2;
+            // 
+            // lbl_CallSystemText
+            // 
+            this.lbl_CallSystemText.Location = new System.Drawing.Point(291, 11);
+            this.lbl_CallSystemText.Name = "lbl_CallSystemText";
+            this.lbl_CallSystemText.Size = new System.Drawing.Size(70, 14);
+            this.lbl_CallSystemText.TabIndex = 3;
+            this.lbl_CallSystemText.Text = "labelControl1";
+            // 
+            // lbl_ElevatorSystemImage
+            // 
+            this.lbl_ElevatorSystemImage.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(39)))), ((int)(((byte)(46)))));
+            this.lbl_ElevatorSystemImage.Appearance.ForeColor = System.Drawing.Color.White;
+            this.lbl_ElevatorSystemImage.Appearance.Options.UseBackColor = true;
+            this.lbl_ElevatorSystemImage.Appearance.Options.UseForeColor = true;
+            this.lbl_ElevatorSystemImage.Appearance.Options.UseTextOptions = true;
+            this.lbl_ElevatorSystemImage.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.lbl_ElevatorSystemImage.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this.lbl_ElevatorSystemImage.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("labelControl3.ImageOptions.Image")));
+            this.lbl_ElevatorSystemImage.Location = new System.Drawing.Point(366, 6);
+            this.lbl_ElevatorSystemImage.Name = "lbl_ElevatorSystemImage";
+            this.lbl_ElevatorSystemImage.Size = new System.Drawing.Size(37, 36);
+            this.lbl_ElevatorSystemImage.TabIndex = 2;
+            // 
+            // lbl_ElevatorSystemText
+            // 
+            this.lbl_ElevatorSystemText.Location = new System.Drawing.Point(409, 11);
+            this.lbl_ElevatorSystemText.Name = "lbl_ElevatorSystemText";
+            this.lbl_ElevatorSystemText.Size = new System.Drawing.Size(70, 14);
+            this.lbl_ElevatorSystemText.TabIndex = 3;
+            this.lbl_ElevatorSystemText.Text = "labelControl1";
             // 
             // MainForm
             // 
@@ -321,12 +485,13 @@ namespace ACS.Monitor
             this.Appearance.Options.UseForeColor = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1345, 484);
+            this.ClientSize = new System.Drawing.Size(1233, 428);
             this.ControlContainer = this.fluentDesignFormContainer1;
             this.Controls.Add(this.fluentDesignFormContainer1);
             this.Controls.Add(this.accordionControl1);
             this.Controls.Add(this.fluentDesignFormControl1);
             this.FluentDesignFormControl = this.fluentDesignFormControl1;
+            this.IconOptions.Image = ((System.Drawing.Image)(resources.GetObject("MainForm.IconOptions.Image")));
             this.LookAndFeel.SkinMaskColor = System.Drawing.Color.White;
             this.LookAndFeel.SkinMaskColor2 = System.Drawing.Color.White;
             this.LookAndFeel.SkinName = "DevExpress Style";
@@ -334,18 +499,22 @@ namespace ACS.Monitor
             this.Name = "MainForm";
             this.NavigationControl = this.accordionControl1;
             this.TransparencyKey = System.Drawing.Color.WhiteSmoke;
-            this.fluentDesignFormContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
-            this.panelControl1.ResumeLayout(false);
-            this.panelControl1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentFormDefaultManager1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHypertextLabel1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHypertextLabel2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.accordionControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentDesignFormControl1)).EndInit();
+            this.fluentDesignFormControl1.ResumeLayout(false);
+            this.fluentDesignFormControl1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).EndInit();
             this.dockPanelCall.ResumeLayout(false);
             this.dockPanelRobot.ResumeLayout(false);
-            this.dockPanel1.ResumeLayout(false);
+            this.dockPanelElevator.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -356,9 +525,6 @@ namespace ACS.Monitor
         private DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormControl fluentDesignFormControl1;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlSetting;
         private DevExpress.XtraBars.FluentDesignSystem.FluentFormDefaultManager fluentFormDefaultManager1;
-        private DevExpress.XtraBars.BarSubItem barSubItem1;
-        private DevExpress.XtraEditors.PanelControl panelControl1;
-        private DevExpress.XtraEditors.PictureEdit pictureEdit1;
         private DevExpress.XtraEditors.LabelControl lbl_Login;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlMainView;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlHistory;
@@ -370,12 +536,30 @@ namespace ACS.Monitor
         private DevExpress.XtraBars.Docking.DockPanel dockPanelCall;
         private DevExpress.XtraBars.Docking.ControlContainer dockPanel1_Container;
         private DevExpress.XtraBars.Docking.DockManager dockManager1;
-        private DevExpress.XtraBars.Docking.DockPanel dockPanel1;
+        private DevExpress.XtraBars.Docking.DockPanel dockPanelElevator;
         private DevExpress.XtraBars.Docking.ControlContainer controlContainer1;
         private DevExpress.XtraBars.Docking.DockPanel dockPanelRobot;
         private DevExpress.XtraBars.Docking.ControlContainer dockPanel2_Container;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlMapView;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlRobot;
+        private System.Windows.Forms.Timer AlarmMsgTimer;
+        private DevExpress.XtraEditors.LabelControl lbl_UserNumberImage;
+        private DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit repositoryItemPictureEdit1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEdit1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemHypertextLabel repositoryItemHypertextLabel1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEdit2;
+        private DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit repositoryItemPictureEdit2;
+        private DevExpress.XtraBars.Bar bar1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemHypertextLabel repositoryItemHypertextLabel2;
+        private DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit repositoryItemPictureEdit3;
+        private DevExpress.XtraBars.BarStaticItem barStaticItem1;
+        private DevExpress.XtraEditors.LabelControl lbl_FormSizeChange;
+        private DevExpress.XtraEditors.LabelControl lbl_FormClose;
+        private DevExpress.XtraEditors.LabelControl lbl_UserNumberText;
+        private DevExpress.XtraEditors.LabelControl lbl_ElevatorSystemText;
+        private DevExpress.XtraEditors.LabelControl lbl_ElevatorSystemImage;
+        private DevExpress.XtraEditors.LabelControl lbl_CallSystemText;
+        private DevExpress.XtraEditors.LabelControl lbl_CallSystemImage;
     }
 }
 

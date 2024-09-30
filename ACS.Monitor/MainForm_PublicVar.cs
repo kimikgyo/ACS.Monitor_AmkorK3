@@ -34,6 +34,8 @@ namespace ACS.Monitor
         // job test flag
         public bool jobStepFlag = false;
 
+        //========================================================== Alarm 팝업 관련
+        public AlarmMessageQueue<string> AlarmMessageQueue = new AlarmMessageQueue<string>();
 
         ////==========================================================
 

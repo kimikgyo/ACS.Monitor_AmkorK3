@@ -159,8 +159,6 @@ namespace ACS.Monitor
         }
         private void TableLayoutPanelRowColumn()
         {
-            //GridControl 크기 조절
-            //splitContainerControl1.SplitterPosition = ((this.Height / 3) * 2);
 
             if (ConfigData.DisplayMapNames.Count == 0)
             {

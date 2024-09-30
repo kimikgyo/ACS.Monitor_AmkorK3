@@ -24,7 +24,7 @@ namespace Monitor.Data
 
         public static bool CallScreenActive = false;
         public static bool RobotScreenActive = false;
-        public static bool ElevatorScreenTimerStart= false;
+        public static bool ElevatorScreenActive = false;
 
         public static string UserNumber = null;   //LogIn 정보 {사번}
         public static string UserName = null;     //LogIn 정보 {사용자이름}

@@ -44,8 +44,8 @@ namespace ACS.Monitor
         private Color mouseOverTextColor = Color.FromArgb(57, 173, 233);
         private Color nomalTextColor = Color.FromArgb(167, 168, 169);
         private Color buttonClickFlagColor = Color.FromArgb(57, 174, 234);
-        private Color Test1 = Color.FromArgb(58, 63, 67);
-        private Color Test = Color.FromArgb(27, 37, 45);
+        private Color GridViewRowOddColor = Color.FromArgb(58, 63, 67);
+        private Color GridViewRowEvenColor = Color.FromArgb(27, 37, 45);
 
         public RobotScreen()
         {
@@ -241,11 +241,11 @@ namespace ACS.Monitor
                 {
                     if (e.RowHandle % 2 == 0)
                     {
-                        e.Appearance.BackColor = Test;
+                        e.Appearance.BackColor = GridViewRowEvenColor;
                     }
                     else
                     {
-                        e.Appearance.BackColor = Test1;
+                        e.Appearance.BackColor = GridViewRowOddColor;
                     }
                 }
             }
@@ -253,11 +253,11 @@ namespace ACS.Monitor
             {
                 if (e.RowHandle % 2 == 0)
                 {
-                    e.Appearance.BackColor = Test;
+                    e.Appearance.BackColor = GridViewRowEvenColor;
                 }
                 else
                 {
-                    e.Appearance.BackColor = Test1;
+                    e.Appearance.BackColor = GridViewRowOddColor;
                 }
             }
         }

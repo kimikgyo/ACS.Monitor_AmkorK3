@@ -6,27 +6,39 @@ using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
 using log4net;
-using Monitor.Common;
 using Monitor.Data;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ACS.Monitor
 {
-    public partial class ElevatorSystem : Form
+    public partial class ElevatorSystem : DevExpress.XtraEditors.XtraForm
     {
-
         private readonly static ILog EventLogger = LogManager.GetLogger("Event"); //Function 실행관련 Log
         private readonly static ILog UserLogger = LogManager.GetLogger("User"); //버튼 및 화면조작관련 Log
         private readonly MainForm mainForm;
         private readonly IUnitOfWork uow;
         private DataTable ElevatorDataTable = new DataTable();
 
-        AlertControl control = new AlertControl();
+        
+
+
+        private Color skinColor = Color.FromArgb(43, 52, 59);
+        private Color backColor = Color.FromArgb(30, 39, 46);
+        private Color mouseOverColor = Color.FromArgb(45, 65, 77);
+        private Color mouseOverTextColor = Color.FromArgb(57, 173, 233);
+        private Color nomalTextColor = Color.FromArgb(167, 168, 169);
+        private Color buttonClickFlagColor = Color.FromArgb(57, 174, 234);
+        private Color GridViewRowOddColor = Color.FromArgb(58, 63, 67);
+        private Color GridViewRowEvenColor = Color.FromArgb(27, 37, 45);
+
         public ElevatorSystem(MainForm mainForm, IUnitOfWork uow)
         {
             InitializeComponent();
@@ -38,12 +50,16 @@ namespace ACS.Monitor
             DataTableColumnsCreate();
             GridViewInit();
         }
-
         private void Init()
         {
             #region ElevatorSystemForm
+            this.LookAndFeel.UseDefaultLookAndFeel = false;
+            this.LookAndFeel.SkinName = "DevExpress Dark Style";
+            this.LookAndFeel.SkinMaskColor = skinColor;
+            this.LookAndFeel.SkinMaskColor2 = skinColor;
+            this.BackColor = backColor;
+            this.ForeColor = Color.White;
 
-            this.BackColor = Color.White;
             this.FormBorderStyle = FormBorderStyle.None; // 테두리 제거
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -52,18 +68,71 @@ namespace ACS.Monitor
 
             #endregion
 
-            #region Button
-            btn_ElvAuto.Text = "엘리베이터" + "\r\n" + "AGV Auto";
-            btn_ElvManual.Text = "엘리베이터" + "\r\n" + "AGV Manual";
-            btn_Close.Text = "Close";
-            #endregion
+            #region label
+            lbl_AGVON.AutoSizeMode = LabelAutoSizeMode.None;
+            lbl_AGVON.Text = "AGV" + "\r\n" + "On";
+            lbl_AGVON.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            lbl_AGVON.BackColor = buttonClickFlagColor;
+            lbl_AGVON.Appearance.BackColor = buttonClickFlagColor;
+            lbl_AGVON.Appearance.Options.UseBackColor = true;
+            lbl_AGVON.Cursor = Cursors.Hand;
+            lbl_AGVON.Click += ElevatorModeChange;
 
-            #region AlertControl Event
-            control.FormLoad += Control_FormLoad;
-            #endregion
+            lbl_AGVOFF.AutoSizeMode = LabelAutoSizeMode.None;
+            lbl_AGVOFF.Text = "AGV" + "\r\n" + "OFF";
+            lbl_AGVOFF.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            lbl_AGVOFF.BackColor = buttonClickFlagColor;
+            lbl_AGVOFF.Appearance.BackColor = buttonClickFlagColor;
+            lbl_AGVOFF.Appearance.Options.UseBackColor = true;
+            lbl_AGVOFF.Cursor = Cursors.Hand;
+            lbl_AGVOFF.Click += ElevatorModeChange;
 
+            lbl_AGVMiddle.AutoSizeMode = LabelAutoSizeMode.None;
+            lbl_AGVMiddle.Text = "AGV" + "\r\n" + "Middle";
+            lbl_AGVMiddle.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            lbl_AGVMiddle.BackColor = buttonClickFlagColor;
+            lbl_AGVMiddle.Appearance.BackColor = buttonClickFlagColor;
+            lbl_AGVMiddle.Appearance.Options.UseBackColor = true;
+            lbl_AGVMiddle.Cursor = Cursors.Hand;
+            lbl_AGVMiddle.Click += ElevatorModeChange;
+            #endregion
 
         }
+
+        private void ElevatorModeChange(object sender, EventArgs e)
+        {
+            string Message = null;
+            string labelName = ((LabelControl)sender).Name;
+            var GetElevator = ConfigData.ElevatorInfos.FirstOrDefault(r => r.Location == "Elevator1");
+            if (GetElevator != null)
+            {
+                switch (labelName)
+                {
+                    case "lbl_AGVON":
+                        GetElevator.ACSMode = "AGVON";
+                        GetElevator.UserNumber = ConfigData.UserNumber;
+                        Message = $"사번 : {ConfigData.UserNumber} , 사원 : {ConfigData.UserName}이(가) 전체 엘레베이터를 AGVON 요청 하였습니다.";
+                        break;
+                    case "lbl_AGVOFF":
+                        GetElevator.ACSMode = "AGVOFF";
+                        GetElevator.UserNumber = ConfigData.UserNumber;
+                        Message = $"사번 : {ConfigData.UserNumber} , 사원 : {ConfigData.UserName}이(가) 전체 엘레베이터를 AGVOFF 요청 하였습니다.";
+                        break;
+                    case "lbl_AGVMiddle":
+                        GetElevator.ACSMode = "AGVMiddle";
+                        GetElevator.UserNumber = ConfigData.UserNumber;
+                        Message = $"사번 : {ConfigData.UserNumber} , 사원 : {ConfigData.UserName}이(가) 전체 엘레베이터를 AGVMiddle 요청 하였습니다.";
+                        break;
+                }
+                if (Message != null)
+                {
+                    uow.ElevatorInfos.ACSModeUpdate(GetElevator);
+                    UserLogger.Info($"{Message}");
+                    mainForm.AlarmMessageQueue.Enqueue(Message);
+                }
+            }
+        }
+
         private void GridViewInit()
         {
             #region GridView 초기 Setting
@@ -158,7 +227,14 @@ namespace ACS.Monitor
 
         private void ElevatorGridView_RowCellStyle(object sender, RowCellStyleEventArgs e)
         {
-
+            if (e.RowHandle % 2 == 0)
+            {
+                e.Appearance.BackColor = GridViewRowEvenColor;
+            }
+            else
+            {
+                e.Appearance.BackColor = GridViewRowOddColor;
+            }
         }
 
         private void ElevatorGridView_RowCellClick(object sender, RowCellClickEventArgs e)
@@ -186,15 +262,14 @@ namespace ACS.Monitor
                         Message = $"사번 : {ConfigData.UserNumber} , 사원 : {ConfigData.UserName} ,{FloorIndex} 층 엘리베이터를 ON 요청 하였습니다";
                     }
 
-                    if(Message!=null)
+                    if (Message != null)
                     {
                         uow.ElevatorInfos.Update(ElevatorInfoData);
                         UserLogger.Info($"{Message}");
-                        AlertInfo info = new AlertInfo($"Elevator({DateTime.Now})", Message);
-                        control.Show(this, info);
+                        mainForm.AlarmMessageQueue.Enqueue(Message);
                     }
                 }
-                
+
             }
         }
 
@@ -225,7 +300,7 @@ namespace ACS.Monitor
             #endregion
 
             #region GridView Data Binding
-            
+
             ElevatorGridControl.DataSource = ElevatorSystemData();
 
             #endregion
@@ -262,47 +337,6 @@ namespace ACS.Monitor
 
         }
 
-        private void btn_Click(object sender, EventArgs e)
-        {
-            string Message = null;
-            string btnName = ((SimpleButton)sender).Name;
-            var GetElevator = ConfigData.ElevatorInfos.FirstOrDefault(r => r.Location == "Elevator1");
-            if (GetElevator != null)
-            {
-                switch (btnName)
-                {
-                    case "btn_ElvAuto":
-                        GetElevator.ACSMode = "MiRControlMode";
-                        GetElevator.UserNumber = ConfigData.UserNumber;
-                        Message = $"사번 : {ConfigData.UserNumber} , 사원 : {ConfigData.UserName}이(가) 전체 엘레베이터를 ON 요청 하였습니다.";
-                        break;
-                    case "btn_ElvManual":
-                        GetElevator.ACSMode = "MiRUnControlMode";
-                        GetElevator.UserNumber = ConfigData.UserNumber;
-                        Message = $"사번 : {ConfigData.UserNumber} , 사원 : {ConfigData.UserName}이(가) 전체 엘레베이터를 OFF 요청 하였습니다.";
-                        break;
-                    //case "btn_Close":
-                    //    mainForm.flyoutPanel1.HidePopup();
-                    //    mainForm.flyoutPanelControl1.Controls.Clear();
-                    //    Close();
-                    //    break;
-                }
-                if (Message != null)
-                {
-                    uow.ElevatorInfos.ACSModeUpdate(GetElevator);
-                    UserLogger.Info($"{Message}");
-                    AlertInfo info = new AlertInfo($"Elevator({DateTime.Now})", Message);
-                    control.Show(this, info);
-                }
-            }
-
-        }
-
-
-        private void Control_FormLoad(object sender, AlertFormLoadEventArgs e)
-        {
-            e.Buttons.PinButton.SetDown(true);
-        }
 
 
 
@@ -311,32 +345,46 @@ namespace ACS.Monitor
             var elvModeInfo = ConfigData.ElevatorInfos.FirstOrDefault(x => x.Location.StartsWith("Elevator"));
             if (elvModeInfo != null)
             {
-                if (elvModeInfo.ACSMode == "MiRControlMode")
+                if (elvModeInfo.ACSMode == "AGVON")
                 {
-                    btn_ElvAuto.Appearance.BackColor = Color.Chartreuse;
-                    btn_ElvAuto.Appearance.Options.UseBackColor = true;
-                    btn_ElvManual.Appearance.BackColor = Color.LightGray;
-                    btn_ElvManual.Appearance.Options.UseBackColor = true;
+                    lbl_AGVON.BackColor = backColor;
+                    lbl_AGVOFF.BackColor = buttonClickFlagColor;
+                    lbl_AGVMiddle.BackColor = buttonClickFlagColor;
+               
                 }
-                else if (elvModeInfo.ACSMode == "MiRUnControlMode")
+                else if (elvModeInfo.ACSMode == "AGVOFF")
                 {
-                    btn_ElvAuto.Appearance.BackColor = Color.LightGray;
-                    btn_ElvAuto.Appearance.Options.UseBackColor = true;
-                    btn_ElvManual.Appearance.BackColor = Color.Chartreuse;
-                    btn_ElvManual.Appearance.Options.UseBackColor = true;
+                    lbl_AGVON.BackColor = buttonClickFlagColor;
+                    lbl_AGVOFF.BackColor = backColor;
+                    lbl_AGVMiddle.BackColor = buttonClickFlagColor;
+                }
+                else if(elvModeInfo.ACSMode == "AGVMiddle")
+                {
+                    lbl_AGVON.BackColor = buttonClickFlagColor;
+                    lbl_AGVOFF.BackColor = buttonClickFlagColor;
+                    lbl_AGVMiddle.BackColor = backColor;
                 }
             }
         }
 
         private void DisplayTimer_Tick(object sender, EventArgs e)
         {
-            DisplayTimer.Enabled = false;
-            ElevatorSystemDisplay();
-            DisplayElevatorMode();
-            DisplayTimer.Interval = 1000;
-            DisplayTimer.Enabled = true;
+            if (ConfigData.ElevatorScreenActive)
+            {
+                DisplayTimer.Enabled = false;
+                ElevatorSystemDisplay();
+                DisplayElevatorMode();
+                DisplayTimer.Interval = 1000;
+                DisplayTimer.Enabled = true;
+            }
+            else
+            {
+                DisplayTimer.Stop();
+                DisplayTimer.Enabled = false;
+                DisplayTimer.Dispose();
+                this.Close();
+                this.Dispose();
+            }
         }
-
-
     }
 }

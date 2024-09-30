@@ -1,6 +1,8 @@
 ﻿using DevExpress.XtraBars;
+using DevExpress.XtraBars.Alerter;
 using DevExpress.XtraBars.Docking;
 using DevExpress.XtraBars.Navigation;
+using DevExpress.XtraEditors;
 using log4net;
 using Monitor.Common;
 using Monitor.Data;
@@ -23,7 +25,7 @@ namespace ACS.Monitor
         private readonly static ILog UserLogger = LogManager.GetLogger("User"); //버튼 및 화면조작관련 Log
         private readonly static ILog TimeoutLogger = LogManager.GetLogger("Timeout");
 
-        private static string AmkorImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Image", "Amkor.png");
+        private static string AmkorImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Image", "LogInAmkorImage31.png");
         Image AmkorImage = Image.FromFile(AmkorImagePath);
 
         private static string AmkorIconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Image", "Monitoring_Icon.ico");
@@ -34,13 +36,14 @@ namespace ACS.Monitor
         private Color mouseOverColor = Color.FromArgb(45, 65, 77);
         private Color mouseOverTextColor = Color.FromArgb(57, 173, 233);
         private Color nomalTextColor = Color.FromArgb(167, 168, 169);
+        private Color TopbarSkinColor = Color.FromArgb(116, 125, 132);
 
         private readonly UnitOfWork uow;
         private MapView ChildMainForm;
         private ElevatorSystem elevator = null;
         private CallSystem CallSystem = null;
         private GetDataControl getDataControl = null;
-
+        private AlertControl AlarmPupUpcontrol = null;
         public MainForm()
         {
             InitializeComponent();
@@ -61,8 +64,19 @@ namespace ACS.Monitor
         private void Init()
         {
             getDataControl = new GetDataControl(this, uow);
+            AlarmPupUpcontrol = new AlertControl();
+
+            #region AlertControl Event
+            AlarmPupUpcontrol.FormLoad += AlarmPupUpcontrol_FormLoad;
+            #endregion
 
         }
+
+        private void AlarmPupUpcontrol_FormLoad(object sender, AlertFormLoadEventArgs e)
+        {
+            e.Buttons.PinButton.SetDown(true);
+        }
+
         private void Start()
         {
             getDataControl.Start();
@@ -70,8 +84,10 @@ namespace ACS.Monitor
 
         private void FormInit()
         {
-            this.MinimizeBox = false;  // 최소화 버튼 비활성
-            this.MaximizeBox = true;  // 최대화 버튼 비활성화
+            this.ControlBox = false;
+            //this.MinimizeBox = false;  // 최소화 버튼 비활성
+            //this.MaximizeBox = true;  // 최대화 버튼 비활성화
+            //this.CloseBox = false;
 
             this.LookAndFeel.UseDefaultLookAndFeel = false;
             this.LookAndFeel.SkinName = "DevExpress Dark Style";
@@ -84,17 +100,57 @@ namespace ACS.Monitor
             fluentDesignFormContainer1.BackColor = backColor;
             fluentDesignFormContainer1.ForeColor = Color.White;
 
-            panelControl1.Visible = true;
-            panelControl1.BackColor = skinColor;
-            panelControl1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-
-            pictureEdit1.BackColor = skinColor;
-            pictureEdit1.Image = AmkorImage;
-
+            //panelControl1.Visible = true;
+            //panelControl1.BackColor = skinColor;
+            //panelControl1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            barStaticItem1.ImageOptions.Image = AmkorImage;
+            lbl_Login.BackColor = Color.Transparent;
             lbl_Login.Cursor = Cursors.Hand;
-            lbl_Login.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            lbl_Login.Click += Lbl_Login_Click;
+            lbl_Login.Anchor = /*AnchorStyles.Top |*/ AnchorStyles.Right;
+            lbl_Login.BackColor = TopbarSkinColor;
+            lbl_Login.Click += labelClick;
+
+            lbl_FormSizeChange.BackColor = Color.Transparent;
+            lbl_FormSizeChange.Cursor = Cursors.Hand;
+            lbl_FormSizeChange.Anchor = AnchorStyles.Right;
+            lbl_FormSizeChange.BackColor = TopbarSkinColor;
+            lbl_FormSizeChange.Click += labelClick;
+
+            lbl_FormClose.BackColor = Color.Transparent;
+            lbl_FormClose.Cursor = Cursors.Hand;
+            lbl_FormClose.Anchor = AnchorStyles.Right;
+            lbl_FormClose.BackColor = TopbarSkinColor;
+            lbl_FormClose.Click += labelClick;
+
+            lbl_UserNumberImage.BackColor = TopbarSkinColor;
+            lbl_UserNumberImage.Anchor = AnchorStyles.Left;
+            lbl_UserNumberImage.Visible = false;
+
+            lbl_CallSystemImage.BackColor = TopbarSkinColor;
+            lbl_CallSystemImage.Anchor = AnchorStyles.Left;
+            lbl_CallSystemImage.Visible = false;
+
+            lbl_ElevatorSystemImage.BackColor = TopbarSkinColor;
+            lbl_ElevatorSystemImage.Anchor = AnchorStyles.Left;
+            lbl_ElevatorSystemImage.Visible = false;
+
+            lbl_UserNumberText.BackColor = TopbarSkinColor;
+            lbl_UserNumberText.Anchor = AnchorStyles.Left;
+            lbl_UserNumberText.Visible = false;
+
+            lbl_CallSystemText.BackColor = TopbarSkinColor;
+            lbl_CallSystemText.Anchor = AnchorStyles.Left;
+            lbl_CallSystemText.Visible = false;
+
+            lbl_ElevatorSystemText.BackColor = TopbarSkinColor;
+            lbl_ElevatorSystemText.Anchor = AnchorStyles.Left;
+            lbl_ElevatorSystemText.Visible = false;
+
+            //lbl_UserNumberDisPlay.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         }
+
+
+
         private void accordionControlInit()
         {
             //설정창 ViewType
@@ -154,6 +210,7 @@ namespace ACS.Monitor
             accordionControlSetting.Appearance.Hovered.ForeColor = mouseOverTextColor; // 마우스 오버 글자 색상
 
             #endregion
+
             accordionControlMapView.Click += AccordionControl_Item_Click;
             accordionControlRobot.Click += AccordionControl_Item_Click;
             accordionControlErrorLog.Click += AccordionControl_Item_Click;
@@ -208,7 +265,7 @@ namespace ACS.Monitor
                         CallSystem.Activate();
                         CallSystem.Show();
                     }
-                    else if(dockPanelCall.Visibility == DockVisibility.AutoHide)
+                    else if (dockPanelCall.Visibility == DockVisibility.AutoHide)
                     {
                         //창이 숨겨져 있을경우
                         dockPanelCall.Visibility = DockVisibility.Visible;
@@ -216,6 +273,24 @@ namespace ACS.Monitor
 
                     break;
                 case "accordionControlElevator":
+                    if (dockPanelElevator.Visibility == DockVisibility.Hidden)
+                    {
+                        //창이 생성이 되지 않았을경우
+                        dockPanelElevator.Visibility = DockVisibility.Visible;
+                        ConfigData.ElevatorScreenActive = true;
+                        var elevatorSystem = new ElevatorSystem(this, uow);
+                        elevatorSystem.TopLevel = false;
+                        elevatorSystem.Dock = DockStyle.Fill;
+                        dockPanelElevator.BackColor = Color.White;
+                        dockPanelElevator.Controls.Add(elevatorSystem);
+                        elevatorSystem.Activate();
+                        elevatorSystem.Show();
+                    }
+                    else if (dockPanelElevator.Visibility == DockVisibility.AutoHide)
+                    {
+                        //창이 숨겨져 있을경우
+                        dockPanelElevator.Visibility = DockVisibility.Visible;
+                    }
                     break;
                 case "Setting":
                     break;
@@ -241,6 +316,13 @@ namespace ACS.Monitor
             dockPanelRobot.Visibility = DevExpress.XtraBars.Docking.DockVisibility.Hidden;
             #endregion
 
+            #region Elevator Panel
+            dockPanelElevator.BackColor = backColor;
+            dockPanelElevator.Text = "Elevator";
+            dockPanelElevator.Options.AllowDockAsTabbedDocument = false;  // 문서 탭 형태가 아닌 도킹
+            dockPanelElevator.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
+            dockPanelElevator.Visibility = DevExpress.XtraBars.Docking.DockVisibility.Hidden;
+            #endregion
 
             #region DockPanel Event
             dockPanelCall.ClosingPanel += DockPanelCall_ClosingPanel;
@@ -251,7 +333,7 @@ namespace ACS.Monitor
         private void DockPanelCall_ClosingPanel(object sender, DevExpress.XtraBars.Docking.DockPanelCancelEventArgs e)
         {
             ConfigData.CallScreenActive = false;
-           
+
         }
 
 
@@ -280,36 +362,90 @@ namespace ACS.Monitor
             view.StartLoop();
         }
 
-        private void Lbl_Login_Click(object sender, EventArgs e)
+        private void labelClick(object sender, EventArgs e)
         {
-            //사번 입력 Form을 불러옴
-            var UserNumberForm = new UserNumberForm();
-            DialogResult result = UserNumberForm.ShowDialog();
-            if (result == DialogResult.Yes)
+            string labelName = ((LabelControl)sender).Name;
+            switch (labelName)
             {
-                //사번 입력하여 검색
-                var UserNumber = uow.UserNumbers.DBGetAll().FirstOrDefault(u => u.UserNumber == UserNumberForm.UserNumber);
-                //사번이 없는경우 설정창을 Clear한후 다시 초기설정함
-                if (UserNumber == null) MessageBox.Show("등록되지 않은 사원번호 이거나 비밀번호가 틀립니다!");
-                else
-                {
-                    ConfigData.UserNumber = UserNumber.UserNumber;
-                    ConfigData.UserName = UserNumber.UserName;
-                    ConfigData.UserElevatorAuthority = UserNumber.ElevatorAuthority;
-                    ConfigData.UserCallAuthority = UserNumber.CallMissionAuthority;
+                case "lbl_FormClose":
 
-                    string LableText = $"사원번호 = {ConfigData.UserNumber} / 사원이름 = {ConfigData.UserName}";
+                    this.Close();
 
-                    if (ConfigData.UserElevatorAuthority == 1)
+                    break;
+                case "lbl_FormSizeChange":
+
+                    if (WindowState == FormWindowState.Normal) this.WindowState = FormWindowState.Maximized;
+                    else this.WindowState = FormWindowState.Normal;
+
+                    break;
+
+                case "lbl_Login":
+                    if (ConfigData.UserNumber == null)
                     {
-                        LableText += " / ElevatorSystem 사용가능";
+                        var UserNumberForm = new UserLoginForm();
+                        //사번 입력 Form을 불러옴
+                        UserNumberForm.StartPosition = FormStartPosition.Manual;
+                        UserNumberForm.Location = new Point(this.Location.X + (this.Width - UserNumberForm.Width) / 2, this.Location.Y + (this.Width - UserNumberForm.Width) / 6);
+                        DialogResult result = UserNumberForm.ShowDialog();
+                        if (result == DialogResult.Yes)
+                        {
+                            // 사번 입력하여 검색
+                            var UserNumber = uow.UserNumbers.DBGetAll().FirstOrDefault(u => u.UserNumber == UserNumberForm.UserNumber);
+                            //사번이 없는경우 설정창을 Clear한후 다시 초기설정함
+                            if (UserNumber == null) MessageBox.Show("등록되지 않은 사원번호 이거나 비밀번호가 틀립니다!");
+                            else
+                            {
+                                ConfigData.UserNumber = UserNumber.UserNumber;
+                                ConfigData.UserName = UserNumber.UserName;
+                                ConfigData.UserElevatorAuthority = UserNumber.ElevatorAuthority;
+                                ConfigData.UserCallAuthority = UserNumber.CallMissionAuthority;
+
+                                lbl_UserNumberText.Text = $"사원번호 = {ConfigData.UserNumber}{Environment.NewLine}사원이름 = {ConfigData.UserName}";
+
+                                if (ConfigData.UserElevatorAuthority == 1)
+                                {
+                                    lbl_ElevatorSystemText.Text = "ElevatorSystem" + "\r\n" + "사용가능";
+                                }
+                                else lbl_ElevatorSystemText.Text = "ElevatorSystem" + "\r\n" + "권한없음";
+
+                                if (ConfigData.UserCallAuthority == 1)
+                                {
+                                    lbl_CallSystemText.Text = "CallSystem" + "\r\n" + "사용가능";
+                                }
+                                else lbl_CallSystemText.Text = "CallSystem" + "\r\n" + "사용가능";
+
+                                lbl_UserNumberImage.Visible = true;
+                                lbl_CallSystemImage.Visible = true;
+                                lbl_ElevatorSystemImage.Visible = true;
+
+                                lbl_UserNumberText.Visible = true;
+                                lbl_CallSystemText.Visible = true;
+                                lbl_ElevatorSystemText.Visible = true;
+                            }
+                        }
                     }
-                    if (ConfigData.UserCallAuthority == 1)
+                    else
                     {
-                        LableText += " / CallSystem 사용가능";
+                        if (MessageBox.Show("LogOut 하시겠습니까?", "LogOut", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            lbl_UserNumberImage.Visible = false;
+                            lbl_CallSystemImage.Visible = false;
+                            lbl_ElevatorSystemImage.Visible = false;
+
+                            lbl_UserNumberText.Visible = false;
+                            lbl_CallSystemText.Visible = false;
+                            lbl_ElevatorSystemText.Visible = false;
+
+                            ConfigData.UserNumber = null;
+                            ConfigData.UserName = null;
+                            ConfigData.UserElevatorAuthority = 0;
+                            ConfigData.UserCallAuthority = 0;
+                        }
                     }
-                }
+                    break;
             }
+
+
         }
 
         private void AccordionControl1_ElementClick(object sender, ElementClickEventArgs e)
@@ -352,6 +488,20 @@ namespace ACS.Monitor
             }
         }
         #endregion
+
+        private void AlarmMsgTimer_Tick(object sender, EventArgs e)
+        {
+            while (this.AlarmMessageQueue.Count > 0)
+            {
+                if (this.AlarmMessageQueue.TryDequeue(out string msg))
+                {
+                    AlertInfo info = new AlertInfo($"({DateTime.Now})", msg);
+
+                    AlarmPupUpcontrol.Show(this, info);
+                }
+
+            }
+        }
 
     }
 }
