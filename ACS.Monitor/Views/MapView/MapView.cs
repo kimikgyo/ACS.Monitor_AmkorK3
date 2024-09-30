@@ -267,10 +267,13 @@ namespace ACS.Monitor
 
         private void AutoDisplay_Timer_Tick(object sender, EventArgs e)
         {
-            AutoDisplay_Timer.Enabled = false;
-            Map_Load();
-            AutoDisplay_Timer.Interval = 1000; // 타이머 인터벌 1초로 설정!
-            AutoDisplay_Timer.Enabled = true;
+            if (ConfigData.MapViewScreenActive)
+            {
+                AutoDisplay_Timer.Enabled = false;
+                Map_Load();
+                AutoDisplay_Timer.Interval = 1000; // 타이머 인터벌 1초로 설정!
+                AutoDisplay_Timer.Enabled = true;
+            }
         }
 
     }

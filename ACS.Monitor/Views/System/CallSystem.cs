@@ -429,11 +429,8 @@ namespace ACS.Monitor
         }
 
 
-
         private void DisplayTimer_Tick(object sender, EventArgs e)
         {
-            Console.WriteLine($"{ConfigData.CallScreenActive}");
-
             if (ConfigData.CallScreenActive)
             {
                 DisplayTimer.Enabled = false;
@@ -442,18 +439,6 @@ namespace ACS.Monitor
                 DisplayTimer.Interval = 1000;
                 DisplayTimer.Enabled = true;
             }
-            else
-            {
-                DisplayTimer.Stop();
-                DisplayTimer.Enabled = false;
-                DisplayTimer.Dispose();
-                this.Close();
-                this.Dispose();
-            }
-
-
         }
-
-
     }
 }

@@ -263,6 +263,7 @@ namespace ACS.Monitor
             // 
             this.accordionControlSetting.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("accordionControlSetting.ImageOptions.SvgImage")));
             this.accordionControlSetting.Name = "accordionControlSetting";
+            this.accordionControlSetting.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             this.accordionControlSetting.Text = "Setting";
             // 
             // fluentDesignFormControl1

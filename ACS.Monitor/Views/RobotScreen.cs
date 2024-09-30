@@ -50,10 +50,10 @@ namespace ACS.Monitor
         public RobotScreen()
         {
             InitializeComponent();
+            Init();
             GridViewInit();
             GridViewColumnsCreate();
             DataTableColumnsCreate();
-            Init();
         }
         protected override void OnLoad(EventArgs e)
         {
@@ -601,16 +601,6 @@ namespace ACS.Monitor
                 DisplayTimer.Interval = 1000; // 타이머 인터벌 1초로 설정!
                 DisplayTimer.Enabled = true;
             }
-            else
-            {
-                DisplayTimer.Stop();
-                DisplayTimer.Enabled = false;
-                DisplayTimer.Dispose();
-                this.Close();
-                this.Dispose();
-            }
-
-           
         }
     }
 }

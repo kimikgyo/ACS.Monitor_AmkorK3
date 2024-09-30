@@ -22,6 +22,9 @@ namespace Monitor.Data
         public static Dictionary<string, string> DisplayRobotNames;
         public static Dictionary<string, string> DisplayMapNames;
 
+
+        public static bool MapViewScreenActive = false;
+        public static bool SettingScreenActive = false;
         public static bool CallScreenActive = false;
         public static bool RobotScreenActive = false;
         public static bool ElevatorScreenActive = false;

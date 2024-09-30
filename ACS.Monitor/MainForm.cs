@@ -39,11 +39,16 @@ namespace ACS.Monitor
         private Color TopbarSkinColor = Color.FromArgb(116, 125, 132);
 
         private readonly UnitOfWork uow;
-        private MapView ChildMainForm;
-        private ElevatorSystem elevator = null;
-        private CallSystem CallSystem = null;
+        private MapView ChildMainForm = null;
+        private RobotScreen robotScreen = null;
+        private ElevatorSystem elevatorSystem = null;
+        private CallSystem callSystem = null;
+        private SettingSystem settingSystem = null;
+
         private GetDataControl getDataControl = null;
         private AlertControl AlarmPupUpcontrol = null;
+
+
         public MainForm()
         {
             InitializeComponent();
@@ -51,18 +56,33 @@ namespace ACS.Monitor
 
             Init();
 
+
+
+
+
         }
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
             Start();
             FormInit();
             accordionControlInit();
             InitDockPanel();
             ChildMainFormFunc();
+
         }
         private void Init()
         {
+            #region Screen Class선언
+
+            ChildMainForm = new MapView(this, uow);
+            robotScreen = new RobotScreen();
+            elevatorSystem = new ElevatorSystem(this, uow);
+            settingSystem = new SettingSystem();
+            callSystem = new CallSystem(this, uow);
+            #endregion
+
             getDataControl = new GetDataControl(this, uow);
             AlarmPupUpcontrol = new AlertControl();
 
@@ -217,15 +237,30 @@ namespace ACS.Monitor
             accordionControlJobLog.Click += AccordionControl_Item_Click;
             accordionControlCall.Click += AccordionControl_Item_Click;
             accordionControlElevator.Click += AccordionControl_Item_Click;
+            accordionControlSetting.Click += AccordionControl_Item_Click;
         }
 
         private void AccordionControl_Item_Click(object sender, EventArgs e)
         {
-            string itemName = ((AccordionControlElement)sender).Name;
+            Control formControl = null;
 
+            if (fluentDesignFormContainer1 != null) formControl = fluentDesignFormContainer1.Controls[0];
+
+            string itemName = ((AccordionControlElement)sender).Name;
             switch (itemName)
             {
                 case "accordionControlMapView":
+                    ChildMainForm.TopLevel = false;
+                    ChildMainForm.Dock = DockStyle.Fill;
+
+                    fluentDesignFormContainer1.Controls.Clear();
+                    fluentDesignFormContainer1.BackColor = Color.White;
+                    fluentDesignFormContainer1.Controls.Add(ChildMainForm);
+                    ConfigData.MapViewScreenActive = true;
+                    ChildMainForm.Activate();
+                    ChildMainForm.Show();
+                    ConfigData.SettingScreenActive = false;
+
                     break;
                 case "accordionControlRobot":
                     if (dockPanelRobot.Visibility == DockVisibility.Hidden)
@@ -233,7 +268,6 @@ namespace ACS.Monitor
                         //창이 생성이 되지 않았을경우
                         dockPanelRobot.Visibility = DockVisibility.Visible;
                         ConfigData.RobotScreenActive = true;
-                        var robotScreen = new RobotScreen();
                         robotScreen.TopLevel = false;
                         robotScreen.Dock = DockStyle.Fill;
                         dockPanelRobot.BackColor = backColor;
@@ -257,13 +291,12 @@ namespace ACS.Monitor
                         //창이 생성이 되지 않았을경우
                         dockPanelCall.Visibility = DockVisibility.Visible;
                         ConfigData.CallScreenActive = true;
-                        var CallSystem = new CallSystem(this, uow);
-                        CallSystem.TopLevel = false;
-                        CallSystem.Dock = DockStyle.Fill;
+                        callSystem.TopLevel = false;
+                        callSystem.Dock = DockStyle.Fill;
                         dockPanelCall.BackColor = Color.White;
-                        dockPanelCall.Controls.Add(CallSystem);
-                        CallSystem.Activate();
-                        CallSystem.Show();
+                        dockPanelCall.Controls.Add(callSystem);
+                        callSystem.Activate();
+                        callSystem.Show();
                     }
                     else if (dockPanelCall.Visibility == DockVisibility.AutoHide)
                     {
@@ -278,7 +311,6 @@ namespace ACS.Monitor
                         //창이 생성이 되지 않았을경우
                         dockPanelElevator.Visibility = DockVisibility.Visible;
                         ConfigData.ElevatorScreenActive = true;
-                        var elevatorSystem = new ElevatorSystem(this, uow);
                         elevatorSystem.TopLevel = false;
                         elevatorSystem.Dock = DockStyle.Fill;
                         dockPanelElevator.BackColor = Color.White;
@@ -292,7 +324,18 @@ namespace ACS.Monitor
                         dockPanelElevator.Visibility = DockVisibility.Visible;
                     }
                     break;
-                case "Setting":
+                case "accordionControlSetting":
+                    settingSystem.TopLevel = false;
+                    settingSystem.Dock = DockStyle.Fill;
+
+                    fluentDesignFormContainer1.Controls.Clear();
+                    fluentDesignFormContainer1.BackColor = Color.White;
+                    fluentDesignFormContainer1.Controls.Add(settingSystem);
+                    ConfigData.SettingScreenActive = true;
+                    settingSystem.Activate();
+                    settingSystem.Show();
+                    ConfigData.MapViewScreenActive = false;
+
                     break;
 
             }
@@ -325,16 +368,31 @@ namespace ACS.Monitor
             #endregion
 
             #region DockPanel Event
-            dockPanelCall.ClosingPanel += DockPanelCall_ClosingPanel;
-
+            dockPanelCall.ClosingPanel += DockPanel_ClosingPanel;
+            dockPanelElevator.ClosingPanel += DockPanel_ClosingPanel;
+            dockPanelRobot.ClosingPanel += DockPanel_ClosingPanel;
             #endregion
         }
 
-        private void DockPanelCall_ClosingPanel(object sender, DevExpress.XtraBars.Docking.DockPanelCancelEventArgs e)
-        {
-            ConfigData.CallScreenActive = false;
 
+
+        private void DockPanel_ClosingPanel(object sender, DockPanelCancelEventArgs e)
+        {
+            string dockPanelName = ((DockPanel)sender).Name;
+            switch (dockPanelName)
+            {
+                case "dockPanelRobot":
+                    ConfigData.RobotScreenActive = false;
+                    break;
+                case "dockPanelElevator":
+                    ConfigData.ElevatorScreenActive = false;
+                    break;
+                case "dockPanelCall":
+                    ConfigData.CallScreenActive = false;
+                    break;
+            }
         }
+
 
 
         /// <summary>
@@ -342,13 +400,14 @@ namespace ACS.Monitor
         /// </summary>
         private void ChildMainFormFunc()
         {
-            ChildMainForm = new MapView(this, uow);
             ChildMainForm.TopLevel = false;
             ChildMainForm.Dock = DockStyle.Fill;
             fluentDesignFormContainer1.BackColor = Color.White;
             fluentDesignFormContainer1.Controls.Add(ChildMainForm);
+           ConfigData.MapViewScreenActive = true;
             ChildMainForm.Activate();
             ChildMainForm.Show();
+            ConfigData.SettingScreenActive = false;
         }
 
         public void DbDrawUCMApView(UCMapView view, FloorMapIdConfigModel floorMapIdConfig, string fleetIp, bool Flag)
