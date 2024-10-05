@@ -55,6 +55,8 @@ namespace Monitor.Map
                             //============포지션 전체 그리기
                             //DBImageDrawPositions(g, fleetPositionsDB, Image, floorMapIdConfigs);
 
+                            //=============장비 포지션 Text 그리기
+                            DBImageUserText(g, fleetPositionsDB, Image, floorMapIdConfigs);
                             if (robots != null)
                             {
                                 foreach (var robot in robots)
@@ -246,34 +248,54 @@ namespace Monitor.Map
 
             // draw robot info
             var robotInfo = robot.RobotAlias;
-            var textPoint = centerPoint - new Size(20, 20);
+            //var textPoint = centerPoint - new Size(20, 20);
+            var textPoint = centerPoint - new Size(70, 20);
 
 
-            g.DrawString(robotInfo, textFont1, Brushes.Magenta, textPoint + new Size(40, -10));
+            g.DrawString(robotInfo, textFont1, Brushes.Red, textPoint + new Size(40, -10));
 
             //// 좌표계 회전 복구
             //matrix.RotateAt(-theta, centerPoint);
             //g.Transform = matrix;
         }
-        private void DBImageDrawText(Graphics g, float x, float y, Font font,/* Brush brush,*/ string text)
+
+        private void DBImageUserText(Graphics g, IList<FleetPositionModel> fleetPositions, Image DataBaseImage, FloorMapIdConfigModel floorMapIdConfigs)
         {
+            foreach (var UserPOSText in fleetPositions.Where(x => x.MapID == floorMapIdConfigs.MapID && x.Name.StartsWith("User")))
+            {
 
-            //float x = (float)pos.PosX / (float)map.Resolution;
-            //float y = (float)pos.PosY / (float)map.Resolution;
-            //float theta = (float)pos.Orientation;
-
-            //y = map.Image.Height - y;
-
-            //// draw
-            var size = g.MeasureString(text, font);
-            var rect1 = new RectangleF(x, y, size.Width, size.Height);
-            var rect2 = new Rectangle((int)x, (int)y, (int)size.Width, (int)size.Height);
-            //g.FillRectangle(Brushes.Yellow, rect1);
-            g.DrawRectangle(Pens.DarkGray, rect2);
-            g.DrawString(text, font, Brushes.Black, rect1);
-            // //g.DrawString(text, font, brush, x, y);
+                DBImageDrawText(g, DataBaseImage, UserPOSText, font2);
+                Console.WriteLine(UserPOSText.Name);
+            }
         }
 
+        private void DBImageDrawText(Graphics g, Image DataBaseImage, FleetPositionModel pos, Font font/*, Brush brush,string text*/)
+        {
+            float Resolution = 0.05f;
 
+            float x = (float)pos.PosX / (float)Resolution;
+            float y = (float)pos.PosY / (float)Resolution;
+            float theta = (float)pos.Orientation;
+
+            y = DataBaseImage.Height - y;
+            string posName = pos.Name.Replace("User", "");
+
+            var centerPoint = new PointF(x, y);
+            var size = g.MeasureString(posName, font);
+
+            var TextPoint = new PointF(centerPoint.X - 28, centerPoint.Y);
+            var TextBoxSize = new SizeF(size.Width, size.Height + 3);
+
+            // Size
+            var rect1 = new RectangleF(TextPoint.X, TextPoint.Y, TextBoxSize.Width, TextBoxSize.Height);
+            var rect2 = new Rectangle((int)TextPoint.X, (int)TextPoint.Y, (int)TextBoxSize.Width, (int)TextBoxSize.Height);
+
+            //그리기
+            g.FillRectangle(Brushes.Yellow, rect1);
+            g.DrawRectangle(Pens.DarkGray, rect2);
+            g.DrawString(posName, font, Brushes.Black, rect1);
+            //g.DrawString(text, font, brush, x, y);
+
+        }
     }
 }

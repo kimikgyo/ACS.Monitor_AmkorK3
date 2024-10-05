@@ -223,42 +223,51 @@ namespace ACS.Monitor
 
 
 
-            if (e.Column == RobotGridView.Columns["DGV_MiR_State"])
-            {
-                string category = RobotGridView.GetRowCellDisplayText(e.RowHandle, RobotGridView.Columns["DGV_MiR_State"]);
+            //if (e.Column == RobotGridView.Columns["DGV_MiR_State"])
+            //{
+            //    string category = RobotGridView.GetRowCellDisplayText(e.RowHandle, RobotGridView.Columns["DGV_MiR_State"]);
 
-                if (category == "Ready")
-                    e.Appearance.BackColor = Color.LightBlue;
-                else if (category == "Pause" || category == "ManualControl")
-                    e.Appearance.BackColor = Color.Yellow;
-                else if (category == "Executing")
-                    e.Appearance.BackColor = Color.Chartreuse;
-                else if (category == "Error" || category == "EmergencyStop")
-                    e.Appearance.BackColor = Color.OrangeRed;
-                else if (category == "unavailable")
-                    e.Appearance.BackColor = Color.DimGray;
-                else
-                {
-                    if (e.RowHandle % 2 == 0)
-                    {
-                        e.Appearance.BackColor = GridViewRowEvenColor;
-                    }
-                    else
-                    {
-                        e.Appearance.BackColor = GridViewRowOddColor;
-                    }
-                }
+            //    if (category == "Ready")
+            //        e.Appearance.BackColor = Color.LightBlue;
+            //    else if (category == "Pause" || category == "ManualControl")
+            //        e.Appearance.BackColor = Color.Yellow;
+            //    else if (category == "Executing")
+            //        e.Appearance.BackColor = Color.Chartreuse;
+            //    else if (category == "Error" || category == "EmergencyStop")
+            //        e.Appearance.BackColor = Color.OrangeRed;
+            //    else if (category == "unavailable")
+            //        e.Appearance.BackColor = Color.DimGray;
+            //    else
+            //    {
+            //        if (e.RowHandle % 2 == 0)
+            //        {
+            //            e.Appearance.BackColor = GridViewRowEvenColor;
+            //        }
+            //        else
+            //        {
+            //            e.Appearance.BackColor = GridViewRowOddColor;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    if (e.RowHandle % 2 == 0)
+            //    {
+            //        e.Appearance.BackColor = GridViewRowEvenColor;
+            //    }
+            //    else
+            //    {
+            //        e.Appearance.BackColor = GridViewRowOddColor;
+            //    }
+            //}
+
+            if (e.RowHandle % 2 == 0)
+            {
+                e.Appearance.BackColor = GridViewRowEvenColor;
             }
             else
             {
-                if (e.RowHandle % 2 == 0)
-                {
-                    e.Appearance.BackColor = GridViewRowEvenColor;
-                }
-                else
-                {
-                    e.Appearance.BackColor = GridViewRowOddColor;
-                }
+                e.Appearance.BackColor = GridViewRowOddColor;
             }
         }
 
