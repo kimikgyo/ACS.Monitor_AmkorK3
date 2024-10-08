@@ -53,13 +53,7 @@ namespace ACS.Monitor
         {
             InitializeComponent();
             uow = new UnitOfWork();
-
             Init();
-
-
-
-
-
         }
         protected override void OnLoad(EventArgs e)
         {
@@ -286,42 +280,55 @@ namespace ACS.Monitor
                 case "accordionControlJobLog":
                     break;
                 case "accordionControlCall":
-                    if (dockPanelCall.Visibility == DockVisibility.Hidden)
+                    if (ConfigData.UserCallAuthority == 1)
                     {
-                        //창이 생성이 되지 않았을경우
-                        dockPanelCall.Visibility = DockVisibility.Visible;
-                        ConfigData.CallScreenActive = true;
-                        callSystem.TopLevel = false;
-                        callSystem.Dock = DockStyle.Fill;
-                        dockPanelCall.BackColor = Color.White;
-                        dockPanelCall.Controls.Add(callSystem);
-                        callSystem.Activate();
-                        callSystem.Show();
+                        if (dockPanelCall.Visibility == DockVisibility.Hidden)
+                        {
+                            //창이 생성이 되지 않았을경우
+                            dockPanelCall.Visibility = DockVisibility.Visible;
+                            ConfigData.CallScreenActive = true;
+                            callSystem.TopLevel = false;
+                            callSystem.Dock = DockStyle.Fill;
+                            dockPanelCall.BackColor = Color.White;
+                            dockPanelCall.Controls.Add(callSystem);
+                            callSystem.Activate();
+                            callSystem.Show();
+                        }
+                        else if (dockPanelCall.Visibility == DockVisibility.AutoHide)
+                        {
+                            //창이 숨겨져 있을경우
+                            dockPanelCall.Visibility = DockVisibility.Visible;
+                        }
                     }
-                    else if (dockPanelCall.Visibility == DockVisibility.AutoHide)
+                    else
                     {
-                        //창이 숨겨져 있을경우
-                        dockPanelCall.Visibility = DockVisibility.Visible;
+                        MessageBox.Show("사용권한이 없습니다!!!" + "\r\n" + "관리자에게 문의해 주시기 바랍니다!!");
                     }
-
                     break;
                 case "accordionControlElevator":
-                    if (dockPanelElevator.Visibility == DockVisibility.Hidden)
+                    if (ConfigData.UserElevatorAuthority == 1)
                     {
-                        //창이 생성이 되지 않았을경우
-                        dockPanelElevator.Visibility = DockVisibility.Visible;
-                        ConfigData.ElevatorScreenActive = true;
-                        elevatorSystem.TopLevel = false;
-                        elevatorSystem.Dock = DockStyle.Fill;
-                        dockPanelElevator.BackColor = Color.White;
-                        dockPanelElevator.Controls.Add(elevatorSystem);
-                        elevatorSystem.Activate();
-                        elevatorSystem.Show();
-                    }
-                    else if (dockPanelElevator.Visibility == DockVisibility.AutoHide)
+                        if (dockPanelElevator.Visibility == DockVisibility.Hidden)
+                        {
+                            //창이 생성이 되지 않았을경우
+                            dockPanelElevator.Visibility = DockVisibility.Visible;
+                            ConfigData.ElevatorScreenActive = true;
+                            elevatorSystem.TopLevel = false;
+                            elevatorSystem.Dock = DockStyle.Fill;
+                            dockPanelElevator.BackColor = Color.White;
+                            dockPanelElevator.Controls.Add(elevatorSystem);
+                            elevatorSystem.Activate();
+                            elevatorSystem.Show();
+                        }
+                        else if (dockPanelElevator.Visibility == DockVisibility.AutoHide)
+                        {
+                            //창이 숨겨져 있을경우
+                            dockPanelElevator.Visibility = DockVisibility.Visible;
+                        }
+                    } 
+                    else
                     {
-                        //창이 숨겨져 있을경우
-                        dockPanelElevator.Visibility = DockVisibility.Visible;
+                        MessageBox.Show("사용권한이 없습니다!!!" + "\r\n" + "관리자에게 문의해 주시기 바랍니다!!");
                     }
                     break;
                 case "accordionControlSetting":

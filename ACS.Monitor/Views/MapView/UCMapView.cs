@@ -101,6 +101,7 @@ namespace ACS.Monitor
 
             }
 
+            this.backColor = Color.Black;
             this.Map_ID.Text = floorMapIdConfig.FloorName;
             this.mapName = floorMapIdConfig.FloorName;
             this.mapScale = floorMapIdConfig.MapData.mapScale;
@@ -121,11 +122,11 @@ namespace ACS.Monitor
             this.pictureBox1.Dock = DockStyle.Fill;
             this.pictureBox1.BackColor = backColor;
             this.pictureBox1.Visible = true;
-
-
-            this.Map_ID.BackColor = backColor;
+            this.Map_ID.BackColor = Color.Black;
             this.Map_ID.ForeColor = Color.White;
             this.Map_ID.Anchor = AnchorStyles.Left | AnchorStyles.Top;
+
+
 
             // FleetMap
             chkFleetMap.CheckState = FleetMapMode ? CheckState.Checked : CheckState.Unchecked;
@@ -414,7 +415,7 @@ namespace ACS.Monitor
                         button2.Visible = false;
                         button3.Visible = false;
                         btnMapDownload.Visible = false;
-                        cb_DisplayInfo.Visible = true;
+                        cb_DisplayInfo.Visible = false;
                         chkCustomMap.Visible = false;
                         chkACSDbMap.Visible = false;
                         chkFleetMap.Visible = false;

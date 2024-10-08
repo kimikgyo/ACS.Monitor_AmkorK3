@@ -105,12 +105,14 @@ namespace ACS.Monitor
             // 
             // Map_ID
             // 
-            this.Map_ID.Appearance.BackColor = System.Drawing.Color.White;
+            this.Map_ID.Appearance.BackColor = System.Drawing.Color.Transparent;
             this.Map_ID.Appearance.Font = new System.Drawing.Font("Tahoma", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Map_ID.Appearance.Options.UseBackColor = true;
             this.Map_ID.Appearance.Options.UseFont = true;
             this.Map_ID.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
             this.Map_ID.Location = new System.Drawing.Point(6, 3);
+            this.Map_ID.LookAndFeel.SkinName = "DevExpress Dark Style";
+            this.Map_ID.LookAndFeel.UseDefaultLookAndFeel = false;
             this.Map_ID.Name = "Map_ID";
             this.Map_ID.Size = new System.Drawing.Size(93, 126);
             this.Map_ID.TabIndex = 6;
@@ -159,6 +161,8 @@ namespace ACS.Monitor
             // 
             // UCMapView
             // 
+            this.Appearance.BackColor = System.Drawing.Color.Black;
+            this.Appearance.Options.UseBackColor = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lbl_ClickPosInfo);
@@ -170,9 +174,10 @@ namespace ACS.Monitor
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Map_ID);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.btnMapDownload);
+            this.Controls.Add(this.pictureBox1);
+            this.LookAndFeel.UseDefaultLookAndFeel = false;
             this.Name = "UCMapView";
             this.Size = new System.Drawing.Size(516, 555);
             ((System.ComponentModel.ISupportInitialize)(this.cb_DisplayInfo.Properties)).EndInit();

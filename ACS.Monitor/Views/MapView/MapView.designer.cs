@@ -76,7 +76,7 @@
             this.splitContainerControl2.Panel2.Controls.Add(this.splitContainerControl3);
             this.splitContainerControl2.Panel2.Text = "Panel2";
             this.splitContainerControl2.Size = new System.Drawing.Size(1153, 454);
-            this.splitContainerControl2.SplitterPosition = 391;
+            this.splitContainerControl2.SplitterPosition = 376;
             this.splitContainerControl2.TabIndex = 0;
             // 
             // splitContainerControl3
@@ -96,8 +96,8 @@
             // 
             this.splitContainerControl3.Panel2.Controls.Add(this.ucMapView3);
             this.splitContainerControl3.Panel2.Text = "Panel2";
-            this.splitContainerControl3.Size = new System.Drawing.Size(753, 454);
-            this.splitContainerControl3.SplitterPosition = 358;
+            this.splitContainerControl3.Size = new System.Drawing.Size(768, 454);
+            this.splitContainerControl3.SplitterPosition = 367;
             this.splitContainerControl3.TabIndex = 0;
             // 
             // panelControl1
@@ -106,7 +106,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelControl1.Controls.Add(this.splitContainerControl2);
-            this.panelControl1.Location = new System.Drawing.Point(12, 40);
+            this.panelControl1.Location = new System.Drawing.Point(12, 6);
             this.panelControl1.Name = "panelControl1";
             this.panelControl1.Size = new System.Drawing.Size(1156, 454);
             this.panelControl1.TabIndex = 11;
@@ -122,7 +122,7 @@
             this.ucMapView1.MapID = null;
             this.ucMapView1.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.ucMapView1.Name = "ucMapView1";
-            this.ucMapView1.Size = new System.Drawing.Size(389, 446);
+            this.ucMapView1.Size = new System.Drawing.Size(374, 446);
             this.ucMapView1.TabIndex = 11;
             this.ucMapView1.UriStr = null;
             // 
@@ -137,7 +137,7 @@
             this.ucMapView2.MapID = null;
             this.ucMapView2.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.ucMapView2.Name = "ucMapView2";
-            this.ucMapView2.Size = new System.Drawing.Size(354, 446);
+            this.ucMapView2.Size = new System.Drawing.Size(363, 446);
             this.ucMapView2.TabIndex = 9;
             this.ucMapView2.UriStr = null;
             // 
@@ -152,11 +152,11 @@
             this.ucMapView3.MapID = null;
             this.ucMapView3.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.ucMapView3.Name = "ucMapView3";
-            this.ucMapView3.Size = new System.Drawing.Size(376, 446);
+            this.ucMapView3.Size = new System.Drawing.Size(382, 446);
             this.ucMapView3.TabIndex = 10;
             this.ucMapView3.UriStr = null;
             // 
-            // AutoScreen
+            // MapView
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
@@ -165,7 +165,7 @@
             this.Controls.Add(this.panelControl1);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "AutoScreen";
+            this.Name = "MapView";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl2.Panel1)).EndInit();
             this.splitContainerControl2.Panel1.ResumeLayout(false);

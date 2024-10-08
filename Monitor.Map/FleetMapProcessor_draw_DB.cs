@@ -141,7 +141,6 @@ namespace Monitor.Map
             foreach (var pos in fleetPositions.Where(x => x.Name == PositionName))
             {
                 Sub_DBImageDrawPosition(g, pos, DataBaseImage);
-                Console.WriteLine($"{MapName} / {pos.Name}");
             }
         }
         private void DBImageDrawPositions(Graphics g, IList<FleetPositionModel> fleetPositions, Image DataBaseImage, FloorMapIdConfigModel floorMapIdConfigs/*, string PositionName*/)
@@ -252,7 +251,7 @@ namespace Monitor.Map
             var textPoint = centerPoint - new Size(70, 20);
 
 
-            g.DrawString(robotInfo, textFont1, Brushes.Red, textPoint + new Size(40, -10));
+            g.DrawString(robotInfo, textFont1, Brushes.DarkBlue, textPoint + new Size(50, 0));
 
             //// 좌표계 회전 복구
             //matrix.RotateAt(-theta, centerPoint);
@@ -265,7 +264,6 @@ namespace Monitor.Map
             {
 
                 DBImageDrawText(g, DataBaseImage, UserPOSText, font2);
-                Console.WriteLine(UserPOSText.Name);
             }
         }
 
@@ -283,7 +281,7 @@ namespace Monitor.Map
             var centerPoint = new PointF(x, y);
             var size = g.MeasureString(posName, font);
 
-            var TextPoint = new PointF(centerPoint.X - 28, centerPoint.Y);
+            var TextPoint = new PointF(centerPoint.X - 28, centerPoint.Y-30);
             var TextBoxSize = new SizeF(size.Width, size.Height + 3);
 
             // Size
@@ -291,9 +289,9 @@ namespace Monitor.Map
             var rect2 = new Rectangle((int)TextPoint.X, (int)TextPoint.Y, (int)TextBoxSize.Width, (int)TextBoxSize.Height);
 
             //그리기
-            g.FillRectangle(Brushes.Yellow, rect1);
-            g.DrawRectangle(Pens.DarkGray, rect2);
-            g.DrawString(posName, font, Brushes.Black, rect1);
+            g.FillRectangle(Brushes.Transparent, rect1);
+            g.DrawRectangle(Pens.Green, rect2);
+            g.DrawString(posName, font, Brushes.Green, rect1);
             //g.DrawString(text, font, brush, x, y);
 
         }

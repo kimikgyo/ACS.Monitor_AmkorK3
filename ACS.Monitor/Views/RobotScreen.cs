@@ -116,7 +116,7 @@ namespace ACS.Monitor
                 //헤더 패널 폰트 설정: gridView1.Appearance.HeaderPanel.Font에 새로운 Font 객체를 할당합니다.
                 RobotGridView.Appearance.HeaderPanel.Font = new Font("Arial", 8, FontStyle.Bold);
                 //행 폰트 설정: gridView1.Appearance.Row.Font에 새로운 Font 객체를 할당합니다.
-                RobotGridView.Appearance.Row.Font = new Font("Arial", 8, FontStyle.Bold);
+                RobotGridView.Appearance.Row.Font = new Font("Arial", 10, FontStyle.Bold);
                 //다중 선택 활성화: gridView1.OptionsSelection.MultiSelect를 true로 설정합니다.
                 RobotGridView.OptionsSelection.MultiSelect = false;
                 //다중 선택 모드 설정: gridView1.OptionsSelection.MultiSelectMode를 GridMultiSelectMode.RowSelect로 설정합니다.
@@ -151,16 +151,16 @@ namespace ACS.Monitor
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Robot_Alias", Caption = "로봇이름", Visible = true, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_State", Caption = "로봇상태", Visible = true, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Battery_Percent", Caption = "배터리", Visible = true, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_PositionWaitTime", Caption = "포지션값", Visible = true, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_WaitTime", Caption = "대기시간", Visible = true, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Product_Detail", Caption = "자재정보", Visible = true, UnboundType = UnboundColumnType.String });
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Door_D", Caption = "Door", Visible = true, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_PositionName", Caption = "포지션이름", Visible = true, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Product", Caption = "자재유무", Visible = true, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Door", Caption = "Door", Visible = true, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_Source", Caption = "출발지", Visible = true, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_Dest", Caption = "목적지", Visible = true, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_ProgressBar", Caption = "진행률", Visible = true, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MissionText", Caption = "MissionText", Visible = true, UnboundType = UnboundColumnType.String });
 
-            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Product", Caption = "자재유무", Visible = false, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_WaitTime", Caption = "대기시간", Visible = false, UnboundType = UnboundColumnType.String });
+            RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Product_Detail", Caption = "자재정보", Visible = false, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_CallName", Caption = "콜이름", Visible = false, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_ElevatorOrder", Caption = "elevator순서", Visible = false, UnboundType = UnboundColumnType.String });
             RobotGridView.Columns.Add(new GridColumn() { FieldName = "DGV_MiR_Status_Door_T", Caption = "Door1", Visible = false, UnboundType = UnboundColumnType.String });
@@ -192,14 +192,14 @@ namespace ACS.Monitor
             RobotGridView.Columns["DGV_MiR_Status_Product"].AppearanceCell.TextOptions.HAlignment = HorzAlignment.Center;
             RobotGridView.Columns["DGV_MiR_Status_Product_Detail"].AppearanceCell.Options.UseTextOptions = true;
             RobotGridView.Columns["DGV_MiR_Status_Product_Detail"].AppearanceCell.TextOptions.HAlignment = HorzAlignment.Center;
-            RobotGridView.Columns["DGV_MiR_Status_Door_D"].AppearanceCell.Options.UseTextOptions = true;
-            RobotGridView.Columns["DGV_MiR_Status_Door_D"].AppearanceCell.TextOptions.HAlignment = HorzAlignment.Center;
+            RobotGridView.Columns["DGV_MiR_Status_Door"].AppearanceCell.Options.UseTextOptions = true;
+            RobotGridView.Columns["DGV_MiR_Status_Door"].AppearanceCell.TextOptions.HAlignment = HorzAlignment.Center;
             RobotGridView.Columns["DGV_MiR_Status_Door_T"].AppearanceCell.Options.UseTextOptions = true;
             RobotGridView.Columns["DGV_MiR_Status_Door_T"].AppearanceCell.TextOptions.HAlignment = HorzAlignment.Center;
             RobotGridView.Columns["DGV_MiR_Status_Robot_Name_orderby"].AppearanceCell.Options.UseTextOptions = true;
             RobotGridView.Columns["DGV_MiR_Status_Robot_Name_orderby"].AppearanceCell.TextOptions.HAlignment = HorzAlignment.Center;
-            RobotGridView.Columns["DGV_PositionWaitTime"].AppearanceCell.Options.UseTextOptions = true;
-            RobotGridView.Columns["DGV_PositionWaitTime"].AppearanceCell.TextOptions.HAlignment = HorzAlignment.Center;
+            RobotGridView.Columns["DGV_PositionName"].AppearanceCell.Options.UseTextOptions = true;
+            RobotGridView.Columns["DGV_PositionName"].AppearanceCell.TextOptions.HAlignment = HorzAlignment.Center;
             RobotGridView.Columns["DGV_MissionText"].AppearanceCell.Options.UseTextOptions = true;
             RobotGridView.Columns["DGV_MissionText"].AppearanceCell.TextOptions.HAlignment = HorzAlignment.Center;
 
@@ -221,53 +221,28 @@ namespace ACS.Monitor
             //UI 요소에서 셀의 배경색을 사용자 정의할 때 사용하는 속성입니다. 이 속성을 true로 설정하면 지정한 배경색이 적용되며, 기본 배경색 대신 사용자 정의 색상이 사용됩니다.
             e.Appearance.Options.UseBackColor = true;
 
-
-
-            //if (e.Column == RobotGridView.Columns["DGV_MiR_State"])
-            //{
-            //    string category = RobotGridView.GetRowCellDisplayText(e.RowHandle, RobotGridView.Columns["DGV_MiR_State"]);
-
-            //    if (category == "Ready")
-            //        e.Appearance.BackColor = Color.LightBlue;
-            //    else if (category == "Pause" || category == "ManualControl")
-            //        e.Appearance.BackColor = Color.Yellow;
-            //    else if (category == "Executing")
-            //        e.Appearance.BackColor = Color.Chartreuse;
-            //    else if (category == "Error" || category == "EmergencyStop")
-            //        e.Appearance.BackColor = Color.OrangeRed;
-            //    else if (category == "unavailable")
-            //        e.Appearance.BackColor = Color.DimGray;
-            //    else
-            //    {
-            //        if (e.RowHandle % 2 == 0)
-            //        {
-            //            e.Appearance.BackColor = GridViewRowEvenColor;
-            //        }
-            //        else
-            //        {
-            //            e.Appearance.BackColor = GridViewRowOddColor;
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    if (e.RowHandle % 2 == 0)
-            //    {
-            //        e.Appearance.BackColor = GridViewRowEvenColor;
-            //    }
-            //    else
-            //    {
-            //        e.Appearance.BackColor = GridViewRowOddColor;
-            //    }
-            //}
-
-            if (e.RowHandle % 2 == 0)
+            if (e.Column == RobotGridView.Columns["DGV_MiR_State"])
             {
-                e.Appearance.BackColor = GridViewRowEvenColor;
+                string category = RobotGridView.GetRowCellDisplayText(e.RowHandle, RobotGridView.Columns["DGV_MiR_State"]);
+
+                if (category == "Ready") e.Appearance.ForeColor = Color.LightBlue;
+                else if (category == "Pause" || category == "ManualControl") e.Appearance.ForeColor = Color.Yellow;
+                else if (category == "Executing") e.Appearance.ForeColor = Color.Chartreuse;
+                else if (category == "Error" || category == "EmergencyStop") e.Appearance.ForeColor = Color.OrangeRed;
+                else if (category == "unavailable") e.Appearance.ForeColor = Color.OrangeRed;
+            }
+            GridViewStandardBackColor(e);
+        
+        }
+        void GridViewStandardBackColor(RowCellStyleEventArgs rowCellStyle)
+        {
+            if (rowCellStyle.RowHandle % 2 == 0)
+            {
+                rowCellStyle.Appearance.BackColor = GridViewRowEvenColor;
             }
             else
             {
-                e.Appearance.BackColor = GridViewRowOddColor;
+                rowCellStyle.Appearance.BackColor = GridViewRowOddColor;
             }
         }
 
@@ -435,10 +410,10 @@ namespace ACS.Monitor
             RobotdataTable.Columns.Add(new DataColumn() { ColumnName = "DGV_ElevatorOrder", Caption = "elevator순서" });
             RobotdataTable.Columns.Add(new DataColumn() { ColumnName = "DGV_MiR_Status_Product", Caption = "자재유무" });
             RobotdataTable.Columns.Add(new DataColumn() { ColumnName = "DGV_MiR_Status_Product_Detail", Caption = "자재정보" });
-            RobotdataTable.Columns.Add(new DataColumn() { ColumnName = "DGV_MiR_Status_Door_D", Caption = "Door" });
+            RobotdataTable.Columns.Add(new DataColumn() { ColumnName = "DGV_MiR_Status_Door", Caption = "Door" });
             RobotdataTable.Columns.Add(new DataColumn() { ColumnName = "DGV_MiR_Status_Door_T", Caption = "Door1" });
             RobotdataTable.Columns.Add(new DataColumn() { ColumnName = "DGV_MiR_Status_Robot_Name_orderby", Caption = "순서" });
-            RobotdataTable.Columns.Add(new DataColumn() { ColumnName = "DGV_PositionWaitTime", Caption = "포지션값" });
+            RobotdataTable.Columns.Add(new DataColumn() { ColumnName = "DGV_PositionName", Caption = "포지션이름" });
             RobotdataTable.Columns.Add(new DataColumn() { ColumnName = "DGV_MissionText", Caption = "MissionText" });
 
             #endregion
@@ -461,8 +436,9 @@ namespace ACS.Monitor
                 if (robot.Fleet_State == FleetState.unavailable) row["DGV_MiR_State"] = robot.Fleet_State_Text;
                 else row["DGV_MiR_State"] = robot.StateText;
                 row["DGV_MiR_Status_Battery_Percent"] = robot.BatteryPercent.ToString("0.00") + "%";
-
-                row["DGV_WaitTime"] = ConfigData.PositionWaitTimes.FirstOrDefault(x => x.RobotName == robot.RobotName && x.RobotAlias == robot.RobotAlias)?.ElapsedTime ?? "";
+                row["DGV_PositionName"] = robot.PositionZoneName ?? "";
+                row["DGV_MiR_Status_Door"] = robot.Door ?? "";
+                //row["DGV_WaitTime"] = ConfigData.PositionWaitTimes.FirstOrDefault(x => x.RobotName == robot.RobotName && x.RobotAlias == robot.RobotAlias)?.ElapsedTime ?? "";
                 row["DGV_MissionText"] = robot.MissionText ?? "";
                 //Job 상태
                 if (robot.JobId > 0)
@@ -521,14 +497,14 @@ namespace ACS.Monitor
                     row["DGV_ProgressBar"] = 0;
                     row["DGV_ElevatorOrder"] = "";
                 }
-                row["DGV_MiR_Status_Product"] = robot.Product ?? "";
+               
 
                 //var products = uow.Products.Get10ProductsByRobotName(robot.RobotName);
                 //var productNames = products.Select(x => x.ProductName).ToList();
                 //string productInfo = string.Join("\r\n", productNames);
                 //row["DGV_MiR_Status_Product_Detail"] = productInfo;
 
-                row["DGV_MiR_Status_Door_T"] = robot.Door ?? "";
+             
 
 
                 string[] Number = robot.RobotAlias.Split('#');

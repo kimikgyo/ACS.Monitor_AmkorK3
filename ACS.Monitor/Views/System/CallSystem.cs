@@ -193,7 +193,7 @@ namespace ACS.Monitor
             //헤더 패널 폰트 설정: gridView1.Appearance.HeaderPanel.Font에 새로운 Font 객체를 할당합니다.
             CallGridView.Appearance.HeaderPanel.Font = new Font("Arial", 8, FontStyle.Bold);
             //행 폰트 설정: gridView1.Appearance.Row.Font에 새로운 Font 객체를 할당합니다.
-            CallGridView.Appearance.Row.Font = new Font("Arial", 8, FontStyle.Bold);
+            CallGridView.Appearance.Row.Font = new Font("Arial", 10, FontStyle.Bold);
             //다중 선택 활성화: gridView1.OptionsSelection.MultiSelect를 true로 설정합니다.
             CallGridView.OptionsSelection.MultiSelect = false;
             //다중 선택 모드 설정: gridView1.OptionsSelection.MultiSelectMode를 GridMultiSelectMode.RowSelect로 설정합니다.
@@ -256,7 +256,7 @@ namespace ACS.Monitor
             if (ConfigData.StartZone != null)
             {
 
-                foreach (var jobConfig in ConfigData.JobConfigs.Where(j => j.CallName.StartsWith(ConfigData.StartZone)))
+                foreach (var jobConfig in ConfigData.JobConfigs.Where(j => j.CallName.StartsWith(ConfigData.StartZone) && j.CallName.Contains("E/VGO") == false))
                 {
 
                     DataRow row = CallDataTable.NewRow();

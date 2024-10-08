@@ -21,7 +21,7 @@ namespace Monitor.Map
         private readonly Font font2 = new Font("Calibri", 8, FontStyle.Regular);
         //private GraphicsPath robotPath = null;
 
-        private readonly Font textFont1 = new Font("Calibri", 18, FontStyle.Bold);
+        private readonly Font textFont1 = new Font("Calibri", 10, FontStyle.Bold);
         private readonly Font textFont2 = new Font("Calibri", 44, FontStyle.Bold);
         private readonly Font textFont3 = new Font("Calibri", 50, FontStyle.Bold);
         private readonly Font textFont4 = new Font("Calibri", 5, FontStyle.Bold);
